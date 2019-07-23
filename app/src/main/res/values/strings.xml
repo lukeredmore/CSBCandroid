@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">CSBC</string>
+    <string name="title_activity_test_tab">TestTab</string>
+    <string name="title_activity_test_tab2">TestTab2</string>
+    <string name="hint_search_string">Enter Search Text</string>
+
+    <string name="Seton">Seton</string>
+    <string name="StJohns">St. John\'s</string>
+    <string name="AllSaints">All Saints</string>
+    <string name="StJames">St. James</string>
+
+
+    <string name="Athletics">Athletics</string>
+    <string name="Calendar">Calendar</string>
+    <string name="Connect">Connect</string>
+    <string name="Contact">Contact</string>
+    <string name="DressCode">Dress Code</string>
+    <string name="Docs">Docs</string>
+    <string name="Give">Give</string>
+    <string name="Lunch">Lunch</string>
+    <string name="News">News</string>
+    <string name="Options">Options</string>
+    <string name="Portal">Portal</string>
+    <string name="Today">Today</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <!--
+        This is the name that users will see when interacting with this channel.
+        It should describe the category of notifications that will be sent through this channel
+     -->
+    <string name="default_notification_channel_name" translatable="true">Weather</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
+    <string name="fcm_message">FCM Message</string>
+</resources>

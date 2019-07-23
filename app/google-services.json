@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "504038663064",
+    "firebase_url": "https://csbc-f4e43.firebaseio.com",
+    "project_id": "csbc-f4e43",
+    "storage_bucket": "csbc-f4e43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504038663064:android:31a288205c6a841b",
+        "android_client_info": {
+          "package_name": "com.csbcsaints.CSBCandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504038663064-pf73s8dq5ormon2otep35a8utclmgmjm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs6vnDVMh_gNiikMLTqkhnmdV2IZa8IJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504038663064-pf73s8dq5ormon2otep35a8utclmgmjm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "504038663064-4uhlq47o3kbhtfficajn2a022i6mvbga.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.csbcsaints.CSBCapp",
+                "app_store_id": "1458445405"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

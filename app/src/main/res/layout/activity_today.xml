@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".TodayActivity">
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/customAppBar"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp" app:elevation="4dp" android:elevation="4dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                    android:text="@string/Today"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content" android:id="@+id/activityTitle" android:textSize="24sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp" android:layout_marginBottom="8dp" android:layout_marginTop="8dp"/>
+            <TextView
+                    android:text="•••"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/dateChangerButton" android:layout_weight="1"
+                    android:textColor="@android:color/white" android:typeface="normal" android:textSize="20sp"
+                    android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:textAlignment="textEnd"
+                    android:textAllCaps="false" android:layout_marginEnd="16dp" android:clickable="true"/>
+        </LinearLayout>
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorHeight="5dp"
+                app:tabSelectedTextColor="@android:color/white" app:tabTextColor="@android:color/darker_gray"
+        >
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/setonTab" android:text="@string/Seton"
+            />
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/johnTab" android:text="@string/StJohns"
+            />
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/saintsTab" android:text="@string/AllSaints"
+            />
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/jamesTab" android:text="@string/StJames"
+            />
+        </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/customAppBar" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/csbcSuperLightGray">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:id="@+id/scrollLayout">
+            <TextView
+                    android:text="There is no school today"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/dayIndicatorLabel"
+                    android:textSize="34sp" android:textStyle="bold" android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:lineSpacingExtra="0sp" android:lines="1"
+                    android:textColor="@android:color/black" android:padding="16dp"/>
+            <TextView
+                    android:id="@+id/eventsSeparator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Events"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#969696"
+                    android:textStyle="bold"
+                    android:visibility="visible" android:textAlignment="viewStart" android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" android:paddingStart="8dp"
+                    android:paddingLeft="8dp" android:paddingBottom="3dp"/>
+            <TextView
+                    android:id="@+id/athleticsSeparator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/Athletics"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#969696"
+                    android:textStyle="bold"
+                    android:visibility="visible" android:textAlignment="viewStart" android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" android:paddingStart="8dp"
+                    android:paddingLeft="8dp" android:paddingTop="12dp" android:paddingBottom="3dp"
+                    android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

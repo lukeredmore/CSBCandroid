@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".OptionsActivity">
+
+    <View
+            android:layout_width="wrap_content"
+            android:layout_height="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/bar" app:layout_constraintHorizontal_bias="0.0" app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/colorAccent"/>
+    <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bar"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+    >
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                          android:orientation="vertical" android:background="@color/csbcSuperLightGray">
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="My Schools"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#969696"
+                        android:textStyle="bold"
+                        android:visibility="visible" android:textAlignment="viewStart"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp" android:paddingStart="8dp"
+                        android:paddingLeft="8dp" android:paddingTop="20dp" android:paddingBottom="3dp"/>
+            </LinearLayout>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/setonSwitch"
+                    android:text="Seton Catholic Central" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/johnSwitch"
+                    android:text="St. John the Evangelist" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/saintsSwitch"
+                    android:text="All Saints School" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/jamesSwitch"
+                    android:text="St. James School" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/csbcSuperLightGray"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/showAllSchoolsSwitch"
+                    android:text="Show info for all schools:" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/csbcSuperLightGray"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/deliverNotificationsSwitch"
+                    android:text="Day Schedule Notifications" android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false" android:textSize="20sp"
+                    android:textStyle="bold" android:background="@android:color/white"
+                    android:padding="10dp" android:paddingStart="18dp"/>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:background="@android:color/white"
+                    android:id="@+id/deliveryTimeCell"
+                    android:focusable="true" android:focusableInTouchMode="true">
+                <TextView
+                        android:text="Delivery Time"
+                        android:layout_width="187dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:textColor="@color/csbcGray" android:textStyle="bold" android:textSize="20sp"
+                        android:textIsSelectable="false" android:padding="10dp" android:paddingStart="18dp"/>
+                <View
+                        android:layout_width="156dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+                <EditText
+                        android:text="12:00 AM"
+                        android:layout_width="115dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:inputType="none"
+                        android:textSize="20sp"
+                        android:id="@+id/deliveryTimeLabel"
+                        android:focusable="false"
+                        android:textStyle="italic" android:layout_marginEnd="10dp" android:textAlignment="center"
+                        android:textIsSelectable="false"/>
+            </LinearLayout>
+            <TextView
+                    android:text="© 2019 Catholic Schools of Broome County"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/copyrightLabel"
+                    android:textAlignment="center" android:textSize="16sp" android:layout_margin="15dp"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
