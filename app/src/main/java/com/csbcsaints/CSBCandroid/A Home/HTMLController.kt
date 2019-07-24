@@ -11,28 +11,14 @@ import org.jsoup.Jsoup
 import java.io.IOException
 import java.util.*
 
-//import Foundation
-//import SwiftSoup
-//import SafariServices
-//import Alamofire
-//import PDFKit
-//
-//protocol LoadPDFDelegate: class {
-//    func tryToLoadPDFs()
-//}
-
 /// Finds URLs of, download, and store all the lunch menus
-class HTMLController : CSBCAppCompatActivity() {
+class HTMLController {
 
     private val client = OkHttpClient()
-    //weak var delegate : LoadPDFDelegate? = nil
     var lunchesReady : Array<Boolean> = arrayOf(false, false, false, false)
     var lunchURLs : Array<String> = arrayOf("","","","")
-    var i = 0
-    var loadedPDFURLs : MutableMap<Int,String> = mutableMapOf()
-    var loadedWordURLs : MutableMap<Int,String> = mutableMapOf()
 
-    fun downloadAndStoreLunchMenus() {
+    fun downloadAndStoreLunchMenus(parent: MainActivity) {
         lunchesReady = arrayOf(false, false, false, false)
 
         val setonRequest = Request.Builder()
@@ -42,20 +28,14 @@ class HTMLController : CSBCAppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Error on request to CSBCSaints.org: ")
                 println(e)
-//                eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(true)
-//                setupTable()
             }
             override fun onResponse(call: Call, response: Response) {
                 println("Successfully received lunch data")
                 val html = response.body?.string()
                 println(html)
                 if (html != null) {
-                    parseSetonLunchHTML(html)
-                } else {
-//                    eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(true)
+                    parseSetonLunchHTML(html, parent)
                 }
-//                setupTable()
-
             }
         })
 
@@ -71,7 +51,7 @@ class HTMLController : CSBCAppCompatActivity() {
                 println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
-                    parseJohnLunchHTML(html)
+                    parseJohnLunchHTML(html, parent)
                 }
             }
         })
@@ -88,7 +68,7 @@ class HTMLController : CSBCAppCompatActivity() {
                 println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
-                    parseSaintsLunchHTML(html)
+                    parseSaintsLunchHTML(html, parent)
                 }
             }
         })
@@ -105,14 +85,14 @@ class HTMLController : CSBCAppCompatActivity() {
                 println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
-                    parseJamesLunchHTML(html)
+                    parseJamesLunchHTML(html, parent)
                 }
             }
         })
     }
 
 
-    fun parseSetonLunchHTML(html: String?) {
+    fun parseSetonLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
             doc.select(".mega-menu-link")
@@ -121,13 +101,13 @@ class HTMLController : CSBCAppCompatActivity() {
                         println("Seton Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[0] = it.attr("href")
                         lunchesReady[0] = true
-                        tryToLoadPDFs()
+                        tryToLoadPDFs(parent)
                         return
                     }
                 }
         }
     }
-    fun parseJohnLunchHTML(html: String?) {
+    fun parseJohnLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
             doc.select("a[href]")
@@ -139,29 +119,29 @@ class HTMLController : CSBCAppCompatActivity() {
                         println("Johns Lunch Menu Link: " + urlWithJS)
                         lunchURLs[1] = urlWithJS
                         lunchesReady[1] = true
-                        tryToLoadPDFs()
+                        tryToLoadPDFs(parent)
                         return
                     }
                 }
         }
     }
-    fun parseSaintsLunchHTML(html: String?) {
+    fun parseSaintsLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
             doc.select(".et_pb_blurb_description").select("p").select("a")
                 .forEach {
                     println(it.text())
-//                    if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
+                    if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
                         println("Saints Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[2] = it.attr("href")
                         lunchesReady[2] = true
-                        tryToLoadPDFs()
+                        tryToLoadPDFs(parent)
                         return
-//                    }
+                    }
                 }
         }
     }
-    fun parseJamesLunchHTML(html: String?) {
+    fun parseJamesLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
             doc.select(".et_pb_blurb_description").select("p").select("a")
@@ -171,21 +151,18 @@ class HTMLController : CSBCAppCompatActivity() {
                         println("James Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[3] = it.attr("href")
                         lunchesReady[3] = true
-                        tryToLoadPDFs()
+                        tryToLoadPDFs(parent)
                         return
                     }
                 }
         }
     }
 
-    fun tryToLoadPDFs() {
+    fun tryToLoadPDFs(parent: MainActivity) {
         if (lunchesReady.contentEquals(arrayOf(true, true, true, true))) {
             println("Starting document downloads for these lunchURLs:")
             lunchURLs.printAll()
-//            i = 0
-            val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-            sharedPreferences.edit().putString("lunchURLs", Gson().toJson(lunchURLs)).apply()
-//            downloadPDFs()
+            parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE).edit().putString("lunchURLs", Gson().toJson(lunchURLs)).apply()
         }
     }
 }

@@ -28,6 +28,8 @@ class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
         webView = findViewById(R.id.webView)
         loadingSymbol = findViewById(R.id.loadingSymbol)
         val webClient = WebViewDelegate(webView!!, loadingSymbol!!)
+        webView?.setWebViewClient(webClient)
+
         val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         lunchURLs = Gson().fromJson(sharedPreferences.getString("lunchURLs", Gson().toJson(lunchURLs)), Array<String>::class.java)
 

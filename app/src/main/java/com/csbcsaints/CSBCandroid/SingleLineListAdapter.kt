@@ -1,11 +1,10 @@
-package com.csbcsaints.CSBCandroid.Connect
+package com.csbcsaints.CSBCandroid
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.csbcsaints.CSBCandroid.R
 import android.widget.TextView
 import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
 import com.csbcsaints.CSBCandroid.ui.UserFontStyles
@@ -13,7 +12,7 @@ import com.csbcsaints.CSBCandroid.ui.setCustomFont
 import java.util.*
 
 
-class ConnectAdapter(private val context: Context) : BaseAdapter() {
+class SingleLineListAdapter(private val context: Context) : BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val TYPE_ITEM = 0
     private val TYPE_SEPARATOR = 1

@@ -74,7 +74,7 @@ class MainActivity: AppCompatActivity() {
         setupNotifications()
 
         val html = HTMLController()
-        html.downloadAndStoreLunchMenus()
+        html.downloadAndStoreLunchMenus(this)
 
         for (i in 0 until iconTitles.size) {
             iconsList.add(Icon(iconTitles[i], iconImages[i]))
@@ -255,8 +255,6 @@ class MainActivity: AppCompatActivity() {
             when(tag) {
                 1 -> {
                     val intent = Intent(baseContext, TodayActivity::class.java)
-                    intent.putExtra("eventsArray", eventsParcelableArray)
-                    intent.putExtra("athleticsArray", athleticsParcelableArray)
                     startActivityForResult(intent, START_TODAY_ACTIVITY_REQUEST_CODE)
                 }
                 3 -> {
@@ -265,7 +263,6 @@ class MainActivity: AppCompatActivity() {
                 }
                 4 -> {
                     val intent = Intent(baseContext, CalendarActivity::class.java)
-                    intent.putExtra("eventsArray", eventsParcelableArray)
                     startActivityForResult(intent, START_CALENDAR_ACTIVITY_REQUEST_CODE)
                 }
                 6 -> {
@@ -274,7 +271,6 @@ class MainActivity: AppCompatActivity() {
                 }
                 7 -> {
                     val intent = Intent(baseContext, AthleticsActivity::class.java)
-                    intent.putExtra("athleticsArray", athleticsParcelableArray)
                     startActivityForResult(intent, START_ATHLETICS_ACTIVITY_REQUEST_CODE)
                 }
                 9 -> {

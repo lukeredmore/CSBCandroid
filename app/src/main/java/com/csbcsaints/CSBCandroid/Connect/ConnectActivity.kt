@@ -6,7 +6,6 @@ import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-import com.csbcsaints.CSBCandroid.Connect.ConnectAdapter
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
 //TODO - ensure all accounts still work, add new accounts, open in correct app, depending on what's installed
@@ -88,7 +87,7 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
     }
 
     override fun tabSelectedHandler() {
-        val connectAdapter = ConnectAdapter(this)
+        val connectAdapter = SingleLineListAdapter(this)
         var x = 0
         for(socialMediaSite in 0 until socialArray[schoolSelectedInt].size) {
             connectAdapter.addSectionHeaderItem(tableHeaders[x])
@@ -113,48 +112,6 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
             }
         }
     }
-
-    /*
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        //val activityTag = arguments?.getInt("activityTag")
-        val root = inflater.inflate(R.layout.activity_connect, container, false)
-        val schoolSelected = schoolsList[(arguments?.getInt(ConnectActivity.ARG_SECTION_NUMBER) ?: 1)-1]
-        val schoolSelectedInt = schoolPickerMap[schoolSelected]!!
-
-        val listView : ListView = root.findViewById(R.id.listView)
-
-
-        val connectAdapter = ConnectAdapter(this.requireContext())
-        var x = 0
-        for(socialMediaSite in 0 until socialArray[schoolSelectedInt].size) {
-            connectAdapter.addSectionHeaderItem(tableHeaders[x])
-            linkList.add("HEADER")
-            x++
-            for(username in 0 until socialArray[schoolSelectedInt][socialMediaSite].size) {
-                connectAdapter.addItem(socialArray[schoolSelectedInt][socialMediaSite][username])
-                linkList.add(socialURLArray[schoolSelectedInt][socialMediaSite][username])
-            }
-        }
-
-        listView.adapter = connectAdapter
-        listView.setOnItemClickListener{ adapterView: AdapterView<*>?, view: View?, position: Int, l: Long ->
-            val id = linkList[position]
-
-            if((position == connectAdapter.mData.size - 1 || position == connectAdapter.mData.size - 2) && id != "HEADER") {
-                openInstagram(id)
-            } else if(id.first().isLetter() && id != "HEADER"){
-                openTwitter(id)
-            } else if(id != "HEADER") {
-                openFacebook(id)
-            }
-        }
-        return root
-    }
-    */
-
 
     fun openTwitter(id : String) {
         var intent: Intent? = null
