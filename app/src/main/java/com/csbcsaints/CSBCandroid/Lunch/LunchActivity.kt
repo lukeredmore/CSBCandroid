@@ -13,7 +13,7 @@ import com.csbcsaints.CSBCandroid.ui.*
 import com.google.gson.Gson
 import java.util.*
 
-//TODO - remove existing test stuff, load downloaded file locations on system from UserDefaults, display either webview or pdfview, add share button display date on bottom tab, enable rotation
+//TODO - display as pdf if possible, display either webview or pdfview, add share button display date on bottom tab!, enable rotation
 
 class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 

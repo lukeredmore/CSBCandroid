@@ -8,7 +8,7 @@ import android.widget.ListView
 import com.csbcsaints.CSBCandroid.Docs.ActualDocActivity
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-//TODO - Add documents list in ListView, segue with selected to viewer (All docs are included in app install), add share button
+//TODO - Pass document itself or local link to viewer
 
 class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
 

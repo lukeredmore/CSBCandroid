@@ -10,7 +10,7 @@ import okhttp3.*
 import org.jsoup.Jsoup
 import java.io.IOException
 
-//TODO - Add search function, add loading symbol, add refresh, fix pulling existing data, add school filter, add view more button
+//TODO - Add search function, add loading symbol!, add refresh!, fix pulling existing data!, add school filter, add view more button!
 
 class CalendarActivity : CSBCAppCompatActivity() {
 

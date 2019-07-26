@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_options.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO - Add report issue mailer, add version number, add Admin Settings (later)
+//TODO - Add report issue mailer!, add version number!, add Admin Settings
 
 class OptionsActivity : AppCompatActivity() {
 

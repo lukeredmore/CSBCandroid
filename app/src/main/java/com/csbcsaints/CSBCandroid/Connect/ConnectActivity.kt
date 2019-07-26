@@ -8,7 +8,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-//TODO - ensure all accounts still work, add new accounts, open in correct app, depending on what's installed
+//TODO - ensure all accounts still work!, add new accounts!
 
 class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
 

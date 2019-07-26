@@ -18,7 +18,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO - Support dark mode, support hiding schools, store school selected in a class
+//TODO - Support dark mode, support hiding schools, store school selected in an object
 
 open class CSBCAppCompatActivity : AppCompatActivity() {
     var schoolSelected = "Seton"

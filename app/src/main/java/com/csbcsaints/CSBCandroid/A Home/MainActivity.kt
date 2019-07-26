@@ -37,7 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO - Fix launch screen, check for alerts from WBNG and display them, start downloading lunch menus
+//TODO - Fix launch screen!, check for alerts from WBNG and display them, start downloading lunch menus
 
 class MainActivity: AppCompatActivity() {
 
@@ -45,8 +45,6 @@ class MainActivity: AppCompatActivity() {
         const val START_CALENDAR_ACTIVITY_REQUEST_CODE = 0
         const val START_ATHLETICS_ACTIVITY_REQUEST_CODE = 1
         const val START_TODAY_ACTIVITY_REQUEST_CODE = 2
-        const val START_OPTIONS_ACTIVITY_REQUEST_CODE = 3
-        const val START_TAB_ACTIVITY_REQUEST_CODE = 4
     }
     var eventsParcelableArray : Array<Parcelable>? = null
     var athleticsParcelableArray : Array<Parcelable>? = null
@@ -109,7 +107,6 @@ class MainActivity: AppCompatActivity() {
                 val token = task.result?.token!!
 
                 // Log and toast
-                write(token)
                 println("Device token: " + token)
 
                 notificationController = NotificationController(this)

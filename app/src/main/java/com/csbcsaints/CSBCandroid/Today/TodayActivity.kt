@@ -22,7 +22,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO: Swipe gesture?, show date as header, double tap to return to Today, add loading symbol, fix UserDefaults
+//TODO: Swipe gesture, show date as header!, double tap to return to Today!, add loading symbol!, fix UserDefaults!
 
 class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 

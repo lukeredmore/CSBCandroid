@@ -6,12 +6,9 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 
-class WebViewDelegate : WebViewClient {
+class WebViewDelegate(webView : WebView, loadingSymbol : ProgressBar) : WebViewClient() {
 
-    var webView : WebView? = null
-
-    constructor(webView: WebView, loadingSymbol : ProgressBar) {
-        this.webView = webView
+    init {
         webView.setWebViewClient(object:WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)

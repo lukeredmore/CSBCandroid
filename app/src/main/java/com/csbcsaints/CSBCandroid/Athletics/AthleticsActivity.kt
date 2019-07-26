@@ -9,7 +9,7 @@ import okhttp3.*
 import org.jsoup.Jsoup
 import java.io.IOException
 
-//TODO - Add search function, add loading symbol, add refresh, fix pulling existing data
+//TODO - Add search function, add loading symbol!, add refresh!, fix pulling existing data!
 
 class AthleticsActivity : CSBCAppCompatActivity() {
 

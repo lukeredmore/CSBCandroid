@@ -10,6 +10,8 @@ import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.google.gson.Gson
 
+//TODO - Pull document from bundle instead of internet, add share button
+
 class ActualDocActivity : CSBCAppCompatActivity() {
 
     var webView : WebView? = null
