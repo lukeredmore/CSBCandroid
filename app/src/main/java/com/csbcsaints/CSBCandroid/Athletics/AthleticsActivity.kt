@@ -1,29 +1,50 @@
 package com.csbcsaints.CSBCandroid
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ListView
+import android.widget.ProgressBar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import eu.amirs.JSON
 import okhttp3.*
-import org.jsoup.Jsoup
 import java.io.IOException
 
-//TODO - Add search function, add loading symbol!, add refresh!, fix pulling existing data!
+//TODO - Add search function, fix pulling existing data!
 
 class AthleticsActivity : CSBCAppCompatActivity() {
 
     private val client = OkHttpClient()
     var athleticsData = AthleticsDataParser()
+    var listView : ListView? = null
+    var athleticsAdapter : AthleticsAdapter? = null
+    var swipeRefreshLayout : SwipeRefreshLayout? = null
+    var loadingSymbol : ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_athletics)
+
+        loadingSymbol = findViewById(R.id.loadingSymbol)
+        athleticsAdapter = AthleticsAdapter(this)
+        listView = findViewById(R.id.listView)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+
+        loadingSymbol?.visibility = View.VISIBLE
+        swipeRefreshLayout?.setColorSchemeColors(getResources().getColor(R.color.colorAccent))
+        swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                swipeRefreshLayout?.setRefreshing(true)
+                getAthleticsData()
+            }
+        })
+
         getSupportActionBar()?.setTitle("Athletics")
         tryToBuildExistingData()
     }
 
     private fun tryToBuildExistingData() {
+        swipeRefreshLayout?.setEnabled(false)
         val athleticsArray : Array<AthleticsModel?> = retrieveAthleticsArrayFromUserDefaults()
         println(athleticsArray)
         if (athleticsArray.size > 1) {
@@ -59,21 +80,23 @@ class AthleticsActivity : CSBCAppCompatActivity() {
     }
 
     fun setupTable() {
-        if (!athleticsData.athleticsModelArray.isNullOrEmpty()) {
-            val listView : ListView = findViewById(R.id.listView)
+        val adapter = AthleticsAdapter(this)
 
-            val athleticsAdapter = AthleticsAdapter(this)
+        if (!athleticsData.athleticsModelArray.isNullOrEmpty()) {
             for(dateWithEvents in athleticsData.athleticsModelArray) {
                 if (dateWithEvents != null) {
-                    athleticsAdapter.addSectionHeaderItem(dateWithEvents!!.date)
-                    for (event in 0 until dateWithEvents!!.sport.size) {
-                        athleticsAdapter.addItem(dateWithEvents!!, event)
+                    adapter.addSectionHeaderItem(dateWithEvents.date)
+                    for (event in 0 until dateWithEvents.sport.size) {
+                        adapter.addItem(dateWithEvents, event)
                     }
                 }
             }
             runOnUiThread(object:Runnable {
                 override fun run() {
-                    listView.adapter = athleticsAdapter
+                    listView?.adapter = adapter
+                    loadingSymbol?.visibility = View.INVISIBLE
+                    swipeRefreshLayout?.setRefreshing(false)
+                    swipeRefreshLayout?.setEnabled(true)
                 }
             })
         }

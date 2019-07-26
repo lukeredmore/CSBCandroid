@@ -23,13 +23,13 @@ class AthleticsAdapter(private val context: Context) : BaseAdapter() {
         val itemToAdd = AthleticsModelSingle(item.homeGame[index], item.gender[index], item.level[index], item.sport[index], item.opponent[index], item.time[index], item.date)
         rowData[headerData.size] = itemToAdd
         headerData.add("ROW")
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
     fun addSectionHeaderItem(item: String) {
         headerData.add(item)
         sectionHeader.add(headerData.size - 1)
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {

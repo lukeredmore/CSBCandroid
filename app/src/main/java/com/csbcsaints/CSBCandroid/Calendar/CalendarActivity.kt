@@ -1,30 +1,49 @@
 package com.csbcsaints.CSBCandroid
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ListView
+import android.widget.ProgressBar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.Calendar.CalendarAdapter
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.ui.*
-import eu.amirs.JSON
-import kotlinx.android.synthetic.main.activity_athletics.*
 import okhttp3.*
-import org.jsoup.Jsoup
 import java.io.IOException
 
-//TODO - Add search function, add loading symbol!, add refresh!, fix pulling existing data!, add school filter, add view more button!
+//TODO - Add search function, fix pulling existing data!, add school filter, add view more button!
 
 class CalendarActivity : CSBCAppCompatActivity() {
 
     private val client = OkHttpClient()
     var eventsData = EventsDataParser()
+    var listView : ListView? = null
+    var swipeRefreshLayout : SwipeRefreshLayout? = null
+    var loadingSymbol : ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+
+        loadingSymbol = findViewById(R.id.loadingSymbol)
+        listView = findViewById(R.id.listView)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+
+        loadingSymbol?.visibility = View.VISIBLE
+        swipeRefreshLayout?.setColorSchemeColors(getResources().getColor(R.color.colorAccent))
+        swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                swipeRefreshLayout?.setRefreshing(true)
+                getEventsData()
+            }
+        })
+
         getSupportActionBar()?.setTitle("Calendar")
         tryToBuildExistingData()
     }
 
     private fun tryToBuildExistingData() {
+        swipeRefreshLayout?.setEnabled(false)
         val eventsArray: Array<EventsModel?> = retrieveEventsArrayFromUserDefaults()
         if (eventsArray.size > 1) {
             println("Events Data already exists and we can use it")
@@ -72,8 +91,11 @@ class CalendarActivity : CSBCAppCompatActivity() {
         }
 
         runOnUiThread(object:Runnable {
-            public override fun run() {
-                listView.adapter = adapter
+            override fun run() {
+                listView?.adapter = adapter
+                loadingSymbol?.visibility = View.INVISIBLE
+                swipeRefreshLayout?.setRefreshing(false)
+                swipeRefreshLayout?.setEnabled(true)
             }
         })
     }

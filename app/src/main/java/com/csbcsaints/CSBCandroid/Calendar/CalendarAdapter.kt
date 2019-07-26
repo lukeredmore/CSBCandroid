@@ -21,7 +21,7 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
 
     fun addItem(item: EventsModel) {
         rowData.add(item)
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
 
