@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.content.Intent
 import android.net.Uri
 import android.R.id.message
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.*
 import java.net.URI
 import java.util.*
@@ -48,10 +49,10 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
     var addressTextView : TextView? = null
     var cityStateTextView : TextView? = null
 
-    var mainPhoneLayout : LinearLayout? = null
-    var districtPhoneLayout : LinearLayout? = null
-    var schoolFaxLayout : LinearLayout? = null
-    var schoolMailLayout : LinearLayout? = null
+    var mainPhoneLayout : ConstraintLayout? = null
+    var districtPhoneLayout : ConstraintLayout? = null
+    var schoolFaxLayout : ConstraintLayout? = null
+    var schoolMailLayout : ConstraintLayout? = null
 
     var mainPhoneIcon : ImageView? = null
     var mainPhoneTextView : TextView? = null
@@ -121,13 +122,13 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
         districtPhoneIcon?.setImageResource(R.drawable.phoneicon)
         districtPhoneTextView = findViewById(R.id.districtPhoneTextView)
         districtPhoneTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
-        faxIcon = findViewById(R.id.faxIcon)
+        faxIcon = findViewById(R.id.schoolFaxIcon)
         faxIcon?.setImageResource(R.drawable.faxicon)
-        faxTextView = findViewById(R.id.faxTextView)
+        faxTextView = findViewById(R.id.schoolFaxTextView)
         faxTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
-        mailIcon = findViewById(R.id.mailIcon)
+        mailIcon = findViewById(R.id.schoolMailIcon)
         mailIcon?.setImageResource(R.drawable.mailicon)
-        mailTextView = findViewById(R.id.mailTextView)
+        mailTextView = findViewById(R.id.schoolMailTextView)
         mailTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
 
         beforeLayout = findViewById(R.id.beforeCell)

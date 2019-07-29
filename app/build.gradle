@@ -1,23 +1,34 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/lukeredmore/keystore3')
+            storePassword 'android'
+            keyAlias = 'keystore3'
+            keyPassword 'android'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.csbcsaints.CSBCandroid"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.Peppa"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
         }
     }
 }
@@ -50,8 +61,9 @@ dependencies {
     implementation 'com.github.amirdew:JSON:v1.0.0'
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-database:18.0.1'
     implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 //    implementation 'com.google.firebase:firebase-core:16.0.9'
 ////    implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'

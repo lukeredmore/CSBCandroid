@@ -27,13 +27,12 @@
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:text="My Schools"
                         android:textAllCaps="true"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="#969696"
                         android:textStyle="bold"
-                        android:visibility="visible" android:textAlignment="viewStart"
+                        android:visibility="visible"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp" android:paddingStart="8dp"
                         android:paddingLeft="8dp" android:paddingTop="20dp" android:paddingBottom="3dp"/>
@@ -91,7 +90,7 @@
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:background="@android:color/white"
+                    android:layout_height="match_parent" android:background="@android:color/white"
                     android:id="@+id/deliveryTimeCell"
                     android:focusable="true" android:focusableInTouchMode="true">
                 <TextView
@@ -113,6 +112,29 @@
                         android:id="@+id/deliveryTimeLabel"
                         android:focusable="false"
                         android:textStyle="italic" android:layout_marginEnd="10dp" android:textAlignment="center"
+                        android:textIsSelectable="false"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:background="@android:color/white"
+                    android:id="@+id/versionCell"
+                    android:focusable="true" android:focusableInTouchMode="true">
+                <TextView
+                        android:text="Version"
+                        android:layout_width="187dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:textColor="@color/csbcGray" android:textStyle="bold" android:textSize="20sp"
+                        android:textIsSelectable="false" android:padding="10dp" android:paddingStart="18dp"/>
+                <TextView
+                        android:text="1.0.0a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:inputType="none"
+                        android:textSize="20sp"
+                        android:id="@+id/versionLabel"
+                        android:focusable="false"
+                        android:textStyle="italic" android:layout_marginEnd="16dp" android:textAlignment="textEnd"
                         android:textIsSelectable="false"/>
             </LinearLayout>
             <TextView

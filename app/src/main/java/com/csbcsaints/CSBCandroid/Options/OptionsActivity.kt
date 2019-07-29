@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_options.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO - Add report issue mailer!, add version number!, add Admin Settings
+//TODO - Add report issue mailer!, add Admin Settings
 
 class OptionsActivity : AppCompatActivity() {
 
@@ -49,9 +49,13 @@ class OptionsActivity : AppCompatActivity() {
         deliverNotificationsSwitch = findViewById(R.id.deliverNotificationsSwitch)
         deliveryTimeLabel = findViewById(R.id.deliveryTimeLabel)
         deliveryTimeCell = findViewById(R.id.deliveryTimeCell)
-        copyrightLabel = findViewById(R.id.copyrightLabel)
+        findViewById<TextView>(R.id.copyrightLabel).text = "© ${Calendar.getInstance().time.yearString()} Catholic Schools of Broome County"
+        if (BuildConfig.BUILD_TYPE == "debug") {
+            findViewById<TextView>(R.id.versionLabel).text = "${BuildConfig.VERSION_NAME}a"
+        } else {
+            findViewById<TextView>(R.id.versionLabel).text = BuildConfig.VERSION_NAME
+        }
 
-        copyrightLabel?.text = "© ${Calendar.getInstance().time.yearString()} Catholic Schools of Broome County"
 
         deliveryTimeLabel?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(v:View) {

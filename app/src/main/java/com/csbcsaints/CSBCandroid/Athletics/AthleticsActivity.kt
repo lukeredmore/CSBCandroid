@@ -10,7 +10,7 @@ import eu.amirs.JSON
 import okhttp3.*
 import java.io.IOException
 
-//TODO - Add search function, fix pulling existing data!
+//TODO - Add search function, fix pulling existing data!, no data loading!
 
 class AthleticsActivity : CSBCAppCompatActivity() {
 

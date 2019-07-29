@@ -67,6 +67,8 @@ class MainActivity: AppCompatActivity() {
         setContentView(R.layout.activity_main)
         getSupportActionBar()?.hide()
 
+        println("\nVersion ${BuildConfig.VERSION_NAME} has loaded in the ${BuildConfig.BUILD_TYPE} configuration.\n")
+
         removeBannerAlert()
 
         setupNotifications()
