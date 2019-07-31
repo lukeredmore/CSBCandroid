@@ -37,7 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO - Fix launch screen!, check for alerts from WBNG and display them, start downloading lunch menus
+//TODO - make sure new launch screen works!, check for alerts from WBNG and display them, start downloading lunch menus
 
 class MainActivity: AppCompatActivity() {
 
@@ -62,6 +62,7 @@ class MainActivity: AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)

@@ -9,13 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.yearString
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_options.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO - Add report issue mailer!, add Admin Settings
+//TODO - add Admin Settings
 
 class OptionsActivity : AppCompatActivity() {
 
@@ -27,8 +28,8 @@ class OptionsActivity : AppCompatActivity() {
     var deliverNotificationsSwitch : Switch? = null
     var deliveryTimeLabel : EditText? = null
     var deliveryTimeCell : LinearLayout? = null
+    var reportIssue : ConstraintLayout? = null
     var settingsSwitch : Array<Switch?> = arrayOf()
-    var copyrightLabel : TextView? = null
 
     var notificationController : NotificationController? = null
     var notificationSettings : NotificationSettings? = null
@@ -55,7 +56,17 @@ class OptionsActivity : AppCompatActivity() {
         } else {
             findViewById<TextView>(R.id.versionLabel).text = BuildConfig.VERSION_NAME
         }
+        reportIssue = findViewById(R.id.reportIssue)
 
+
+        reportIssue?.setOnClickListener(object:View.OnClickListener {
+            override fun onClick(v:View) {
+                val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:lredmore@syrdio.org"))
+                email.putExtra(Intent.EXTRA_SUBJECT, "CSBC Android App User Comment")
+                email.putExtra(Intent.EXTRA_TEXT, "Please give a detailed description of the issue you would like to report or the suggestion you would like to submit:")
+                startActivity(email)
+            }
+        })
 
         deliveryTimeLabel?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(v:View) {

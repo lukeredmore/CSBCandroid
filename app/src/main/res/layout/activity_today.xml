@@ -84,14 +84,13 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#969696"
                     android:textStyle="bold"
-                    android:visibility="visible" android:textAlignment="viewStart" android:layout_marginStart="10dp"
+                    android:visibility="visible" android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp" android:paddingStart="8dp"
                     android:paddingLeft="8dp" android:paddingBottom="3dp"/>
             <TextView
                     android:id="@+id/athleticsSeparator"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:text="@string/Athletics"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -103,4 +102,12 @@
                     android:layout_marginTop="10dp"/>
         </LinearLayout>
     </ScrollView>
+    <ProgressBar
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/loadingSymbol"
+            android:indeterminateOnly="true"
+            android:keepScreenOn="true"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

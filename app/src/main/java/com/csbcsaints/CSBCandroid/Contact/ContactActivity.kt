@@ -20,7 +20,7 @@ import com.csbcsaints.CSBCandroid.ui.*
 import java.net.URI
 import java.util.*
 
-//TODO - Add map link, add parallax effect
+//TODO - Confirm who All Saint's principal is, Add map link, add parallax effect
 
 class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
 

@@ -14,8 +14,6 @@ import com.csbcsaints.CSBCandroid.ui.setCustomFont
 import com.google.android.material.tabs.TabLayout
 import android.webkit.WebChromeClient
 
-//TODO - Make sure dres code is updated
-
 class DressCodeActivity : CSBCAppCompatActivity() {
 
     var dressCodeSelectedInt = 0

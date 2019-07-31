@@ -22,7 +22,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO: Swipe gesture, show date as header!, double tap to return to Today!, add loading symbol!, fix UserDefaults!
+//TODO: Swipe gesture, double tap to return to Today!, fix UserDefaults!
 
 class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 
@@ -53,11 +53,14 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
     var athleticsSeparator : TextView? = null
     var scrollLayout : LinearLayout? = null
     var dateChangerButton : TextView? = null
+    var activityTitle : TextView? = null
+    var loadingSymbol : ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today)
 
+        activityTitle = findViewById(R.id.activityTitle)
         dayIndicatorLabel = findViewById(R.id.dayIndicatorLabel)
         dayIndicatorLabel?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.BOLD)
         eventsSeparator = findViewById(R.id.eventsSeparator)
@@ -65,10 +68,13 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
         listView = findViewById(R.id.listView)
         scrollLayout = findViewById(R.id.scrollLayout)
         dateChangerButton = findViewById(R.id.dateChangerButton)
+        loadingSymbol = findViewById(R.id.loadingSymbol)
 
         dateString = Calendar.getInstance().time.dateString() //Should be current date string, but can change to test
+        activityTitle?.text = "Today"
         daySchedule = DaySchedule(this, true, true, true, true)
 
+        loadingSymbol?.visibility = View.VISIBLE
         dateChangerButton?.setOnClickListener(object:View.OnClickListener {
             val yearFormatter = SimpleDateFormat("yyyy")
             val monthFormatter = SimpleDateFormat("MM")
@@ -90,6 +96,12 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
                                 day = "0$day"
                             }
                             dateString = "$month/$day/$year"
+                            if (dateString != Calendar.getInstance().time.dateString()) {
+                                val titleFormatter = SimpleDateFormat("MMM d")
+                                activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
+                            } else {
+                                activityTitle?.text = "Today"
+                            }
                             tabSelectedHandler()
                             tryToLoadTableView()
                         }
@@ -304,6 +316,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             createCellForEventsModelAndAddToEndOfScrollView(eventsArrayToDisplay.toTypedArray(), scrollLayout!!)
             scrollLayout?.addView(athleticsSeparator)
             createCellForAthleticsModelAndAddToEndOfScrollView(athleticsArrayToDisplay, scrollLayout!!)
+            loadingSymbol?.visibility = View.INVISIBLE
         }
     }
 

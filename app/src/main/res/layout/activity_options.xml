@@ -114,6 +114,11 @@
                         android:textStyle="italic" android:layout_marginEnd="10dp" android:textAlignment="center"
                         android:textIsSelectable="false"/>
             </LinearLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/csbcSuperLightGray" android:id="@+id/view2"
+                    android:layout_weight="1"/>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -137,11 +142,39 @@
                         android:textStyle="italic" android:layout_marginEnd="16dp" android:textAlignment="textEnd"
                         android:textIsSelectable="false"/>
             </LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:background="@android:color/white"
+                    android:layout_height="match_parent" android:id="@+id/reportIssue">
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="10dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/csbcGray"
+                        android:text="Report Issue"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/reportIssueArrow"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent" android:paddingStart="18dp"
+                        android:textStyle="bold" android:id="@+id/reportIssueText" android:gravity="clip_vertical"/>
+                <ImageView
+                        app:srcCompat="@drawable/indicator_arrow"
+                        android:id="@+id/reportIssueArrow"
+                        android:scaleType="centerInside" android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                     android:text="© 2019 Catholic Schools of Broome County"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/copyrightLabel"
-                    android:textAlignment="center" android:textSize="16sp" android:layout_margin="15dp"/>
+                    android:textAlignment="center" android:textSize="16sp" android:layout_margin="15dp"
+            />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

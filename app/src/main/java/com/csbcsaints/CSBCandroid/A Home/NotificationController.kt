@@ -18,6 +18,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import java.util.*
 
+//TODO - See stack about queuing notifications with Payload over multiple alarms
+
 class NotificationController {
 
     var timeFormatter : SimpleDateFormat = SimpleDateFormat("h:mm a")
@@ -56,12 +58,6 @@ class NotificationController {
             val notifTimeAsDate = timeFormatter.parse(notificationSettings!!.deliveryTime) //Get time of notif deliver as date
             val notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate!!) //rewrite in 24h (16:23)
             println(notif24HTimeString)
-//            val timeComponentsStrings = notif24HTimeString.split(":").toMutableList() //convert to components
-//            print(timeComponentsStrings)
-//            for (i in timeComponentsStrings) {
-//                timeComponents.add(i.toInt())
-//            }
-//            print(timeComponents)
 
             val daySchedule = DaySchedule(context, notificationSettings!!.schools[0], notificationSettings!!.schools[1], notificationSettings!!.schools[2], notificationSettings!!.schools[3])
             val allSchoolDays : MutableList<String> = daySchedule.dateDayDictArray
@@ -72,9 +68,6 @@ class NotificationController {
             }
             allSchoolDays.printAll()
 
-//            for (i in 50 until allSchoolDays.count()) { //Limit all schoolDaysCount to 50
-//                allSchoolDays.removeAt(50)
-//            }
 
             //Mark: Setup notification
             for (date in allSchoolDays) {
@@ -141,11 +134,6 @@ class NotificationController {
                 println(" ")
             }
 
-//            center.getPendingNotificationRequests(completionHandler: { requests in
-//                    for request in requests {
-//                        print(request)
-//                    }
-//            })
         } else {
             print("User has declined to receive notifications")
         }
