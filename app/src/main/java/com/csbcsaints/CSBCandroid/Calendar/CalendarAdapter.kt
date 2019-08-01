@@ -1,11 +1,16 @@
 package com.csbcsaints.CSBCandroid.Calendar
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
 import com.csbcsaints.CSBCandroid.ui.UserFontStyles
@@ -16,29 +21,36 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val TYPE_ITEM = 0
     private val TYPE_SEPARATOR = 1
+    val headerData = ArrayList<String>()
     val rowData : MutableList<EventsModel> = arrayListOf()
     private val sectionHeader = TreeSet<Int>()
 
     fun addItem(item: EventsModel) {
         rowData.add(item)
+        headerData.add("ROW")
 //        notifyDataSetChanged()
     }
 
+    fun addSectionHeaderItem(item: String) {
+        headerData.add(item)
+        sectionHeader.add(headerData.size - 1)
+//        notifyDataSetChanged()
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (sectionHeader.contains(position)) TYPE_SEPARATOR else TYPE_ITEM
     }
 
     override fun getViewTypeCount(): Int {
-        return 1
+        return 2
     }
 
     override fun getCount(): Int {
-        return rowData.size
+        return headerData.size
     }
 
-    override fun getItem(position: Int): EventsModel {
-        return rowData.get(position)
+    override fun getItem(position: Int): String {
+        return headerData.get(position)
     }
 
     override fun getItemId(position: Int): Long {
@@ -61,25 +73,44 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
                     holder.timeLabel = convertView!!.findViewById<View>(R.id.timeLabel) as TextView
                     holder.schoolsLabel = convertView!!.findViewById<View>(R.id.schoolsLabel) as TextView
                 }
+                TYPE_SEPARATOR -> {
+                    convertView = inflater.inflate(R.layout.calendar_supplemental_list_layout, null)
+                    holder.textView = convertView!!.findViewById(R.id.text)
+                    holder.container = convertView!!.findViewById(R.id.container)
+                }
             }
             convertView!!.tag = holder
         } else {
             holder = convertView.tag as CalendarViewHolder
         }
 
-        val model = rowData[position]
 
-        holder.textView?.setText("Separator")
-        holder.titleLabel?.setText(model?.event.toUpperCase())
-        holder.titleLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
-        holder.monthLabel?.setText(model?.month)
-        holder.monthLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
-        holder.dayLabel?.setText(model?.day)
-        holder.dayLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
-        holder.timeLabel?.setText(model?.time)
-        holder.timeLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.ITALIC)
-        holder.schoolsLabel?.setText(model?.schools)
-        holder.schoolsLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
+
+        holder.textView?.text = headerData.get(position)
+        holder.textView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.ITALIC)
+        if (holder.textView?.text == "View More >") {
+            holder.textView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
+            holder.container?.setOnClickListener(View.OnClickListener {
+                val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+                builder.setToolbarColor(ResourcesCompat.getColor(parent.getResources(), R.color.colorPrimary, null))
+                val customTabsIntent : CustomTabsIntent = builder.build()
+                customTabsIntent.launchUrl(parent.context, Uri.parse("https://csbcsaints.org/calendar"))
+            })
+        }
+
+        if (rowData.count() > 0) {
+            val model = rowData[position]
+            holder.titleLabel?.text = model.event.toUpperCase()
+            holder.titleLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
+            holder.monthLabel?.text = model.month
+            holder.monthLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
+            holder.dayLabel?.text = model.day
+            holder.dayLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
+            holder.timeLabel?.text = model.time
+            holder.timeLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.ITALIC)
+            holder.schoolsLabel?.text = model.schools
+            holder.schoolsLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
+        }
 
         return convertView
     }
@@ -89,6 +120,7 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
 
 class CalendarViewHolder {
     var textView: TextView? = null
+    var container : ConstraintLayout? = null
     var titleLabel: TextView? = null
     var monthLabel: TextView? = null
     var dayLabel: TextView? = null

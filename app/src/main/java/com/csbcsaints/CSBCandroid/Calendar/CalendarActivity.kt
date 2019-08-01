@@ -13,7 +13,7 @@ import com.csbcsaints.CSBCandroid.ui.*
 import okhttp3.*
 import java.io.IOException
 
-//TODO - Add search function, fix pulling existing data!, add school filter, add view more button!
+//TODO - Add search function, add school filter
 
 class CalendarActivity : CSBCAppCompatActivity() {
 
@@ -91,10 +91,14 @@ class CalendarActivity : CSBCAppCompatActivity() {
 
     fun setupTable() {
         val adapter = CalendarAdapter(this)
-        var x = 0
-        for (event in eventsData.eventsModelArray) {
-            adapter.addItem(event!!)
+        if (!eventsData.eventsModelArray.contains(EventsModel("", "", "", "", "", ""))) {
+            for (event in eventsData.eventsModelArray) {
+                adapter.addItem(event!!)
+            }
+        } else {
+            adapter.addSectionHeaderItem("There are no more events this month")
         }
+        adapter.addSectionHeaderItem("View More >")
 
         runOnUiThread(object:Runnable {
             override fun run() {

@@ -168,24 +168,6 @@ fun AppCompatActivity.write(text: Any) {
     Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show()
 }
 
-fun EventsDataParser.retrieveEventsArrayFromUserDefaults(forceReturn : Boolean = false) : Array<EventsModel?> {
-    val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-    val currentTime = Calendar.getInstance().time
-    val eventsArrayTimeString : String? = sharedPreferences?.getString("eventsArrayTime", null)
-    val eventsArrayTime = eventsArrayTimeString?.toDateWithTime()?.addHours(1)
-    val json = sharedPreferences?.getString("eventsArray", null)
-    if (eventsArrayTime != null && !json.isNullOrEmpty()) {
-        if ((eventsArrayTime!! > currentTime) || (forceReturn)) {
-            return Gson().fromJson(json, Array<EventsModel?>::class.java)
-        } else {
-            return arrayOf()
-        }
-    } else {
-        return arrayOf()
-    }
-
-}
-
 fun Array<String>.printAll() {
     print("[")
     for (each in 0 until size - 1) {

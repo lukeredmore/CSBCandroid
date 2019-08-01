@@ -72,7 +72,7 @@ class EventsDataParser {
             }
             eventsModelArray = modelListToReturn.toTypedArray()
         } else {
-            eventsModelArray = arrayOf(EventsModel("There are no more events this month.", "", "", "", "", ""))
+            eventsModelArray = arrayOf(EventsModel("", "", "", "", "", ""))
         }
         addObjectArrayToUserDefaults(eventsModelArray, preferences)
     }
