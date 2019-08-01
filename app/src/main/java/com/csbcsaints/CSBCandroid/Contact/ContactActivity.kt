@@ -1,23 +1,14 @@
 package com.csbcsaints.CSBCandroid
 
-import android.app.ActionBar
-import android.content.Context
-import android.media.Image
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
 import android.content.Intent
 import android.net.Uri
-import android.R.id.message
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.*
-import java.net.URI
 import java.util.*
 
 //TODO - Confirm who All Saint's principal is, Add map link, add parallax effect
@@ -146,42 +137,33 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
 
         setupViewForTabbedActivity(R.layout.activity_contact)
     }
-
     override fun tabSelectedHandler() {
         imageView?.setImageResource(BUILDING_IMAGE_ARRAY[schoolSelectedInt])
 
         mapIcon?.setImageResource(MAP_IMAGE_ARRAY[schoolSelectedInt])
-        mapTextView?.setText(SCHOOL_NAMES[schoolSelectedInt])
-        addressTextView?.setText(SCHOOL_ADDRESSES[schoolSelectedInt])
-        cityStateTextView?.setText(SCHOOL_CITY_STATE[schoolSelectedInt])
+        mapTextView?.text = SCHOOL_NAMES[schoolSelectedInt]
+        addressTextView?.text = SCHOOL_ADDRESSES[schoolSelectedInt]
+        cityStateTextView?.text = SCHOOL_CITY_STATE[schoolSelectedInt]
 
-        mainPhoneTextView?.setText("Main: " + SCHOOL_PHONE[schoolSelectedInt])
-        districtPhoneTextView?.setText("District: " + DISTRICT_PHONE)
-        faxTextView?.setText("Fax: " + SCHOOL_FAX[schoolSelectedInt])
-        mailTextView?.setText(SCHOOL_PRINCIPALS[schoolSelectedInt] + ", Principal")
+        mainPhoneTextView?.text = "Main: " + SCHOOL_PHONE[schoolSelectedInt]
+        districtPhoneTextView?.text = "District: " + DISTRICT_PHONE
+        faxTextView?.text = "Fax: " + SCHOOL_FAX[schoolSelectedInt]
+        mailTextView?.text = SCHOOL_PRINCIPALS[schoolSelectedInt] + ", Principal"
 
         normalParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         collapsedParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
 
         if (BEFORE_TIME[schoolSelectedInt] == null) {
-            beforeLayout?.setLayoutParams(collapsedParams)
-            afterLayout?.setLayoutParams(collapsedParams)
-
-//            beforeLayout?.updateViewLayout(beforeLayout, collapsedParams)
-//            afterLayout?.updateViewLayout(afterLayout, collapsedParams)
+            beforeLayout?.layoutParams = collapsedParams
+            afterLayout?.layoutParams = collapsedParams
         } else {
-            beforeSchoolTextView?.setText(BEFORE_TIME[schoolSelectedInt])
-            beforeLayout?.setLayoutParams(normalParams)
-            afterSchoolTextView?.setText(AFTER_TIME[schoolSelectedInt])
-            afterLayout?.setLayoutParams(normalParams)
-//            beforeLayout?.setLayoutParams(normalParams)
-//            afterLayout?.setLayoutParams(normalParams)
-//
-//            afterSchoolTextView?.setText(AFTER_TIME[schoolSelectedInt])
-
+            beforeSchoolTextView?.text = BEFORE_TIME[schoolSelectedInt]
+            beforeLayout?.layoutParams = normalParams
+            afterSchoolTextView?.text = AFTER_TIME[schoolSelectedInt]
+            afterLayout?.layoutParams = normalParams
         }
-        startSchoolTextView?.setText(START_TIME[schoolSelectedInt])
-        dismissalSchoolTextView?.setText(DISMISSAL_TIME[schoolSelectedInt])
+        startSchoolTextView?.text = START_TIME[schoolSelectedInt]
+        dismissalSchoolTextView?.text = DISMISSAL_TIME[schoolSelectedInt]
 
     }
 

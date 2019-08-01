@@ -1,15 +1,11 @@
 package com.csbcsaints.CSBCandroid
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-@Parcelize
 data class NotificationSettings(
     var shouldDeliver : Boolean,
     var deliveryTime : String,
     var schools : Array<Boolean>,
     var valuesChangedByUser : Boolean
-) : Parcelable
+)
 
 fun NotificationSettings.printNotifData() {
     println("-----------NOTIFICATION SETTINGS-----------")

@@ -1,7 +1,6 @@
 package com.csbcsaints.CSBCandroid.Calendar
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
 import com.csbcsaints.CSBCandroid.ui.UserFontStyles
@@ -92,7 +91,7 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
             holder.textView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
             holder.container?.setOnClickListener(View.OnClickListener {
                 val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-                builder.setToolbarColor(ResourcesCompat.getColor(parent.getResources(), R.color.colorPrimary, null))
+                builder.setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 val customTabsIntent : CustomTabsIntent = builder.build()
                 customTabsIntent.launchUrl(parent.context, Uri.parse("https://csbcsaints.org/calendar"))
             })

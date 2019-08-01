@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.Calendar.CalendarAdapter
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
@@ -16,7 +17,6 @@ import java.io.IOException
 //TODO - Add search function, add school filter
 
 class CalendarActivity : CSBCAppCompatActivity() {
-
     private val client = OkHttpClient()
     var eventsData = EventsDataParser()
     var listView : ListView? = null
@@ -36,7 +36,7 @@ class CalendarActivity : CSBCAppCompatActivity() {
         sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
         loadingSymbol?.visibility = View.VISIBLE
-        swipeRefreshLayout?.setColorSchemeColors(getResources().getColor(R.color.colorAccent))
+        swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
         swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 swipeRefreshLayout?.setRefreshing(true)
@@ -44,10 +44,12 @@ class CalendarActivity : CSBCAppCompatActivity() {
             }
         })
 
-        getSupportActionBar()?.setTitle("Calendar")
+        supportActionBar?.title = "Calendar"
         tryToBuildExistingData()
     }
 
+
+    //MARK - Data methods
     private fun tryToBuildExistingData() {
         swipeRefreshLayout?.setEnabled(false)
         val eventsArray: Array<EventsModel?> = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!)
@@ -60,7 +62,6 @@ class CalendarActivity : CSBCAppCompatActivity() {
             getEventsData()
         }
     }
-
     fun getEventsData() {
         println("We are asking for Events data")
         val request = Request.Builder()
@@ -89,6 +90,8 @@ class CalendarActivity : CSBCAppCompatActivity() {
         })
     }
 
+
+    //MARK - Table methods
     fun setupTable() {
         val adapter = CalendarAdapter(this)
         if (!eventsData.eventsModelArray.contains(EventsModel("", "", "", "", "", ""))) {
@@ -104,8 +107,8 @@ class CalendarActivity : CSBCAppCompatActivity() {
             override fun run() {
                 listView?.adapter = adapter
                 loadingSymbol?.visibility = View.INVISIBLE
-                swipeRefreshLayout?.setRefreshing(false)
-                swipeRefreshLayout?.setEnabled(true)
+                swipeRefreshLayout?.isRefreshing = false
+                swipeRefreshLayout?.isEnabled = true
             }
         })
     }

@@ -1,23 +1,17 @@
 package com.csbcsaints.CSBCandroid
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
-import com.csbcsaints.CSBCandroid.Today.TodayAdapter
 import com.csbcsaints.CSBCandroid.ui.*
 import eu.amirs.JSON
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.athletics_list_layout.*
 import okhttp3.*
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -31,7 +25,6 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
     var eventsClient : OkHttpClient? = OkHttpClient()
     var eventsData : Array<EventsModel?>? = null
     var athleticsData : Array<AthleticsModel?>? = null
-    val schoolsList = arrayOf("Seton","St. John's","All Saints","St. James")
     var athleticsReady = false
     var listView : ListView? = null
     var daySchedule: DaySchedule? = null
@@ -133,14 +126,105 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             tryToLoadTableView()
         }
     }
-
     override fun tabSelectedHandler() {
         println("The dateString is: " + dateString)
         val day : Int? = daySchedule?.dateDayDict!![schoolSelected]!![dateString]
-        dayIndicatorLabel?.setText(getDayOfCycle(day))
+        dayIndicatorLabel?.text = getDayOfCycle(day)
     }
 
 
+    //MARK - Data methods
+    fun getEventsData() {
+        println("We are asking for Events data")
+        val request = Request.Builder()
+            .url("https://csbcsaints.org/calendar/")
+            .build()
+
+        eventsClient?.newCall(request)?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error on request to CSBCSaints.org: ")
+                println(e)
+                eventsData = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!,true)
+                eventsReady = true
+                tryToLoadTableView()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                println("Successfully received calendar data")
+                this@TodayActivity.runOnUiThread(object:Runnable {
+                    public override fun run() {
+                        val html = response.body?.string()
+                        println(html)
+                        val eventsDataParser = EventsDataParser()
+                        if (html != null) {
+                            eventsDataParser.parseEventsData(html, sharedPreferences4!!)
+                            eventsArray = eventsDataParser.eventsModelArray
+                        } else {
+                            eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!, true)
+                        }
+                        eventsReady = true
+                        tryToLoadTableView()
+                    }
+                })
+
+            }
+        })
+    }
+    fun getAthleticsData() {
+        canCallAthletics = false
+        println("we are asking for data")
+        val request = Request.Builder()
+            .url("https://www.schedulegalaxy.com/api/v1/schools/163/activities")
+            .build()
+
+        athleticsClient?.newCall(request)?.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error on request to ScheduleGalaxy: ")
+                println(e)
+                athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!, true)
+                athleticsReady = true
+                tryToLoadTableView()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                println("sucess")
+                this@TodayActivity.runOnUiThread(object:Runnable {
+                    public override fun run() {
+                        val athleticsDataParser = AthleticsDataParser()
+                        val json = JSON(response.body?.string())
+                        athleticsDataParser.parseAthleticsData(json, sharedPreferences4!!)
+                        athleticsArray = athleticsDataParser.athleticsModelArray
+                        athleticsReady = true
+                        tryToLoadTableView()
+                    }
+                })
+            }
+
+        })
+    }
+    fun getDayOfCycle(day : Int?) : String {
+        if (day != null && day != 0) {
+            return "Today is Day $day"
+        } else {
+            return "There is no school today"
+        }
+    }
+
+
+    //MARK - Table methods
+    fun createBasicTextView(color: Int, style: UserFontStyles) : TextView {
+        val textView: TextView = TextView(this)
+        textView.layoutParams = cellParams
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17F)
+        textView.setTextColor(color)
+        textView.setCustomFont(UserFontFamilies.GOTHAM, style)
+        textView.setBackgroundColor(Color.WHITE)
+        return textView
+    }
+    fun createNoEventsTextView() : TextView {
+        val textView = createBasicTextView(R.color.csbcGray, UserFontStyles.ITALIC)
+        textView.text = "There are no events today"
+        textView.setPadding(24.toPx(),14.toPx(),24.toPx(),14.toPx())
+        return textView
+    }
     fun createCellForEventsModelAndAddToEndOfScrollView(model : Array<EventsModel?>?, scrollLayout : LinearLayout) {
         if (!model.isNullOrEmpty() && model[0] != null) {
             for (event in 0 until model.count()) {
@@ -211,90 +295,6 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             scrollLayout.addView(athleticsNoEvents)
         }
     }
-
-    fun createBasicTextView(color: Int, style: UserFontStyles) : TextView {
-        val textView: TextView = TextView(this)
-        textView.layoutParams = cellParams
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17F)
-        textView.setTextColor(color)
-        textView.setCustomFont(UserFontFamilies.GOTHAM, style)
-        textView.setBackgroundColor(Color.WHITE)
-        return textView
-    }
-    fun createNoEventsTextView() : TextView {
-        val textView = createBasicTextView(R.color.csbcGray, UserFontStyles.ITALIC)
-        textView.text = "There are no events today"
-        textView.setPadding(24.toPx(),14.toPx(),24.toPx(),14.toPx())
-        return textView
-    }
-
-    fun getAthleticsData() {
-        canCallAthletics = false
-        println("we are asking for data")
-        val request = Request.Builder()
-            .url("https://www.schedulegalaxy.com/api/v1/schools/163/activities")
-            .build()
-
-        athleticsClient?.newCall(request)?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to ScheduleGalaxy: ")
-                println(e)
-                athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!, true)
-                athleticsReady = true
-                tryToLoadTableView()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("sucess")
-                this@TodayActivity.runOnUiThread(object:Runnable {
-                    public override fun run() {
-                        val athleticsDataParser = AthleticsDataParser()
-                        val json = JSON(response.body?.string())
-                        athleticsDataParser.parseAthleticsData(json, sharedPreferences4!!)
-                        athleticsArray = athleticsDataParser.athleticsModelArray
-                        athleticsReady = true
-                        tryToLoadTableView()
-                    }
-                })
-            }
-
-        })
-    }
-    fun getEventsData() {
-        println("We are asking for Events data")
-        val request = Request.Builder()
-            .url("https://csbcsaints.org/calendar/")
-            .build()
-
-        eventsClient?.newCall(request)?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to CSBCSaints.org: ")
-                println(e)
-                eventsData = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!,true)
-                eventsReady = true
-                tryToLoadTableView()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("Successfully received calendar data")
-                this@TodayActivity.runOnUiThread(object:Runnable {
-                    public override fun run() {
-                        val html = response.body?.string()
-                        println(html)
-                        val eventsDataParser = EventsDataParser()
-                        if (html != null) {
-                            eventsDataParser.parseEventsData(html, sharedPreferences4!!)
-                            eventsArray = eventsDataParser.eventsModelArray
-                        } else {
-                            eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!, true)
-                        }
-                        eventsReady = true
-                        tryToLoadTableView()
-                    }
-                })
-
-            }
-        })
-    }
-
     fun tryToLoadTableView() {
         println("runnign")
         if (athleticsReady && eventsReady) {
@@ -322,13 +322,4 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             loadingSymbol?.visibility = View.INVISIBLE
         }
     }
-
-    fun getDayOfCycle(day : Int?) : String {
-        if (day != null && day != 0) {
-            return "Today is Day $day"
-        } else {
-            return "There is no school today"
-        }
-    }
-
 }

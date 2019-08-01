@@ -11,9 +11,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AthleticsDataParser {
-
     var athleticsModelArray : Array<AthleticsModel?> = arrayOf()
-    val teamAbbreviations = mapOf("V" to "Varsity","JV" to "JV","7/8TH" to "Modified")
+    private val teamAbbreviations = mapOf("V" to "Varsity","JV" to "JV","7/8TH" to "Modified")
 
     fun parseAthleticsData(json : JSON, preferences : SharedPreferences) {
         var modelListToReturn : MutableList<AthleticsModel> = arrayListOf()
@@ -93,7 +92,6 @@ class AthleticsDataParser {
         athleticsModelArray = modelListToReturn.toTypedArray()
         addObjectArrayToUserDefaults(athleticsModelArray, preferences)
     }
-
     private fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>, preferences : SharedPreferences) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(athleticsArray)
@@ -102,5 +100,4 @@ class AthleticsDataParser {
         preferences.edit()?.putString("athleticsArray", json)?.apply()
         preferences.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
     }
-
 }

@@ -1,6 +1,5 @@
 package com.csbcsaints.CSBCandroid
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -11,15 +10,12 @@ import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.yearString
-import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.activity_options.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 //TODO - add Admin Settings
 
 class OptionsActivity : AppCompatActivity() {
-
     var setonSwitch : Switch? = null
     var johnSwitch : Switch? = null
     var saintsSwitch : Switch? = null
@@ -36,6 +32,7 @@ class OptionsActivity : AppCompatActivity() {
 
     val normalParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     val collapsedParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,7 +150,6 @@ class OptionsActivity : AppCompatActivity() {
 
         getNotificationPreferences()
     }
-
     override fun onStop() {
         super.onStop()
 
@@ -182,6 +178,7 @@ class OptionsActivity : AppCompatActivity() {
         notificationController?.subscribeToTopics()
     }
 
+
     fun getNotificationPreferences() {
 
         val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
@@ -203,7 +200,6 @@ class OptionsActivity : AppCompatActivity() {
 
         deliveryTimeLabel?.setText(notificationSettings?.deliveryTime)//what time should they be
     }
-
     fun settingsSwitchToggled() {
 
         notificationSettings?.valuesChangedByUser = true

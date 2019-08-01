@@ -20,34 +20,28 @@ import java.util.*
 
 //TODO - See stack about queuing notifications with Payload over multiple alarms
 
-class NotificationController {
-
+class NotificationController(val context: Context) {
     var timeFormatter : SimpleDateFormat = SimpleDateFormat("h:mm a")
     var timeFormatterIn24H : SimpleDateFormat = SimpleDateFormat("HH:mm")
     var dateStringFormatter : SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
-
-    var timeComponents : MutableList<Int> = arrayListOf()
     val dayScheduleLite = DaySchedule(AppCompatActivity())
     var notificationSettings : NotificationSettings?
-
     val todaysDate = Calendar.getInstance().time
-    var context : Context
 
     var sharedPreferences : SharedPreferences? = null
 
-    constructor(context: Context) {
-        this.context = context
+
+    init {
         sharedPreferences = context.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         notificationSettings = defineNotificationSettings()
     }
-
-
-
     fun reconstruct() {
         notificationSettings = null
         notificationSettings = defineNotificationSettings()
     }
 
+
+    //MARK - Show notifications
     fun queueNotifications() {
         val center = NotificationManagerCompat.from(context)
         center.cancelAll()
@@ -139,7 +133,6 @@ class NotificationController {
         }
 
     }
-
     fun subscribeToTopics() {
         val topicArray = arrayOf("setonNotifications","johnNotifications","saintsNotifications","jamesNotifications")
         val schoolBools = notificationSettings?.schools ?: arrayOf(false, false, false, false)
@@ -170,9 +163,9 @@ class NotificationController {
         }
     }
 
-    fun defineNotificationSettings() : NotificationSettings {
-        //val sharedPreferences2 =
 
+    //MARK - Notification Settings
+    fun defineNotificationSettings() : NotificationSettings {
         val json = sharedPreferences?.getString("Notifications", null)
         if (!json.isNullOrEmpty()) {
             println("Notification settings exist")
@@ -185,7 +178,6 @@ class NotificationController {
         }
 
     }
-
     fun storeNotificationSettings(settings: NotificationSettings) {
         settings.printNotifData()
         this.notificationSettings = settings

@@ -49,12 +49,7 @@ class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 
         setupViewForTabbedActivity(R.layout.activity_lunch)
     }
-
     override fun tabSelectedHandler() {
         webView?.loadUrl("https://docs.google.com/gview?url=${lunchURLs[schoolSelectedInt]}")
     }
-
-
-
-
 }

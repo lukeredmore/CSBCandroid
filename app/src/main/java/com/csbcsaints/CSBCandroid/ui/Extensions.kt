@@ -1,6 +1,5 @@
 package com.csbcsaints.CSBCandroid.ui
 
-import android.content.Context
 import android.content.res.Resources
 import android.widget.TextView
 import java.text.SimpleDateFormat
@@ -8,32 +7,26 @@ import java.util.*
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
-import com.csbcsaints.CSBCandroid.Calendar.EventsModel
-import com.csbcsaints.CSBCandroid.EventsDataParser
-import com.google.gson.Gson
 import java.text.ParseException
 
 
+//MARK - Dates
 fun Date.yearString() : String {
     val dateFormatter = SimpleDateFormat("yyyy")
     return dateFormatter.format(this)
 }
-
 fun Date.fullMonthString() : String {
     val dateFormatter = SimpleDateFormat("MMMM")
     return dateFormatter.format(this)
 }
-
 fun Date.abbrvMonthString() : String {
     val dateFormatter = SimpleDateFormat("MMM")
     return dateFormatter.format(this)
 }
-
 fun Date.numMonthString() : String {
     val dateFormatter = SimpleDateFormat("MM")
     return dateFormatter.format(this)
 }
-
 fun Date.dayString() : String {
     val dateFormatter = SimpleDateFormat("dd")
     return dateFormatter.format(this)
@@ -50,68 +43,6 @@ fun String.toDateWithTime() : Date {
     val dateFormatter = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
     return dateFormatter.parse(this)
 }
-
-
-enum class UserFontFamilies {
-    GOTHAM, MONTSERRAT
-}
-
-enum class UserFontStyles {
-    XLIGHT, XLIGHTITALIC, LIGHT, ULTRALIGHTITALIC, THIN, THINITALIC, REGULAR, ITALIC, SEMIBOLD, BOLD, BLACK
-}
-
-fun TextView.setCustomFont(fontFamily: UserFontFamilies, fontStyle: UserFontStyles) {
-    var fontName : String = "gotham.otf"
-    when (fontFamily) {
-        UserFontFamilies.GOTHAM -> {
-            when (fontStyle) {
-                UserFontStyles.XLIGHT -> fontName = "Gotham-XLight.otf"
-                UserFontStyles.XLIGHTITALIC -> fontName = "XLightItalic.otf"
-                UserFontStyles.LIGHT -> fontName = "Gotham-Light.otf"
-                UserFontStyles.ULTRALIGHTITALIC -> fontName = "UltraItalic.otf"
-                UserFontStyles.THIN -> fontName = "Gotham-Thin.otf"
-                UserFontStyles.THINITALIC -> fontName = "Gotham-ThinItalic.otf"
-                UserFontStyles.REGULAR -> fontName = "GothamBookRegular.otf"
-                UserFontStyles.ITALIC -> fontName = "Gotham-BookItalic.otf"
-                UserFontStyles.SEMIBOLD -> fontName = "gotham.otf"
-                UserFontStyles.BOLD -> fontName = "Gotham-Bold.otf"
-                UserFontStyles.BLACK -> fontName = "Gtham-Black.otf"
-            }
-        }
-        UserFontFamilies.MONTSERRAT -> {
-            when (fontStyle) {
-                UserFontStyles.REGULAR -> fontName = "Montserrat-Regular.otf"
-                UserFontStyles.ITALIC -> fontName = "Montserrat-Italic.otf"
-                UserFontStyles.SEMIBOLD -> fontName = "Montserrat-SemiBold.otf"
-            }
-        }
-    }
-    val tf : Typeface = Typeface.createFromAsset(context.assets, "fonts/$fontName")
-    setTypeface(tf)
-}
-
-//fun AppCompatActivity.sendModelBackToPreviousActivity(dataArray: Array<EventsModel?>?) {
-//    if (dataArray != null) {
-//        val label: String = this.localClassName
-//        println("$label is passing data back")
-//        val intent = Intent().apply {
-//            putExtra("eventsArray", dataArray)
-//        }
-//        setResult(Activity.RESULT_OK, intent)
-//    }
-//}
-//
-//fun AppCompatActivity.sendModelBackToPreviousActivity(dataArray: Array<AthleticsModel?>?) {
-//    if (dataArray != null) {
-//    val label: String = this.localClassName
-//    println("$label is passing data back")
-//    val intent = Intent().apply {
-//        putExtra("athleticsArray", dataArray)
-//    }
-//    setResult(Activity.RESULT_OK, intent)
-//}
-//}
-
 fun Date.addDays(daysToAdd: Int) : Date {
     val calendar = Calendar.getInstance()
     try {
@@ -143,31 +74,49 @@ fun Date.addMinutes(minutesToAdd: Int) : Date {
     return calendar.time
 }
 
-//fun Array<Parcelable>.convertToAthleticsArray() : Array<AthleticsModel?> {
-//    if (this != null) {
-//        println("Athletics Data already exists and we can use it")
-//        val existingModelArray = arrayOfNulls<AthleticsModel>(this!!.size)
-//        for (i in this.indices) {
-//            existingModelArray[i] = this[i] as AthleticsModel
-//        }
-//        return existingModelArray
-//    } else return arrayOf()
-//}
-//
-//fun Array<Parcelable>.convertToEventsArray() : Array<EventsModel?>? {
-//    if (this != null) {
-//        println("Athletics Data already exists and we can use it")
-//        val existingModelArray = arrayOfNulls<EventsModel>(this!!.size)
-//        for (i in this.indices) {
-//            existingModelArray[i] = this[i] as EventsModel
-//        }
-//        return existingModelArray
-//    } else return arrayOf()
-//}
+
+//MARK - Fonts
+enum class UserFontFamilies {
+    GOTHAM, MONTSERRAT
+}
+enum class UserFontStyles {
+    XLIGHT, XLIGHTITALIC, LIGHT, ULTRALIGHTITALIC, THIN, THINITALIC, REGULAR, ITALIC, SEMIBOLD, BOLD, BLACK
+}
+fun TextView.setCustomFont(fontFamily: UserFontFamilies, fontStyle: UserFontStyles) {
+    var fontName : String = "gotham.otf"
+    when (fontFamily) {
+        UserFontFamilies.GOTHAM -> {
+            when (fontStyle) {
+                UserFontStyles.XLIGHT -> fontName = "Gotham-XLight.otf"
+                UserFontStyles.XLIGHTITALIC -> fontName = "XLightItalic.otf"
+                UserFontStyles.LIGHT -> fontName = "Gotham-Light.otf"
+                UserFontStyles.ULTRALIGHTITALIC -> fontName = "UltraItalic.otf"
+                UserFontStyles.THIN -> fontName = "Gotham-Thin.otf"
+                UserFontStyles.THINITALIC -> fontName = "Gotham-ThinItalic.otf"
+                UserFontStyles.REGULAR -> fontName = "GothamBookRegular.otf"
+                UserFontStyles.ITALIC -> fontName = "Gotham-BookItalic.otf"
+                UserFontStyles.SEMIBOLD -> fontName = "gotham.otf"
+                UserFontStyles.BOLD -> fontName = "Gotham-Bold.otf"
+                UserFontStyles.BLACK -> fontName = "Gtham-Black.otf"
+            }
+        }
+        UserFontFamilies.MONTSERRAT -> {
+            when (fontStyle) {
+                UserFontStyles.REGULAR -> fontName = "Montserrat-Regular.otf"
+                UserFontStyles.ITALIC -> fontName = "Montserrat-Italic.otf"
+                UserFontStyles.SEMIBOLD -> fontName = "Montserrat-SemiBold.otf"
+            }
+        }
+    }
+    val tf : Typeface = Typeface.createFromAsset(context.assets, "fonts/$fontName")
+    typeface = tf
+}
+
+
+//MARK - Debugging
 fun AppCompatActivity.write(text: Any) {
     Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show()
 }
-
 fun Array<String>.printAll() {
     print("[")
     for (each in 0 until size - 1) {
@@ -175,7 +124,6 @@ fun Array<String>.printAll() {
     }
     println(this.last() + "]")
 }
-
 fun MutableList<String>.printAll() {
     print("[")
     for (each in 0 until size - 1) {
@@ -185,6 +133,7 @@ fun MutableList<String>.printAll() {
 }
 
 
+//MARK - Display
 /**
  * Takes the runtime device px value and returns the corresponding dp value
  */

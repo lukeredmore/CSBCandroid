@@ -32,7 +32,6 @@ class HTMLController {
             override fun onResponse(call: Call, response: Response) {
                 println("Successfully received lunch data")
                 val html = response.body?.string()
-                println(html)
                 if (html != null) {
                     parseSetonLunchHTML(html, parent)
                 }
@@ -130,7 +129,6 @@ class HTMLController {
             val doc = Jsoup.parse(html)
             doc.select(".et_pb_blurb_description").select("p").select("a")
                 .forEach {
-                    println(it.text())
                     if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
                         println("Saints Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[2] = it.attr("href")
@@ -146,7 +144,6 @@ class HTMLController {
             val doc = Jsoup.parse(html)
             doc.select(".et_pb_blurb_description").select("p").select("a")
                 .forEach {
-                    println(it.text())
                     if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
                         println("James Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[3] = it.attr("href")

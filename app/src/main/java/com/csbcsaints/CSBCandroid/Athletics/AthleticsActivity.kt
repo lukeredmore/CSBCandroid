@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import eu.amirs.JSON
@@ -15,11 +16,10 @@ import java.io.IOException
 //TODO - Add search function
 
 class AthleticsActivity : CSBCAppCompatActivity() {
-
     private val client = OkHttpClient()
     var athleticsData = AthleticsDataParser()
     var listView : ListView? = null
-    var athleticsAdapter : AthleticsAdapter? = null
+    private var athleticsAdapter : AthleticsAdapter? = null
     var swipeRefreshLayout : SwipeRefreshLayout? = null
     var loadingSymbol : ProgressBar? = null
 
@@ -35,7 +35,7 @@ class AthleticsActivity : CSBCAppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
         loadingSymbol?.visibility = View.VISIBLE
-        swipeRefreshLayout?.setColorSchemeColors(getResources().getColor(R.color.colorAccent))
+        swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
         swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 swipeRefreshLayout?.setRefreshing(true)
@@ -47,6 +47,8 @@ class AthleticsActivity : CSBCAppCompatActivity() {
         tryToBuildExistingData()
     }
 
+
+    //MARK - Data methods
     private fun tryToBuildExistingData() {
         swipeRefreshLayout?.setEnabled(false)
         val athleticsArray : Array<AthleticsModel?> = retrieveAthleticsArrayFromUserDefaults(sharedPreferences3!!)
@@ -60,7 +62,6 @@ class AthleticsActivity : CSBCAppCompatActivity() {
             getAthleticsData()
         }
     }
-
     fun getAthleticsData() {
         println("We are asking for Athletics data")
         val request = Request.Builder()
@@ -83,6 +84,8 @@ class AthleticsActivity : CSBCAppCompatActivity() {
         })
     }
 
+
+    //MARK - Table methods
     fun setupTable() {
         val adapter = AthleticsAdapter(this)
 

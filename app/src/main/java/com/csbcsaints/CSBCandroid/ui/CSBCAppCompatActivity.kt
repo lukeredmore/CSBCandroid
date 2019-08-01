@@ -3,18 +3,13 @@ package com.csbcsaints.CSBCandroid.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.preference.PreferenceManager
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
-import android.view.View
-import android.widget.TableLayout
 import android.widget.TextView
 import com.csbcsaints.CSBCandroid.AthleticsModel
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.R
 import com.google.gson.Gson
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,20 +21,16 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
     val schoolSelectedMap = mapOf<String, Int>("Seton" to 0, "St. John's" to 1, "All Saints" to 2, "St. James" to 3)
     val schoolSelectedArray = arrayOf<String>("Seton", "St. John's", "All Saints", "St. James")
     val dateStringFormatter = SimpleDateFormat("MM/dd/yyyy")
-    var testSharedPrefs : SharedPreferences? = null
 
-//    constructor() {
-//        testSharedPrefs = getSharedPreferences("UserDefaults", Context.MODE_WORLD_READABLE)
-//
-//    }
 
+    //MARK - Activity control
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
-//        testSharedPrefs =
-
     }
 
+
+    //MARK - Tab methods
     fun setupViewForTabbedActivity(layout: Int) {
         val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         getSupportActionBar()?.hide()
@@ -63,12 +54,10 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
             override fun onTabReselected(p0: TabLayout.Tab?) { }
         })
     }
+    open fun tabSelectedHandler() {}
 
-    open fun tabSelectedHandler() {
-        print("try this tho")
-        println(Calendar.getInstance().time.dateString())
-    }
 
+    //MARK - Athletics/Calendar methods
     fun retrieveEventsArrayFromUserDefaults(preferences : SharedPreferences, forceReturn : Boolean = false) : Array<EventsModel?> {
         println("Attempting to retrieve stored Events data.")
         val currentTime = Calendar.getInstance().time

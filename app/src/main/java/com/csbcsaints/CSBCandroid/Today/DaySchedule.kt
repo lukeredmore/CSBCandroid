@@ -3,14 +3,12 @@ package com.csbcsaints.CSBCandroid
 import com.csbcsaints.CSBCandroid.ui.addDays
 import java.text.SimpleDateFormat
 import java.util.*
-import android.R.id.edit
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.Context.MODE_PRIVATE
 import com.csbcsaints.CSBCandroid.ui.printAll
 
 
-class DaySchedule {
+class DaySchedule(context : Context, forSeton : Boolean = false, forJohn : Boolean = false, forSaints : Boolean = false, forJames : Boolean = false) {
     val startDateString : String = "09/04/2019" //first day of school
     val endDateString : String = "06/19/2020" //last day of school
     var dateDayDict : MutableMap<String,MutableMap<String,Int>> = mutableMapOf("Seton" to mutableMapOf(), "St. John's" to mutableMapOf(), "All Saints" to mutableMapOf(), "St. James" to mutableMapOf())
@@ -20,11 +18,9 @@ class DaySchedule {
     val noElementarySchoolDateStrings : Array<String> = arrayOf("11/15/2019")
     val noHighSchoolDateStrings : Array<String> = arrayOf("01/21/2020", "01/22/2020", "01/23/2020", "01/24/2020", "01/25/2020", "06/18/2020", "06/19/2020")
 
-    var snowDateStrings : Array<String> = arrayOf() //["02/22/2020", "02/25/2020", "02/26/2020", "02/27/2020"]
+    var snowDateStrings : Array<String> = arrayOf()
     var dayScheduleOverides : MutableMap<String, Int> = mutableMapOf()
     //var snowDateCount = 0
-
-    //var schoolDates : [String:[String]]!
 
     var restrictedDates : MutableList<Date> = arrayListOf()
     var restrictedDatesForHS : MutableList<Date> = arrayListOf()
@@ -34,13 +30,10 @@ class DaySchedule {
     var appendableRestrictedDatesForESStrings : MutableList<String> = arrayListOf()
     var restrictedDatesForHSStrings : Array<String> = arrayOf()
     var restrictedDatesForESStrings : Array<String> = arrayOf()
-    var context : Context
 
     var preferences : SharedPreferences? = null
 
-
-    constructor(context : Context, forSeton : Boolean = false, forJohn : Boolean = false, forSaints : Boolean = false, forJames : Boolean = false) {
-        this.context = context
+    init {
         if (forSeton || forJohn || forSaints || forJames) {
             preferences = context.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
             restrictedDates.clear()
@@ -57,10 +50,10 @@ class DaySchedule {
             findDayOfCycle(forSeton, forJohn, forSaints, forJames)
 
         }
-
     }
 
-    fun findDayOfCycle(forSeton : Boolean, forJohn : Boolean, forSaints : Boolean, forJames : Boolean) {
+    //MARK - Day schedule creator
+    private fun findDayOfCycle(forSeton : Boolean, forJohn : Boolean, forSaints : Boolean, forJames : Boolean) {
         val dateParser = SimpleDateFormat("MM/dd/yyyy")
         val weekDayFormatter = SimpleDateFormat("EEEE")
         var date : Date = dateParser.parse(startDateString)
@@ -155,17 +148,14 @@ class DaySchedule {
         //print(dateDayDictArray)
 
     }
-
-
-    fun proceedToNextDay(day : Int) : Int {
+    private fun proceedToNextDay(day : Int) : Int {
         var newDay = day + 1
         if (newDay > 6) {
             newDay =  1
         }
         return newDay
     }
-
-    fun checkToAddDateToArray(dateString : String) {
+    private fun checkToAddDateToArray(dateString : String) {
         if (!dateDayDictArray.contains(dateString)) {
             dateDayDictArray.add(dateString)
         }

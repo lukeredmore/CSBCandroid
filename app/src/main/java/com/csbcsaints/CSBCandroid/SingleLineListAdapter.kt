@@ -73,7 +73,7 @@ class SingleLineListAdapter(private val context: Context) : BaseAdapter() {
         } else {
             holder = convertView.tag as ViewHolder
         }
-        holder.textView!!.setText(mData.get(position))
+        holder.textView!!.text = mData.get(position)
 
         return convertView
     }

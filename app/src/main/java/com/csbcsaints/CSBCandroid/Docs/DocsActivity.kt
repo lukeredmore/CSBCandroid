@@ -11,7 +11,6 @@ import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 //TODO - Pass document itself or local link to viewer
 
 class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
-
     val documentTitles = arrayOf(
         arrayOf("SCC Parent - Student Handbook", "SCC Bell Schedule", "SCC Course Description and Information Guide", "SCC Monthly Calendar", "CSBC Calendar"),
         arrayOf(""),
@@ -24,6 +23,7 @@ class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
         arrayOf("https://csbcsaints.org/wp-content/uploads/rev9_18-Student-Parent-POLICIES-Handbook-12.pdf","https://csbcsaints.org/wp-content/uploads/Official-Code-of-Conduct.doc-2.pdf"))
     var documentListView : ListView? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_docs)
@@ -32,7 +32,6 @@ class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
 
         setupViewForTabbedActivity(R.layout.activity_docs)
     }
-
     override fun tabSelectedHandler() {
         val connectAdapter = SingleLineListAdapter(this)
         for(pdfTitle in documentTitles[schoolSelectedInt]) {
@@ -50,28 +49,4 @@ class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
 
         }
     }
-
-
 }
-
-
-/* !!!!!SAVE THIS IT IS THE ONLY RECORD OF THE OLD WAY!!!!!
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-
-        val activityTag = arguments?.getInt("activityTag")
-        val root = inflater.inflate(R.layout.activity_docs, container, false)
-        val textView = root.findViewById<TextView>(R.id.testSchoolSelected)
-
-
-        schoolSelected = schoolsList[(arguments?.getInt(DocsActivity.ARG_SECTION_NUMBER) ?: 1)-1]
-        textView.text = schoolSelected
-
-
-
-        return root
-    }
-    */

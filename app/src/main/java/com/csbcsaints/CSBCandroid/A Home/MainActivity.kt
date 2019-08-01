@@ -248,77 +248,71 @@ class MainActivity: AppCompatActivity() {
     }
 
 
-        fun performSegue(withPosition : Int) {
-            val tag = withPosition + 1
-            when(tag) {
-                1 -> {
-                    val intent = Intent(baseContext, TodayActivity::class.java)
-                    startActivityForResult(intent, START_TODAY_ACTIVITY_REQUEST_CODE)
-                }
-                3 -> {
-                    val intent = Intent(baseContext, ContactActivity::class.java)
-                    startActivity(intent)
-                }
-                4 -> {
-                    val intent = Intent(baseContext, CalendarActivity::class.java)
-                    startActivityForResult(intent, START_CALENDAR_ACTIVITY_REQUEST_CODE)
-                }
-                6 -> {
-                    val intent = Intent(baseContext, LunchActivity::class.java)
-                    startActivity(intent)
-                }
-                7 -> {
-                    val intent = Intent(baseContext, AthleticsActivity::class.java)
-                    startActivityForResult(intent, START_ATHLETICS_ACTIVITY_REQUEST_CODE)
-                }
-                9 -> {
-                    val intent = Intent(baseContext, ConnectActivity::class.java)
-                    startActivity(intent)
-                }
-                10 -> {
-                    val intent = Intent(baseContext, DressCodeActivity::class.java)
-                    startActivity(intent)
-                }
-                11 -> {
-                    val intent = Intent(baseContext, DocsActivity::class.java)
-                    startActivity(intent)
-                }
-                12 -> {
-                    val intent = Intent(baseContext, OptionsActivity::class.java)
-                    startActivity(intent)
-                }
-                else -> return
+    fun performSegue(withPosition : Int) {
+        val tag = withPosition + 1
+        when(tag) {
+            1 -> {
+                val intent = Intent(baseContext, TodayActivity::class.java)
+                startActivityForResult(intent, START_TODAY_ACTIVITY_REQUEST_CODE)
             }
-        }
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            println("did tihis aeven come back")
-            println(requestCode)
-            if (requestCode == Activity.RESULT_OK) {
-                println("and this")
-                if (requestCode == START_ATHLETICS_ACTIVITY_REQUEST_CODE) {
-                    athleticsParcelableArray = data!!.getParcelableArrayExtra("athleticsArray")
-                    println("athleticsArray stored")
-                }
-                if (requestCode == START_CALENDAR_ACTIVITY_REQUEST_CODE) {
-                    eventsParcelableArray = data!!.getParcelableArrayExtra("eventsArray")
-                    println("eventsArray stored")
-                } //else  {
-                else {
-                    super.onActivityResult(requestCode, resultCode, data)
-                }
+            3 -> {
+                val intent = Intent(baseContext, ContactActivity::class.java)
+                startActivity(intent)
             }
+            4 -> {
+                val intent = Intent(baseContext, CalendarActivity::class.java)
+                startActivityForResult(intent, START_CALENDAR_ACTIVITY_REQUEST_CODE)
+            }
+            6 -> {
+                val intent = Intent(baseContext, LunchActivity::class.java)
+                startActivity(intent)
+            }
+            7 -> {
+                val intent = Intent(baseContext, AthleticsActivity::class.java)
+                startActivityForResult(intent, START_ATHLETICS_ACTIVITY_REQUEST_CODE)
+            }
+            9 -> {
+                val intent = Intent(baseContext, ConnectActivity::class.java)
+                startActivity(intent)
+            }
+            10 -> {
+                val intent = Intent(baseContext, DressCodeActivity::class.java)
+                startActivity(intent)
+            }
+            11 -> {
+                val intent = Intent(baseContext, DocsActivity::class.java)
+                startActivity(intent)
+            }
+            12 -> {
+                val intent = Intent(baseContext, OptionsActivity::class.java)
+                startActivity(intent)
+            }
+            else -> return
         }
-
-        fun showWebPage(withURL : String?) {
-            val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-            builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
-            val customTabsIntent : CustomTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this, Uri.parse(withURL!!))
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        println("did tihis aeven come back")
+        println(requestCode)
+        if (requestCode == Activity.RESULT_OK) {
+            println("and this")
+            if (requestCode == START_ATHLETICS_ACTIVITY_REQUEST_CODE) {
+                athleticsParcelableArray = data!!.getParcelableArrayExtra("athleticsArray")
+                println("athleticsArray stored")
+            }
+            if (requestCode == START_CALENDAR_ACTIVITY_REQUEST_CODE) {
+                eventsParcelableArray = data!!.getParcelableArrayExtra("eventsArray")
+                println("eventsArray stored")
+            } //else  {
+            else {
+                super.onActivityResult(requestCode, resultCode, data)
+            }
         }
     }
 
-
-
-
-
-
+    fun showWebPage(withURL : String?) {
+        val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+        builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
+        val customTabsIntent : CustomTabsIntent = builder.build()
+        customTabsIntent.launchUrl(this, Uri.parse(withURL!!))
+    }
+}

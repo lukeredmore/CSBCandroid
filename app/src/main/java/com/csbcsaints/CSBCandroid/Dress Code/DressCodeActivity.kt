@@ -1,10 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.TextView
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
@@ -15,23 +12,29 @@ import com.google.android.material.tabs.TabLayout
 import android.webkit.WebChromeClient
 
 class DressCodeActivity : CSBCAppCompatActivity() {
-
     var dressCodeSelectedInt = 0
     var dressCodeSelected = "Elementary"
     val dressCodeTitles = arrayOf("Elementary", "Middle School", "High School")
     val dressCodeHTMLs = arrayOf("elementarySchoolDress", "middleSchoolDress", "highSchoolDress")
     val dressCodeMap = mapOf("Elementary" to 0, "Middle School" to 1, "High School" to 2)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dresscode)
-        setupDressCodeView(R.layout.activity_dresscode)
+        setupDressCodeView()
+    }
+    override fun tabSelectedHandler() {
+        println(dressCodeTitles[dressCodeSelectedInt])
+        val webView : WebView? = findViewById(R.id.webView)
+        webView?.settings?.loadWithOverviewMode = true
+        webView?.settings?.useWideViewPort = true
+        webView?.webChromeClient = WebChromeClient()
+        webView?.loadUrl("file:///android_asset/${dressCodeHTMLs[dressCodeSelectedInt]}.html")
     }
 
-    fun setupDressCodeView(layout: Int) {
+    private fun setupDressCodeView() {
         val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        getSupportActionBar()?.hide()
+        supportActionBar?.hide()
         findViewById<TextView>(R.id.activityTitle).setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
 
         dressCodeSelected = sharedPreferences?.getString("dressCodeSelected", "Elementary") ?: "Elementary"
@@ -53,12 +56,5 @@ class DressCodeActivity : CSBCAppCompatActivity() {
         })
     }
 
-    override fun tabSelectedHandler() {
-        println(dressCodeTitles[dressCodeSelectedInt])
-        val webView : WebView? = findViewById(R.id.webView)
-        webView?.settings?.loadWithOverviewMode = true
-        webView?.settings?.useWideViewPort = true
-        webView?.webChromeClient = WebChromeClient()
-        webView?.loadUrl("file:///android_asset/${dressCodeHTMLs[dressCodeSelectedInt]}.html")
-    }
+
 }

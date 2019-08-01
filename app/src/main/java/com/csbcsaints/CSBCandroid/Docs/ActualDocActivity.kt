@@ -11,7 +11,6 @@ import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 //TODO - Pull document from bundle instead of internet, add share button
 
 class ActualDocActivity : CSBCAppCompatActivity() {
-
     var webView : WebView? = null
     var loadingSymbol : ProgressBar? = null
 
@@ -36,7 +35,6 @@ class ActualDocActivity : CSBCAppCompatActivity() {
 
 
     }
-
     override fun onStart() {
         super.onStart()
         webView?.loadUrl("https://docs.google.com/gview?url=${intent.getStringExtra("selectedLink")}")

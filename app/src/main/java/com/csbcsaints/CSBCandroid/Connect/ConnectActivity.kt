@@ -8,8 +8,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
-
+class ConnectActivity : CSBCAppCompatActivity() {
     val socialArray = arrayOf(
         arrayOf( //Seton
             arrayOf(
@@ -83,7 +82,6 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
 
         setupViewForTabbedActivity(R.layout.activity_connect)
     }
-
     override fun tabSelectedHandler() {
         val connectAdapter = SingleLineListAdapter(this)
         var x = 0
@@ -111,7 +109,8 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
         }
     }
 
-    fun openTwitter(id : String) {
+    //MARK - Deep link methods
+    private fun openTwitter(id : String) {
         var intent: Intent? = null
         try {
             // get the Twitter app if possible
@@ -124,7 +123,7 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
         }
         this.startActivity(intent)
     }
-    fun openInstagram(id : String) {
+    private fun openInstagram(id : String) {
         var intent: Intent? = null
         try {
             // get the Instagram app if possible
@@ -137,7 +136,7 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
         }
         this.startActivity(intent)
     }
-    fun openFacebook(id : String) {
+    private fun openFacebook(id : String) {
         var intent: Intent? = null
         try {
             // get the Facebook app if possible
@@ -150,5 +149,4 @@ class ConnectActivity : CSBCAppCompatActivity() { //Fragment() {
         }
         this.startActivity(intent)
     }
-
 }

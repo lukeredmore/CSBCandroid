@@ -1,20 +1,14 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
-import com.csbcsaints.CSBCandroid.CalendarActivity
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.abbrvMonthString
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.google.gson.Gson
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import java.io.IOException
 import java.util.*
 
 class EventsDataParser {
-
     val titleList : MutableList<String> = arrayListOf()
     val timeList : MutableList<String> = arrayListOf()
     val dayList : MutableList<String> = arrayListOf()
@@ -29,12 +23,10 @@ class EventsDataParser {
             val doc = Jsoup.parse(html)
             doc.select(".evcal_event_title")
                 .forEach {
-                    println(it.text())
                     titleList.add(it.text())
                 }
             doc.select(".evcal_time")
                 .forEach {
-                    println(it.text())
                     if (it.text().contains("(All Day: ")) {
                         timeList.add("All Day")
                     } else {
@@ -43,18 +35,15 @@ class EventsDataParser {
                 }
             doc.select(".date")
                 .forEach {
-                    println(it.text())
                     dayList.add(it.text())
                 }
             doc.select(".month")
                 .forEach {
-                    println(it.text())
                     var dateString = it.text()
                     monthList.add(Calendar.getInstance().time.abbrvMonthString())
                 }
             doc.select(".ett1")
                 .forEach {
-                    println(it.text())
                     val schools = it.text().replace("Schools:", "")
                     schoolsList.add(schools)
                 }
@@ -76,12 +65,9 @@ class EventsDataParser {
         }
         addObjectArrayToUserDefaults(eventsModelArray, preferences)
     }
-
     private fun addObjectArrayToUserDefaults(eventsArray: Array<EventsModel?>, preferences : SharedPreferences) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(eventsArray)
-        println("dateTimeToAdd: " + dateTimeToAdd)
-        println("json: " + json)
         preferences.edit()?.putString("eventsArray", json)?.apply()
         preferences.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
     }
