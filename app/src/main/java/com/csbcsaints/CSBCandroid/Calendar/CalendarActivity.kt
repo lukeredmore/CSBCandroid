@@ -1,5 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
@@ -21,6 +23,8 @@ class CalendarActivity : CSBCAppCompatActivity() {
     var swipeRefreshLayout : SwipeRefreshLayout? = null
     var loadingSymbol : ProgressBar? = null
 
+    var sharedPreferences3 : SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
@@ -28,6 +32,8 @@ class CalendarActivity : CSBCAppCompatActivity() {
         loadingSymbol = findViewById(R.id.loadingSymbol)
         listView = findViewById(R.id.listView)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+
+        sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
         loadingSymbol?.visibility = View.VISIBLE
         swipeRefreshLayout?.setColorSchemeColors(getResources().getColor(R.color.colorAccent))
@@ -44,7 +50,7 @@ class CalendarActivity : CSBCAppCompatActivity() {
 
     private fun tryToBuildExistingData() {
         swipeRefreshLayout?.setEnabled(false)
-        val eventsArray: Array<EventsModel?> = retrieveEventsArrayFromUserDefaults()
+        val eventsArray: Array<EventsModel?> = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!)
         if (eventsArray.size > 1) {
             println("Events Data already exists and we can use it")
             eventsData.eventsModelArray = eventsArray
@@ -65,7 +71,7 @@ class CalendarActivity : CSBCAppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Error on request to CSBCSaints.org: ")
                 println(e)
-                eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(true)
+                eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!, true)
                 setupTable()
             }
             override fun onResponse(call: Call, response: Response) {
@@ -73,9 +79,9 @@ class CalendarActivity : CSBCAppCompatActivity() {
                 val html = response.body?.string()
                 println(html)
                 if (html != null) {
-                    eventsData.parseEventsData(html)
+                    eventsData.parseEventsData(html, sharedPreferences3!!)
                 } else {
-                    eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(true)
+                    eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!, true)
                 }
                 setupTable()
 

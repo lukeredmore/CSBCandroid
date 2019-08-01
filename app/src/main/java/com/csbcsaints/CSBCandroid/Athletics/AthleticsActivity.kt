@@ -1,5 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
@@ -10,7 +12,7 @@ import eu.amirs.JSON
 import okhttp3.*
 import java.io.IOException
 
-//TODO - Add search function, fix pulling existing data!, no data loading!
+//TODO - Add search function
 
 class AthleticsActivity : CSBCAppCompatActivity() {
 
@@ -20,6 +22,8 @@ class AthleticsActivity : CSBCAppCompatActivity() {
     var athleticsAdapter : AthleticsAdapter? = null
     var swipeRefreshLayout : SwipeRefreshLayout? = null
     var loadingSymbol : ProgressBar? = null
+
+    var sharedPreferences3 : SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +42,14 @@ class AthleticsActivity : CSBCAppCompatActivity() {
                 getAthleticsData()
             }
         })
-
+        sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         getSupportActionBar()?.setTitle("Athletics")
         tryToBuildExistingData()
     }
 
     private fun tryToBuildExistingData() {
         swipeRefreshLayout?.setEnabled(false)
-        val athleticsArray : Array<AthleticsModel?> = retrieveAthleticsArrayFromUserDefaults()
+        val athleticsArray : Array<AthleticsModel?> = retrieveAthleticsArrayFromUserDefaults(sharedPreferences3!!)
         println(athleticsArray)
         if (athleticsArray.size > 1) {
             println("Athletics Data already exists and we can use it")
@@ -67,13 +71,13 @@ class AthleticsActivity : CSBCAppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Error on request to ScheduleGalaxy: ")
                 println(e)
-                athleticsData.athleticsModelArray = retrieveAthleticsArrayFromUserDefaults(true)
+                athleticsData.athleticsModelArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences3!!, true)
                 setupTable()
             }
             override fun onResponse(call: Call, response: Response) {
                 println("success")
                 val json = JSON(response.body?.string())
-                athleticsData.parseAthleticsData(json)
+                athleticsData.parseAthleticsData(json, sharedPreferences3!!)
                 setupTable()
             }
         })
@@ -86,7 +90,7 @@ class AthleticsActivity : CSBCAppCompatActivity() {
             for(dateWithEvents in athleticsData.athleticsModelArray) {
                 if (dateWithEvents != null) {
                     adapter.addSectionHeaderItem(dateWithEvents.date)
-                    for (event in 0 until dateWithEvents.sport.size) {
+                    for (event in 0 until dateWithEvents.title.size) {
                         adapter.addItem(dateWithEvents, event)
                     }
                 }

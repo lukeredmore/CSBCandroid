@@ -20,7 +20,7 @@ class AthleticsAdapter(private val context: Context) : BaseAdapter() {
     private val sectionHeader = TreeSet<Int>()
 
     fun addItem(item: AthleticsModel, index: Int) {
-        val itemToAdd = AthleticsModelSingle(item.homeGame[index], item.gender[index], item.level[index], item.sport[index], item.opponent[index], item.time[index], item.date)
+        val itemToAdd = AthleticsModelSingle(item.title[index], item.level[index], item.time[index], item.date)
         rowData[headerData.size] = itemToAdd
         headerData.add("ROW")
 //        notifyDataSetChanged()
@@ -77,15 +77,14 @@ class AthleticsAdapter(private val context: Context) : BaseAdapter() {
         }
 
         val model = rowData[position]
-        val titleText = model?.gender + "'s " + model?.sport + " " + model?.homeGame + " " + model?.opponent
 
-        holder.textView?.setText(headerData.get(position))
+        holder.textView?.text = headerData.get(position)
         holder.textView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
-        holder.titleLabel?.setText(titleText)
+        holder.titleLabel?.text = model?.title
         holder.titleLabel?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
-        holder.levelLabel?.setText(model?.level)
+        holder.levelLabel?.text = model?.level
         holder.levelLabel?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.ITALIC)
-        holder.timeLabel?.setText(model?.time)
+        holder.timeLabel?.text = model?.time
         holder.timeLabel?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
 
         return convertView

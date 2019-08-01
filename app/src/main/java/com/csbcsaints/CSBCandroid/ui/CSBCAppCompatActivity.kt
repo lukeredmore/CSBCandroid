@@ -20,7 +20,7 @@ import java.util.*
 
 //TODO - Support dark mode, support hiding schools, store school selected in an object
 
-open class CSBCAppCompatActivity : AppCompatActivity() {
+abstract class CSBCAppCompatActivity : AppCompatActivity() {
     var schoolSelected = "Seton"
     var schoolSelectedInt = 0
     val schoolSelectedMap = mapOf<String, Int>("Seton" to 0, "St. John's" to 1, "All Saints" to 2, "St. James" to 3)
@@ -28,11 +28,15 @@ open class CSBCAppCompatActivity : AppCompatActivity() {
     val dateStringFormatter = SimpleDateFormat("MM/dd/yyyy")
     var testSharedPrefs : SharedPreferences? = null
 
+//    constructor() {
+//        testSharedPrefs = getSharedPreferences("UserDefaults", Context.MODE_WORLD_READABLE)
+//
+//    }
 
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        testSharedPrefs = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
+//        testSharedPrefs =
 
     }
 
@@ -65,64 +69,41 @@ open class CSBCAppCompatActivity : AppCompatActivity() {
         println(Calendar.getInstance().time.dateString())
     }
 
-    fun addObjectArrayToUserDefaults(eventsArray: Array<EventsModel?>) {
-
-        //val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
-        val json = Gson().toJson(eventsArray)
-        testSharedPrefs?.edit()?.putString("eventsArray", json)?.apply()
-        testSharedPrefs?.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
-    }
-    fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>) {
-        //val sharedPreferences2 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
-        val json = Gson().toJson(athleticsArray)
-        print(dateTimeToAdd)
-        println(json)
-        testSharedPrefs?.edit()?.putString("athleticsArray", json)?.apply()
-        testSharedPrefs?.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
-    }
-    fun retrieveEventsArrayFromUserDefaults(forceReturn : Boolean = false) : Array<EventsModel?> {
-        //val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        println("retireving evnts defaults")
+    fun retrieveEventsArrayFromUserDefaults(preferences : SharedPreferences, forceReturn : Boolean = false) : Array<EventsModel?> {
+        println("Attempting to retrieve stored Events data.")
         val currentTime = Calendar.getInstance().time
-        val eventsArrayTimeString : String? = testSharedPrefs?.getString("eventsArrayTime", null)
+        val eventsArrayTimeString : String? = preferences.getString("athleticsArrayTime", null)
         val eventsArrayTime = eventsArrayTimeString?.toDateWithTime()?.addHours(1)
-        val json = testSharedPrefs?.getString("eventsArray", null)
+        val json = preferences.getString("eventsArray", null)
         if (eventsArrayTime != null && !json.isNullOrEmpty()) {
-            if ((eventsArrayTime!! > currentTime) || (forceReturn)) {
+            if ((eventsArrayTime > currentTime) || (forceReturn)) {
+                println("Up-to-date Events data found, no need to look online.")
                 return Gson().fromJson(json, Array<EventsModel?>::class.java)
             } else {
-                return arrayOf()
+                println("Events data found, but is old. Will refresh online.")
+                return arrayOf(EventsModel("Could not connect.", "", "", "", "", ""))
             }
-        } else if (forceReturn) {
-            return arrayOf(EventsModel("Could not connect.", "", "", "", "", ""))
         } else {
+            println("No Events data found. Looking online.")
             return arrayOf()
         }
-
     }
-    fun retrieveAthleticsArrayFromUserDefaults(forceReturn : Boolean = false) : Array<AthleticsModel?> {
-
-        //val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        println("retireving athletics defaults")
+    fun retrieveAthleticsArrayFromUserDefaults(preferences : SharedPreferences, forceReturn : Boolean = false) : Array<AthleticsModel?> {
+        println("Attempting to retrieve stored Athletics data.")
         val currentTime = Calendar.getInstance().time
-        val athleticsArrayTimeString : String? = testSharedPrefs?.getString("athleticsArrayTime", null)
+        val athleticsArrayTimeString : String? = preferences.getString("athleticsArrayTime", null)
         val athleticsArrayTime = athleticsArrayTimeString?.toDateWithTime()?.addHours(1)
-        val json = testSharedPrefs?.getString("athleticsArray", null)
-        println(json)
-        println(athleticsArrayTime)
+        val json = preferences.getString("athleticsArray", null)
         if (athleticsArrayTime != null && !json.isNullOrEmpty()) {
-            print("1 ")
-            if ((athleticsArrayTime!! > currentTime) || (forceReturn)) {
-                print("2 ")
+            if ((athleticsArrayTime > currentTime) || (forceReturn)) {
+                println("Up-to-date Athletics data found, no need to look online.")
                 return Gson().fromJson(json, Array<AthleticsModel?>::class.java)
             } else {
-                print("3 ")
+                println("Athletics data found, but is old. Will refresh online.")
                 return arrayOf()
             }
         } else {
-            print("4 ")
+            println("No Athletics data found. Looking online.")
             return arrayOf()
         }
     }

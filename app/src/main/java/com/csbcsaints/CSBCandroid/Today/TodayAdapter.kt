@@ -33,11 +33,10 @@ class TodayAdapter(private val context: Context) : BaseAdapter() {
         notifyDataSetChanged()
     }
     fun addItem(item: AthleticsModel) {
-        for (i in 0 until item.sport.size) {
+        for (i in 0 until item.title.size) {
             println("Adding athletics at $itemCount")
-            val titleText = (item.gender[i] + "'s " + item.sport[i] + " " + item.homeGame[i] + " " + item.opponent[i])
-            val itemToAppend : EventsModel = EventsModel(
-                titleText, item.date, item.date, item.date, item.time[i], item.level[i]
+            val itemToAppend = EventsModel(
+                item.title[i], item.date, item.date, item.date, item.time[i], item.level[i]
             )
             rowData[itemCount] = itemToAppend
             itemCount += 1

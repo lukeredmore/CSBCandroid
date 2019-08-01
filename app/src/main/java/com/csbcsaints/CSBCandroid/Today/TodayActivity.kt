@@ -3,6 +3,7 @@ package com.csbcsaints.CSBCandroid
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -55,6 +56,8 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
     var dateChangerButton : TextView? = null
     var activityTitle : TextView? = null
     var loadingSymbol : ProgressBar? = null
+
+    var sharedPreferences4 : SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,9 +115,10 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 
         setupViewForTabbedActivity(R.layout.activity_today)
 
+        sharedPreferences4 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         scrollLayout?.removeViews(1, 2)
-        eventsArray = retrieveEventsArrayFromUserDefaults()
-        athleticsArray = retrieveAthleticsArrayFromUserDefaults()
+        eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!)
+        athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!)
 
         if (athleticsArray.isNullOrEmpty()) {
             if (canCallAthletics) { getAthleticsData() }
@@ -174,7 +178,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
     }
     fun createCellForAthleticsModelAndAddToEndOfScrollView(model : AthleticsModel?, scrollLayout : LinearLayout) {
         if (model != null) {
-            for (event in 0 until model.homeGame.count()) {
+            for (event in 0 until model.title.count()) {
                 val separatorLine = View(this)
                 val lineParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -184,8 +188,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
                 separatorLine.setBackgroundColor(ContextCompat.getColor(this, R.color.csbcSuperLightGray))
 
                 val titleLabel = createBasicTextView(Color.BLACK, UserFontStyles.SEMIBOLD)
-                titleLabel.text =
-                    "${model.gender[event]}'s ${model.sport[event]} ${model.homeGame[event]} ${model.opponent[event]}"
+                titleLabel.text = model.title[event]
                 titleLabel.setPadding(24.toPx(), 14.toPx(), 24.toPx(), 0.toPx())
 
 
@@ -236,7 +239,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Error on request to ScheduleGalaxy: ")
                 println(e)
-                athleticsArray = retrieveAthleticsArrayFromUserDefaults(true)
+                athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!, true)
                 athleticsReady = true
                 tryToLoadTableView()
             }
@@ -246,7 +249,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
                     public override fun run() {
                         val athleticsDataParser = AthleticsDataParser()
                         val json = JSON(response.body?.string())
-                        athleticsDataParser.parseAthleticsData(json)
+                        athleticsDataParser.parseAthleticsData(json, sharedPreferences4!!)
                         athleticsArray = athleticsDataParser.athleticsModelArray
                         athleticsReady = true
                         tryToLoadTableView()
@@ -266,7 +269,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Error on request to CSBCSaints.org: ")
                 println(e)
-                eventsData = retrieveEventsArrayFromUserDefaults(true)
+                eventsData = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!,true)
                 eventsReady = true
                 tryToLoadTableView()
             }
@@ -278,10 +281,10 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
                         println(html)
                         val eventsDataParser = EventsDataParser()
                         if (html != null) {
-                            eventsDataParser.parseEventsData(html)
+                            eventsDataParser.parseEventsData(html, sharedPreferences4!!)
                             eventsArray = eventsDataParser.eventsModelArray
                         } else {
-                            eventsArray = retrieveEventsArrayFromUserDefaults(true)
+                            eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!, true)
                         }
                         eventsReady = true
                         tryToLoadTableView()

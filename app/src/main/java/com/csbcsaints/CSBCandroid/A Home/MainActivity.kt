@@ -37,7 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO - make sure new launch screen works!, check for alerts from WBNG and display them, start downloading lunch menus
+//TODO - add launch screen works, check for alerts from WBNG and display them, start downloading lunch menus
 
 class MainActivity: AppCompatActivity() {
 
@@ -52,7 +52,6 @@ class MainActivity: AppCompatActivity() {
     var iconsList = ArrayList<Icon>()
     val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
     val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
-    var schoolSelected = "Seton"
     val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/fi0kKA?vid=hf0o")
     var shouldSnowDatesReinit = false
     var shouldOverridesReinit = false
@@ -62,7 +61,6 @@ class MainActivity: AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
