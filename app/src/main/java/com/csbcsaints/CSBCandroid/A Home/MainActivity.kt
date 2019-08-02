@@ -52,7 +52,7 @@ class MainActivity: AppCompatActivity() {
     var iconsList = ArrayList<Icon>()
     val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
     val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
-    val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/fi0kKA?vid=hf0o")
+    val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/N-9Y0w?vid=1hepr")
     var shouldSnowDatesReinit = false
     var shouldOverridesReinit = false
     var snowDatesChecked = false
@@ -288,24 +288,6 @@ class MainActivity: AppCompatActivity() {
                 startActivity(intent)
             }
             else -> return
-        }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        println("did tihis aeven come back")
-        println(requestCode)
-        if (requestCode == Activity.RESULT_OK) {
-            println("and this")
-            if (requestCode == START_ATHLETICS_ACTIVITY_REQUEST_CODE) {
-                athleticsParcelableArray = data!!.getParcelableArrayExtra("athleticsArray")
-                println("athleticsArray stored")
-            }
-            if (requestCode == START_CALENDAR_ACTIVITY_REQUEST_CODE) {
-                eventsParcelableArray = data!!.getParcelableArrayExtra("eventsArray")
-                println("eventsArray stored")
-            } //else  {
-            else {
-                super.onActivityResult(requestCode, resultCode, data)
-            }
         }
     }
 

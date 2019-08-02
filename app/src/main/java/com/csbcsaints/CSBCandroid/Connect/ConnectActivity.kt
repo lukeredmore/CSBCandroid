@@ -30,7 +30,7 @@ class ConnectActivity : CSBCAppCompatActivity() {
             arrayOf(
                 "Catholic Schools of Broome County",
                 "Dr. Elizabeth Carter, President",
-                "Angela Tierno-Sherwood, Principal"
+                "William Pipher, Principal"
             ), // t
             arrayOf("Catholic Schools of Broome County", "All Saints School") //f
         ), arrayOf( //St. James

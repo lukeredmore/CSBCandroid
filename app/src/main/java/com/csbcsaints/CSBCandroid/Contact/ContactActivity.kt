@@ -23,8 +23,8 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
     val SCHOOL_PHONE : Array<String> = arrayOf("607.723.5307", "607.723.0703", "607.748.7423", "607.797.5444")
     val DISTRICT_PHONE = "607.723.1547"
     val SCHOOL_FAX = arrayOf("607.723.4811", "607.772.6210", "N/A", "N/A")
-    val SCHOOL_PRINCIPALS = arrayOf("Matthew Martinkovic", "James Fountaine", "Angela Tierno-Sherwood", "Susan Kitchen")
-    val PRINCIPAL_EMAILS = arrayOf("mmartinkovic","jfountaine","atierno","skitchen")
+    val SCHOOL_PRINCIPALS = arrayOf("Matthew Martinkovic", "James Fountaine", "William Pipher", "Susan Kitchen")
+    val PRINCIPAL_EMAILS = arrayOf("mmartinkovic","jfountaine","wpipher","skitchen")
     val BEFORE_TIME = arrayOf(null, "Before School Care: From 7:00 AM", "Before School Care: From 7:00 AM", "Before School Care: From 7:00 AM")
     val START_TIME = arrayOf("Morning Bell: 8:13 AM", "Start: 8:30 AM", "Start: 8:20 AM", "Start 8:20 AM")
     val DISMISSAL_TIME = arrayOf("Dismissal: 3:00 PM", "Dismissal: 2:45 PM", "Dismissal: 2:45 PM", "Dismissal: 3:00 PM")
