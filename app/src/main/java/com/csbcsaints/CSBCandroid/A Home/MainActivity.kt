@@ -1,13 +1,10 @@
 package com.csbcsaints.CSBCandroid
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.AdapterView.OnItemClickListener
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
 import android.view.View
@@ -16,17 +13,10 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.csbcsaints.CSBCandroid.ui.dateString
 import com.csbcsaints.CSBCandroid.ui.toPx
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import java.util.*
-import com.csbcsaints.CSBCandroid.AlertController
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
@@ -44,47 +34,28 @@ class MainActivity: CSBCAppCompatActivity() {
     var htmlController : HTMLController? = null
 
 
+    //MARK - Activity Control
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("\nVersion ${BuildConfig.VERSION_NAME} has loaded in the ${BuildConfig.BUILD_TYPE} configuration.\n")
 
-        FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+        setupGridView()
 
-        setupNotifications()
+        FirebaseApp.initializeApp(this)
+        notificationController = NotificationController(this)
+        notificationController?.setupNotifications()
         htmlController = HTMLController(this)
         alertController = AlertController(this)
-
-        setupGridView()
     }
-
     override fun onStart() {
         super.onStart()
         alertController?.checkForAlert()
     }
 
-    fun setupNotifications() {
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    //Log.w(TAG, "getInstanceId failed", task.exception)
-                    return@OnCompleteListener
-                }
 
-                // Get new Instance ID token
-                val token = task.result?.token!!
-
-                // Log and toast
-                println("Device token: " + token)
-
-                notificationController = NotificationController(this)
-                notificationController?.subscribeToTopics()
-                notificationController?.queueNotifications()
-            })
-    }
-
-
+    //MARK - Notifications
     fun reinitNotifications() {
         print("reinitializing Notifications")
         notificationController = null
@@ -93,6 +64,8 @@ class MainActivity: CSBCAppCompatActivity() {
         notificationController?.queueNotifications()
     }
 
+
+    //MARK - UI methods
     fun showBannerAlert(withMessage : String) {
         val expandedParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         val alertLabel = findViewById<TextView>(R.id.alertLabel)
@@ -129,7 +102,6 @@ class MainActivity: CSBCAppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
     }
-
     private fun setupGridView() {
         for (i in 0 until iconTitles.size) {
             iconsList.add(Icon(iconTitles[i], iconImages[i]))
@@ -149,6 +121,8 @@ class MainActivity: CSBCAppCompatActivity() {
         })
     }
 
+
+    //MARK - Navigation
     private fun performSegue(withPosition : Int) {
         val destinationClass = when(withPosition + 1) {
             1 -> TodayActivity::class.java
@@ -164,7 +138,6 @@ class MainActivity: CSBCAppCompatActivity() {
         }
         startActivity(Intent(baseContext, destinationClass))
     }
-
     private fun showWebPage(withURL : String?) {
         val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))

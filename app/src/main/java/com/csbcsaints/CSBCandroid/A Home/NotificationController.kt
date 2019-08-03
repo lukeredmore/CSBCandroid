@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.ui.*
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.iid.FirebaseInstanceId
 import java.text.SimpleDateFormat
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
@@ -38,6 +40,44 @@ class NotificationController(val context: Context) {
     fun reconstruct() {
         notificationSettings = null
         notificationSettings = defineNotificationSettings()
+    }
+
+
+    //MARK - Notification Settings
+    fun setupNotifications() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    print("Connection to Firebase Messaging Unsucessful ${task.exception}")
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token!!
+                println("Device token: $token")
+
+                subscribeToTopics()
+                queueNotifications()
+            })
+    }
+    private fun defineNotificationSettings() : NotificationSettings {
+        val json = sharedPreferences?.getString("Notifications", null)
+        if (!json.isNullOrEmpty()) {
+            println("Notification settings exist")
+            val settingsToReturn = Gson().fromJson(json, NotificationSettings::class.java)
+            settingsToReturn.printNotifData()
+            return settingsToReturn
+        } else {
+            println("No notification settings exist, returning default one")
+            return NotificationSettings(true, "7:00 AM", arrayOf(true, true, true, true), false)
+        }
+
+    }
+    fun storeNotificationSettings(settings: NotificationSettings) {
+        settings.printNotifData()
+        this.notificationSettings = settings
+        val json = Gson().toJson(settings)
+        sharedPreferences?.edit()?.putString("Notifications", json)?.apply()
     }
 
 
@@ -161,28 +201,6 @@ class NotificationController(val context: Context) {
             FirebaseAnalytics.getInstance(context).setUserProperty(topicArray[i], "${notificationSettings!!.schools[i]}")
 
         }
-    }
-
-
-    //MARK - Notification Settings
-    fun defineNotificationSettings() : NotificationSettings {
-        val json = sharedPreferences?.getString("Notifications", null)
-        if (!json.isNullOrEmpty()) {
-            println("Notification settings exist")
-            val settingsToReturn = Gson().fromJson(json, NotificationSettings::class.java)
-            settingsToReturn.printNotifData()
-            return settingsToReturn
-        } else {
-            println("No notification settings exist, returning default one")
-            return NotificationSettings(true, "7:00 AM", arrayOf(true, true, true, true), false)
-        }
-
-    }
-    fun storeNotificationSettings(settings: NotificationSettings) {
-        settings.printNotifData()
-        this.notificationSettings = settings
-        val json = Gson().toJson(settings)
-        sharedPreferences?.edit()?.putString("Notifications", json)?.apply()
     }
 
 }

@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -17,22 +19,19 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO: Swipe gesture, double tap to return to Today
+//TODO: Swipe gesture, make sure correct events show up for date (events)!
 
 class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 
     var athleticsClient : OkHttpClient? = OkHttpClient()
     var eventsClient : OkHttpClient? = OkHttpClient()
     var eventsData : Array<EventsModel?>? = null
-    var athleticsData : Array<AthleticsModel?>? = null
     var athleticsReady = false
     var listView : ListView? = null
     var daySchedule: DaySchedule? = null
     var eventsReady = false
-    val task = EventsDataParser()
     var canCallAthletics = true
     var canCallEvents = true
-    var allowOnCreateView = true
     var eventsArray : Array<EventsModel?> = arrayOf()
     var athleticsArray : Array<AthleticsModel?> = arrayOf()
     val cellParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
@@ -71,38 +70,10 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
         daySchedule = DaySchedule(this, true, true, true, true)
 
         loadingSymbol?.visibility = View.VISIBLE
-        dateChangerButton?.setOnClickListener(object:View.OnClickListener {
-            val yearFormatter = SimpleDateFormat("yyyy")
-            val monthFormatter = SimpleDateFormat("MM")
-            val dayFormatter = SimpleDateFormat("dd")
-            override fun onClick(v:View) {
-                val date = dateStringFormatter.parse(dateString)
-                val mYear = yearFormatter.format(date).toInt()
-                val mMonth = monthFormatter.format(date).toInt()
-                val mDay = dayFormatter.format(date).toInt()
-                val datePickerDialog = DatePickerDialog(this@TodayActivity,
-                    object:DatePickerDialog.OnDateSetListener {
-                        override fun onDateSet(view:DatePicker, year:Int, monthOfYear:Int, dayOfMonth:Int) {
-                            var month = "${monthOfYear+1}"
-                            var day = "$dayOfMonth"
-                            if (monthOfYear < 10) {
-                                month = "0$month"
-                            }
-                            if (dayOfMonth < 10) {
-                                day = "0$day"
-                            }
-                            dateString = "$month/$day/$year"
-                            if (dateString != Calendar.getInstance().time.dateString()) {
-                                val titleFormatter = SimpleDateFormat("MMM d")
-                                activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
-                            } else {
-                                activityTitle?.text = "Today"
-                            }
-                            tabSelectedHandler()
-                            tryToLoadTableView()
-                        }
-                    }, mYear, mMonth - 1, mDay)
-                datePickerDialog.show()
+        val gestureDetector = GestureDetector(this, TodayGestureListener(this))
+        dateChangerButton?.setOnTouchListener(object:View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                return gestureDetector.onTouchEvent(event);
             }
         })
 
@@ -130,6 +101,47 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
         println("The dateString is: " + dateString)
         val day : Int? = daySchedule?.dateDayDict!![schoolSelected]!![dateString]
         dayIndicatorLabel?.text = getDayOfCycle(day)
+    }
+
+
+    //MARK - Date functions
+    fun dateButtonTapped() {
+        val yearFormatter = SimpleDateFormat("yyyy")
+        val monthFormatter = SimpleDateFormat("MM")
+        val dayFormatter = SimpleDateFormat("dd")
+        val date = dateStringFormatter.parse(dateString)
+        val mYear = yearFormatter.format(date).toInt()
+        val mMonth = monthFormatter.format(date).toInt()
+        val mDay = dayFormatter.format(date).toInt()
+        val datePickerDialog = DatePickerDialog(this@TodayActivity,
+            object:DatePickerDialog.OnDateSetListener {
+                override fun onDateSet(view:DatePicker, year:Int, monthOfYear:Int, dayOfMonth:Int) {
+                    var month = "${monthOfYear+1}"
+                    var day = "$dayOfMonth"
+                    if (monthOfYear < 10) {
+                        month = "0$month"
+                    }
+                    if (dayOfMonth < 10) {
+                        day = "0$day"
+                    }
+                    dateString = "$month/$day/$year"
+                    if (dateString != Calendar.getInstance().time.dateString()) {
+                        val titleFormatter = SimpleDateFormat("MMM d")
+                        activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
+                    } else {
+                        activityTitle?.text = "Today"
+                    }
+                    tabSelectedHandler()
+                    tryToLoadTableView()
+                }
+            }, mYear, mMonth - 1, mDay)
+        datePickerDialog.show()
+    }
+    fun dateButtonDoubleTapped() {
+        dateString = Calendar.getInstance().time.dateString()
+        activityTitle?.text = "Today"
+        tabSelectedHandler()
+        tryToLoadTableView()
     }
 
 
