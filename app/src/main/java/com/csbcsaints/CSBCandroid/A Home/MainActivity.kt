@@ -1,32 +1,23 @@
 package com.csbcsaints.CSBCandroid
 
-import android.app.ActionBar
-import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.AdapterView.OnItemClickListener
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Parcelable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.ui.dateString
 import com.csbcsaints.CSBCandroid.ui.toPx
-import com.csbcsaints.CSBCandroid.ui.write
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DataSnapshot
@@ -35,28 +26,25 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import java.util.*
+import com.csbcsaints.CSBCandroid.AlertController
 import kotlin.collections.ArrayList
+import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-//TODO - add launch screen works, check for alerts from WBNG and display them, start downloading lunch menus
+//TODO - add launch screen works, start downloading lunch menus, consolidate intents
 
-class MainActivity: AppCompatActivity() {
-
+class MainActivity: CSBCAppCompatActivity() {
     companion object {
         const val START_CALENDAR_ACTIVITY_REQUEST_CODE = 0
         const val START_ATHLETICS_ACTIVITY_REQUEST_CODE = 1
         const val START_TODAY_ACTIVITY_REQUEST_CODE = 2
     }
-    var eventsParcelableArray : Array<Parcelable>? = null
-    var athleticsParcelableArray : Array<Parcelable>? = null
     var myAdapter: MainIconGridAdapter? = null
     var iconsList = ArrayList<Icon>()
     val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
     val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
     val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/N-9Y0w?vid=1hepr")
-    var shouldSnowDatesReinit = false
-    var shouldOverridesReinit = false
-    var snowDatesChecked = false
-    var dayOverridesChecked = false
+
+    var localAlerts : com.csbcsaints.CSBCandroid.AlertController? = null
     var notificationController : NotificationController? = null
 
 
@@ -64,38 +52,27 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
-        getSupportActionBar()?.hide()
+        supportActionBar?.hide()
 
         println("\nVersion ${BuildConfig.VERSION_NAME} has loaded in the ${BuildConfig.BUILD_TYPE} configuration.\n")
-
-        removeBannerAlert()
 
         setupNotifications()
 
         val html = HTMLController()
         html.downloadAndStoreLunchMenus(this)
 
-        for (i in 0 until iconTitles.size) {
-            iconsList.add(Icon(iconTitles[i], iconImages[i]))
-        }
-        myAdapter = MainIconGridAdapter(this, iconsList)
-        iconGridView.adapter = myAdapter
-        iconGridView.setOnItemClickListener(OnItemClickListener { parent, v, position, id ->
-            println(position)
-            val iconSelected = iconsList[position]
-            iconSelected.announce()
-            if(position != 1 && position != 4 && position != 7) {
-                performSegue(position)
-            } else if(position > -1 && position < 12) {
-                showWebPage(urlMap[position])
-            }
+        localAlerts = com.csbcsaints.CSBCandroid.AlertController(this)
 
-        })
-
-        getSnowDatesAndOverridesAndQueueNotifications()
+        setupGridView()
 
 
     }
+
+    override fun onStart() {
+        super.onStart()
+        localAlerts?.checkForAlert()
+    }
+
     fun setupNotifications() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -116,98 +93,13 @@ class MainActivity: AppCompatActivity() {
             })
     }
 
-    fun getSnowDatesAndOverridesAndQueueNotifications() {
-        //var snowDays : Set<String> = setOf()
-        FirebaseDatabase.getInstance().reference.child("SnowDays")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(p0: DataSnapshot) {
-                    val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
-                    val myMap: Map<String, String>? = p0.value as? Map<String, String>
-                    val myList: Collection<String>? = myMap?.values
-                    val newSnowDays = myList?.toSet()
-                    val ogSnowDays = preferences.getStringSet("snowDays", null)
-                    println("Existing Snow Days: $ogSnowDays")
-                    println("Firebase Snow Days: $newSnowDays")
-                    if (newSnowDays != null) {
-                        if (newSnowDays.contains(Calendar.getInstance().time.dateString())) {
-                            showBannerAlert("The Catholic Schools of Broome County are closed today")
-                        } else {
-                            removeBannerAlert()
-                        }
-                        if (ogSnowDays != null) {
-                            if (newSnowDays != ogSnowDays) {
-                                println("Saving Firebase snow days and reinitializing")
-                                preferences.edit().putStringSet("snowDays", newSnowDays).apply()
-                                shouldSnowDatesReinit = true
-                                tryToReinit()
-                            } else {
-                                println("They are equal, no need to reinit")
-                            }
-                        } else {
-                            println("Saving Firebase snow days and reinitializing")
-                            preferences.edit().putStringSet("snowDays", newSnowDays).apply()
-                            shouldSnowDatesReinit = true
-                            tryToReinit()
-                        }
-                        snowDatesChecked = true
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    println(databaseError)
-                }
-
-            })
-        FirebaseDatabase.getInstance().reference.child("DayScheduleOverrides")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(p0: DataSnapshot) {
-                    val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-                    val newOverrides: Map<String, Int>? = p0.value as? Map<String, Int>
-                    val ogOverrides = mapOf(
-                        "Seton" to preferences.getInt("SetonOverrides", 0),
-                        "John" to preferences.getInt("JohnOverrides", 0),
-                        "Saints" to preferences.getInt("SaintsOverrides", 0),
-                        "James" to preferences.getInt("JamesOverrides", 0)
-                    )
-                    if (!newOverrides.isNullOrEmpty() && !ogOverrides.isNullOrEmpty()) {
-                        if (newOverrides!! != ogOverrides) {
-                            println("Saving Firebase overrides and reinitializing")
-                            preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
-                            preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
-                            preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
-                            preferences.edit().putInt("JamesOverrides", newOverrides["James"]!!).apply()
-                            shouldOverridesReinit = true
-                            tryToReinit()
-                        } else {
-                            println("They are equal, no need to reinit")
-                        }
-                    } else if (newOverrides != null) {
-                        println("Saving Firebase overrides and reinitializing")
-                        preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
-                        preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
-                        preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
-                        preferences.edit().putInt("JamesOverrides", newOverrides["James"]!!).apply()
-                        shouldOverridesReinit = true
-                        tryToReinit()
-                    }
-                    dayOverridesChecked = true
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    println(databaseError)
-                }
-
-            })
-    }
-    fun tryToReinit() {
-        if (snowDatesChecked && dayOverridesChecked && (shouldSnowDatesReinit || shouldOverridesReinit)) {
-            print("reinitializing Notifications")
-            notificationController = null
-            notificationController = NotificationController(this)
-            notificationController?.subscribeToTopics()
-            notificationController?.queueNotifications()
-        }
+    fun reinitNotifications() {
+        print("reinitializing Notifications")
+        notificationController = null
+        notificationController = NotificationController(this)
+        notificationController?.subscribeToTopics()
+        notificationController?.queueNotifications()
     }
 
     fun showBannerAlert(withMessage : String) {
@@ -247,8 +139,26 @@ class MainActivity: AppCompatActivity() {
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
     }
 
+    private fun setupGridView() {
+        for (i in 0 until iconTitles.size) {
+            iconsList.add(Icon(iconTitles[i], iconImages[i]))
+        }
+        myAdapter = MainIconGridAdapter(this, iconsList)
+        iconGridView.adapter = myAdapter
+        iconGridView.setOnItemClickListener(OnItemClickListener { parent, v, position, id ->
+            println(position)
+            val iconSelected = iconsList[position]
+            iconSelected.announce()
+            if(position != 1 && position != 4 && position != 7) {
+                performSegue(position)
+            } else if(position > -1 && position < 12) {
+                showWebPage(urlMap[position])
+            }
 
-    fun performSegue(withPosition : Int) {
+        })
+    }
+
+    private fun performSegue(withPosition : Int) {
         val tag = withPosition + 1
         when(tag) {
             1 -> {
@@ -291,7 +201,7 @@ class MainActivity: AppCompatActivity() {
         }
     }
 
-    fun showWebPage(withURL : String?) {
+    private fun showWebPage(withURL : String?) {
         val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
         val customTabsIntent : CustomTabsIntent = builder.build()

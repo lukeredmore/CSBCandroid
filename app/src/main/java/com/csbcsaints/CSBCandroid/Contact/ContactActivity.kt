@@ -11,7 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.*
 import java.util.*
 
-//TODO - Confirm who All Saint's principal is, Add map link, add parallax effect
+//TODO - Add map link, add parallax effect
 
 class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
 
@@ -29,12 +29,14 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
     val START_TIME = arrayOf("Morning Bell: 8:13 AM", "Start: 8:30 AM", "Start: 8:20 AM", "Start 8:20 AM")
     val DISMISSAL_TIME = arrayOf("Dismissal: 3:00 PM", "Dismissal: 2:45 PM", "Dismissal: 2:45 PM", "Dismissal: 3:00 PM")
     val AFTER_TIME = arrayOf(null, "After School Care: Until 5:45 PM", "After School Care: Until 6:00 PM", "After School Care: Until 6:00 PM")
+    val SCHOOL_COORDINATES = arrayOf("42.098485,-75.928579", "42.092430,-75.908342", "42.100491,-76.050103", "42.115512,-75.969542")
 
     var normalParams : LinearLayout.LayoutParams? = null
     var collapsedParams : LinearLayout.LayoutParams? = null
 
     var imageView : ImageView? = null
 
+    var mapCell : LinearLayout? = null
     var mapIcon : ImageView? = null
     var mapTextView : TextView? = null
     var addressTextView : TextView? = null
@@ -69,6 +71,7 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
 
         imageView = findViewById(R.id.imageView)
 
+        mapCell = findViewById(R.id.mapCell)
         mapIcon = findViewById(R.id.mapIcon)
         mapTextView = findViewById(R.id.mapTextView)
         mapTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
@@ -80,6 +83,15 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
 
         copyrightLabel = findViewById(R.id.copyrightLabel)
         copyrightLabel?.text = "© ${Calendar.getInstance().time.yearString()} Catholic Schools of Broome County"
+
+        mapCell?.setOnClickListener(View.OnClickListener {
+            val gmmIntentUri = Uri.parse("geo:${SCHOOL_COORDINATES[schoolSelectedInt]}")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            }
+        })
 
         mainPhoneLayout = findViewById(R.id.mainPhone)
         mainPhoneLayout?.setOnClickListener(View.OnClickListener {

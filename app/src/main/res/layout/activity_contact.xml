@@ -90,7 +90,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:gravity="center_vertical" android:elevation="4dp">
+                    android:gravity="center_vertical" android:elevation="4dp" android:id="@+id/mapCell">
                 <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp" app:srcCompat="@drawable/appiconcircle"

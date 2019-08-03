@@ -17,7 +17,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO: Swipe gesture, double tap to return to Today!, fix UserDefaults!
+//TODO: Swipe gesture, double tap to return to Today
 
 class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 

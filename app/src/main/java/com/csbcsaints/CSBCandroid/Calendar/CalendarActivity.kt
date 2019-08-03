@@ -78,7 +78,6 @@ class CalendarActivity : CSBCAppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 println("Successfully received calendar data")
                 val html = response.body?.string()
-                println(html)
                 if (html != null) {
                     eventsData.parseEventsData(html, sharedPreferences3!!)
                 } else {
