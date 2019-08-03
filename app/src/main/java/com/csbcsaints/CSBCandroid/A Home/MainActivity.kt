@@ -30,47 +30,38 @@ import com.csbcsaints.CSBCandroid.AlertController
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-//TODO - add launch screen works, start downloading lunch menus, consolidate intents
+//TODO - add launch screen works, start downloading lunch menus
 
 class MainActivity: CSBCAppCompatActivity() {
-    companion object {
-        const val START_CALENDAR_ACTIVITY_REQUEST_CODE = 0
-        const val START_ATHLETICS_ACTIVITY_REQUEST_CODE = 1
-        const val START_TODAY_ACTIVITY_REQUEST_CODE = 2
-    }
     var myAdapter: MainIconGridAdapter? = null
     var iconsList = ArrayList<Icon>()
     val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
     val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
     val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/N-9Y0w?vid=1hepr")
 
-    var localAlerts : com.csbcsaints.CSBCandroid.AlertController? = null
     var notificationController : NotificationController? = null
+    var alertController : AlertController? = null
+    var htmlController : HTMLController? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("\nVersion ${BuildConfig.VERSION_NAME} has loaded in the ${BuildConfig.BUILD_TYPE} configuration.\n")
+
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        println("\nVersion ${BuildConfig.VERSION_NAME} has loaded in the ${BuildConfig.BUILD_TYPE} configuration.\n")
-
         setupNotifications()
-
-        val html = HTMLController()
-        html.downloadAndStoreLunchMenus(this)
-
-        localAlerts = com.csbcsaints.CSBCandroid.AlertController(this)
+        htmlController = HTMLController(this)
+        alertController = AlertController(this)
 
         setupGridView()
-
-
     }
 
     override fun onStart() {
         super.onStart()
-        localAlerts?.checkForAlert()
+        alertController?.checkForAlert()
     }
 
     fun setupNotifications() {
@@ -159,46 +150,19 @@ class MainActivity: CSBCAppCompatActivity() {
     }
 
     private fun performSegue(withPosition : Int) {
-        val tag = withPosition + 1
-        when(tag) {
-            1 -> {
-                val intent = Intent(baseContext, TodayActivity::class.java)
-                startActivityForResult(intent, START_TODAY_ACTIVITY_REQUEST_CODE)
-            }
-            3 -> {
-                val intent = Intent(baseContext, ContactActivity::class.java)
-                startActivity(intent)
-            }
-            4 -> {
-                val intent = Intent(baseContext, CalendarActivity::class.java)
-                startActivityForResult(intent, START_CALENDAR_ACTIVITY_REQUEST_CODE)
-            }
-            6 -> {
-                val intent = Intent(baseContext, LunchActivity::class.java)
-                startActivity(intent)
-            }
-            7 -> {
-                val intent = Intent(baseContext, AthleticsActivity::class.java)
-                startActivityForResult(intent, START_ATHLETICS_ACTIVITY_REQUEST_CODE)
-            }
-            9 -> {
-                val intent = Intent(baseContext, ConnectActivity::class.java)
-                startActivity(intent)
-            }
-            10 -> {
-                val intent = Intent(baseContext, DressCodeActivity::class.java)
-                startActivity(intent)
-            }
-            11 -> {
-                val intent = Intent(baseContext, DocsActivity::class.java)
-                startActivity(intent)
-            }
-            12 -> {
-                val intent = Intent(baseContext, OptionsActivity::class.java)
-                startActivity(intent)
-            }
+        val destinationClass = when(withPosition + 1) {
+            1 -> TodayActivity::class.java
+            3 -> ContactActivity::class.java
+            4 -> CalendarActivity::class.java
+            6 -> LunchActivity::class.java
+            7 -> AthleticsActivity::class.java
+            9 -> ConnectActivity::class.java
+            10 -> DressCodeActivity::class.java
+            11 -> DocsActivity::class.java
+            12 -> OptionsActivity::class.java
             else -> return
         }
+        startActivity(Intent(baseContext, destinationClass))
     }
 
     private fun showWebPage(withURL : String?) {

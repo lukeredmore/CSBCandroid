@@ -12,13 +12,17 @@ import java.io.IOException
 import java.util.*
 
 /// Finds URLs of, download, and store all the lunch menus
-class HTMLController {
+class HTMLController(val parent : MainActivity) {
 
     private val client = OkHttpClient()
-    var lunchesReady : Array<Boolean> = arrayOf(false, false, false, false)
-    var lunchURLs : Array<String> = arrayOf("","","","")
+    private var lunchesReady : Array<Boolean> = arrayOf(false, false, false, false)
+    private var lunchURLs : Array<String> = arrayOf("","","","")
 
-    fun downloadAndStoreLunchMenus(parent: MainActivity) {
+    init {
+        downloadAndStoreLunchMenus()
+    }
+
+    fun downloadAndStoreLunchMenus() {
         lunchesReady = arrayOf(false, false, false, false)
 
         val setonRequest = Request.Builder()
