@@ -28,17 +28,13 @@ class TodayActivity : CSBCAppCompatActivity() {
     var activityTitle : TextView? = null
     var loadingSymbol : ProgressBar? = null
 
-    var athleticsReady = false
-    var eventsReady = false
-    var eventsArray : Array<EventsModel?> = arrayOf()
-    var athleticsArray : Array<AthleticsModel?> = arrayOf()
+    var todayParser : TodayDataParser? = null
 
     val cellParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.MATCH_PARENT,
         LinearLayout.LayoutParams.WRAP_CONTENT
     )
     var dateString = ""
-    val longDateFormat = SimpleDateFormat("EEEE, MMMM d")
 
     var sharedPreferences4 : SharedPreferences? = null
 
@@ -60,7 +56,7 @@ class TodayActivity : CSBCAppCompatActivity() {
         activityTitle?.text = "Today"
         daySchedule = DaySchedule(this, true, true, true, true)
 
-        loadingSymbol?.visibility = View.VISIBLE
+
         val gestureDetector = GestureDetector(this, TodayGestureListener(this))
         dateChangerButton?.setOnTouchListener(object:View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -72,19 +68,16 @@ class TodayActivity : CSBCAppCompatActivity() {
 
         sharedPreferences4 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         scrollLayout?.removeViews(1, 2)
-        EventsRetriever().retrieveEventsArray(sharedPreferences4!!, false, false) {
-            eventsArray = it
-            eventsReady = true
-            buildLinearLayoutAsTableView()
-        }
-        AthleticsRetriever().retrieveAthleticsArray(sharedPreferences4!!, false, false) {
-            athleticsArray = it
-            athleticsReady = true
-            buildLinearLayoutAsTableView()
-        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadingSymbol?.visibility = View.VISIBLE
+        todayParser = TodayDataParser(this)
     }
     override fun tabSelectedHandler() {
-        println("The dateString is: " + dateString)
+        DeveloperPrinter().print("The dateString is: " + dateString)
         val day : Int? = daySchedule?.dateDayDict!![schoolSelected]!![dateString]
         dayIndicatorLabel?.text = getDayOfCycle(day)
     }
@@ -92,42 +85,47 @@ class TodayActivity : CSBCAppCompatActivity() {
 
     //MARK - Date functions
     fun dateButtonTapped() {
-        val yearFormatter = SimpleDateFormat("yyyy")
-        val monthFormatter = SimpleDateFormat("MM")
-        val dayFormatter = SimpleDateFormat("dd")
-        val date = dateStringFormatter.parse(dateString)
-        val mYear = yearFormatter.format(date).toInt()
-        val mMonth = monthFormatter.format(date).toInt()
-        val mDay = dayFormatter.format(date).toInt()
-        val datePickerDialog = DatePickerDialog(this@TodayActivity,
-            object:DatePickerDialog.OnDateSetListener {
-                override fun onDateSet(view:DatePicker, year:Int, monthOfYear:Int, dayOfMonth:Int) {
-                    var month = "${monthOfYear+1}"
-                    var day = "$dayOfMonth"
-                    if (monthOfYear < 10) {
-                        month = "0$month"
+        if (loadingSymbol?.visibility == View.INVISIBLE) {
+            val yearFormatter = SimpleDateFormat("yyyy")
+            val monthFormatter = SimpleDateFormat("MM")
+            val dayFormatter = SimpleDateFormat("dd")
+            val date = dateStringFormatter.parse(dateString)
+            val mYear = yearFormatter.format(date).toInt()
+            val mMonth = monthFormatter.format(date).toInt()
+            val mDay = dayFormatter.format(date).toInt()
+            val datePickerDialog = DatePickerDialog(this@TodayActivity,
+                object:DatePickerDialog.OnDateSetListener {
+                    override fun onDateSet(view:DatePicker, year:Int, monthOfYear:Int, dayOfMonth:Int) {
+                        var month = "${monthOfYear+1}"
+                        var day = "$dayOfMonth"
+                        if (monthOfYear < 10) {
+                            month = "0$month"
+                        }
+                        if (dayOfMonth < 10) {
+                            day = "0$day"
+                        }
+                        dateString = "$month/$day/$year"
+                        if (dateString != Calendar.getInstance().time.dateString()) {
+                            val titleFormatter = SimpleDateFormat("MMM d")
+                            activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
+                        } else {
+                            activityTitle?.text = "Today"
+                        }
+                        tabSelectedHandler()
+                        buildLinearLayoutAsTableView()
                     }
-                    if (dayOfMonth < 10) {
-                        day = "0$day"
-                    }
-                    dateString = "$month/$day/$year"
-                    if (dateString != Calendar.getInstance().time.dateString()) {
-                        val titleFormatter = SimpleDateFormat("MMM d")
-                        activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
-                    } else {
-                        activityTitle?.text = "Today"
-                    }
-                    tabSelectedHandler()
-                    buildLinearLayoutAsTableView()
-                }
-            }, mYear, mMonth - 1, mDay)
-        datePickerDialog.show()
+                }, mYear, mMonth - 1, mDay)
+            datePickerDialog.show()
+        }
     }
     fun dateButtonDoubleTapped() {
-        dateString = Calendar.getInstance().time.dateString()
-        activityTitle?.text = "Today"
-        tabSelectedHandler()
-        buildLinearLayoutAsTableView()
+        if (loadingSymbol?.visibility == View.INVISIBLE) {
+            dateString = Calendar.getInstance().time.dateString()
+            activityTitle?.text = "Today"
+            tabSelectedHandler()
+            buildLinearLayoutAsTableView()
+        }
+
     }
     fun getDayOfCycle(day : Int?) : String {
         if (day != null && day != 0) {
@@ -140,49 +138,19 @@ class TodayActivity : CSBCAppCompatActivity() {
 
     //MARK - Table methods
     fun buildLinearLayoutAsTableView() {
-        println("runnign")
-        if (athleticsReady && eventsReady) {
-            scrollLayout?.removeAllViews()
+        DeveloperPrinter().print("Building Today View as a LinearLayout impersonating a ListView")
+        scrollLayout?.removeAllViews()
 
-            val eventsArrayToDisplay : MutableList<EventsModel?> = arrayListOf()
-            var i = 0
-            while (eventsArray[i]?.date == dateString) {
-                eventsArrayToDisplay.add(eventsArray[i]!!)
-                i += 1
-            }
-            var athleticsArrayToDisplay : AthleticsModel? = null
-            for (date in athleticsArray) {
-                if (date?.date == longDateFormat.format(dateStringFormatter.parse(dateString))) {
-                    athleticsArrayToDisplay = date
-                    break
-                }
-            }
+        scrollLayout?.addView(dayIndicatorLabel)
+        scrollLayout?.addView(eventsSeparator)
+        createCellForEventsModelAndAddToEndOfScrollView(todayParser?.events(dateStringFormatter.parse(dateString)), scrollLayout!!)
+        scrollLayout?.addView(athleticsSeparator)
+        createCellForAthleticsModelAndAddToEndOfScrollView(todayParser?.athletics(dateStringFormatter.parse(dateString)), scrollLayout!!)
 
-            scrollLayout?.addView(dayIndicatorLabel)
-            scrollLayout?.addView(eventsSeparator)
-            createCellForEventsModelAndAddToEndOfScrollView(eventsArrayToDisplay.toTypedArray(), scrollLayout!!)
-            scrollLayout?.addView(athleticsSeparator)
-            createCellForAthleticsModelAndAddToEndOfScrollView(athleticsArrayToDisplay, scrollLayout!!)
-            loadingSymbol?.visibility = View.INVISIBLE
-        }
+        loadingSymbol?.visibility = View.INVISIBLE
     }
-    fun createBasicTextView(color: Int, style: UserFontStyles) : TextView {
-        val textView: TextView = TextView(this)
-        textView.layoutParams = cellParams
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17F)
-        textView.setTextColor(color)
-        textView.setCustomFont(UserFontFamilies.GOTHAM, style)
-        textView.setBackgroundColor(Color.WHITE)
-        return textView
-    }
-    fun createNoEventsTextView() : TextView {
-        val textView = createBasicTextView(R.color.csbcGray, UserFontStyles.ITALIC)
-        textView.text = "There are no events today"
-        textView.setPadding(24.toPx(),14.toPx(),24.toPx(),14.toPx())
-        return textView
-    }
-    fun createCellForEventsModelAndAddToEndOfScrollView(model : Array<EventsModel?>?, scrollLayout : LinearLayout) {
-        if (!model.isNullOrEmpty() && model[0] != null) {
+    private fun createCellForEventsModelAndAddToEndOfScrollView(model : Array<EventsModel>?, scrollLayout : LinearLayout) {
+        if (!model.isNullOrEmpty()) {
             for (event in 0 until model.count()) {
                 val separatorLine = View(this)
                 val lineParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
@@ -193,7 +161,7 @@ class TodayActivity : CSBCAppCompatActivity() {
                 separatorLine.setBackgroundColor(ContextCompat.getColor(this, R.color.csbcSuperLightGray))
 
                 val titleLabel = createBasicTextView(Color.BLACK, UserFontStyles.SEMIBOLD)
-                titleLabel.text = model[event]!!.event
+                titleLabel.text = model[event].event
                 titleLabel.setPadding(24.toPx(), 14.toPx(), 24.toPx(), 0.toPx())
 
 
@@ -216,7 +184,7 @@ class TodayActivity : CSBCAppCompatActivity() {
             scrollLayout.addView(eventsNoEvents)
         }
     }
-    fun createCellForAthleticsModelAndAddToEndOfScrollView(model : AthleticsModel?, scrollLayout : LinearLayout) {
+    private fun createCellForAthleticsModelAndAddToEndOfScrollView(model : AthleticsModel?, scrollLayout : LinearLayout) {
         if (model != null) {
             for (event in 0 until model.title.count()) {
                 val separatorLine = View(this)
@@ -250,5 +218,20 @@ class TodayActivity : CSBCAppCompatActivity() {
             val athleticsNoEvents = createNoEventsTextView()
             scrollLayout.addView(athleticsNoEvents)
         }
+    }
+    private fun createBasicTextView(color: Int, style: UserFontStyles) : TextView {
+        val textView: TextView = TextView(this)
+        textView.layoutParams = cellParams
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17F)
+        textView.setTextColor(color)
+        textView.setCustomFont(UserFontFamilies.GOTHAM, style)
+        textView.setBackgroundColor(Color.WHITE)
+        return textView
+    }
+    private fun createNoEventsTextView() : TextView {
+        val textView = createBasicTextView(R.color.csbcGray, UserFontStyles.ITALIC)
+        textView.text = "There are no events today"
+        textView.setPadding(24.toPx(),14.toPx(),24.toPx(),14.toPx())
+        return textView
     }
 }

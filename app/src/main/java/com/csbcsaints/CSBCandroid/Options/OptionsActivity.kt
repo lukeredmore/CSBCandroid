@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.yearString
 import java.text.SimpleDateFormat
 import java.util.*
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 //TODO - add Admin Settings
 
@@ -93,28 +94,28 @@ class OptionsActivity : AppCompatActivity() {
 
         setonSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
-                println("Seton Switch checked: ${setonSwitch?.isChecked}")
+                DeveloperPrinter().print("Seton Switch checked: ${setonSwitch?.isChecked}")
                 notificationSettings!!.schools[0] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         johnSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
-                println("John Switch checked: ${johnSwitch?.isChecked}")
+                DeveloperPrinter().print("John Switch checked: ${johnSwitch?.isChecked}")
                 notificationSettings!!.schools[1] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         saintsSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
-                println("Saints Switch checked: ${saintsSwitch?.isChecked}")
+                DeveloperPrinter().print("Saints Switch checked: ${saintsSwitch?.isChecked}")
                 notificationSettings!!.schools[2] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         jamesSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
-                println("James Switch checked: ${jamesSwitch?.isChecked}")
+                DeveloperPrinter().print("James Switch checked: ${jamesSwitch?.isChecked}")
                 notificationSettings!!.schools[3] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }

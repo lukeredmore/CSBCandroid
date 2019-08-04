@@ -7,6 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 //TODO - Pull document from bundle instead of internet, add share button
 
@@ -17,7 +18,7 @@ class ActualDocActivity : CSBCAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doc_viewer)
-        println("WE HAVE ACHIEVED ENLIGHTENMENT")
+        DeveloperPrinter().print("WE HAVE ACHIEVED ENLIGHTENMENT")
         this.title = intent.getStringExtra("selectedTitle")
 
         webView = findViewById(R.id.webViewDocs)

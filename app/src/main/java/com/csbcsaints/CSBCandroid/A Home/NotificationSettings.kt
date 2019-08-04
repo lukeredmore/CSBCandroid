@@ -1,5 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
+
 data class NotificationSettings(
     var shouldDeliver : Boolean,
     var deliveryTime : String,
@@ -8,14 +10,14 @@ data class NotificationSettings(
 )
 
 fun NotificationSettings.printNotifData() {
-    println("-----------NOTIFICATION SETTINGS-----------")
-    println("shouldDeliver: ${shouldDeliver}")
-    println("deliveryTime: " + deliveryTime)
+    DeveloperPrinter().print("-----------NOTIFICATION SETTINGS-----------")
+    DeveloperPrinter().print("shouldDeliver: ${shouldDeliver}")
+    DeveloperPrinter().print("deliveryTime: " + deliveryTime)
     print("schools: [")
     print("${schools[0]}, ")
     print("${schools[1]}, ")
     print("${schools[2]}, ")
-    println("${schools[3]}] ")
-    println("valuesChangedByUser: ${valuesChangedByUser}")
-    println("-------------------------------------------")
+    DeveloperPrinter().print("${schools[3]}] ")
+    DeveloperPrinter().print("valuesChangedByUser: ${valuesChangedByUser}")
+    DeveloperPrinter().print("-------------------------------------------")
 }

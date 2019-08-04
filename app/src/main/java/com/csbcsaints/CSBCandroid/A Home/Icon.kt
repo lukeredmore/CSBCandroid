@@ -1,5 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
+
 class Icon {
     var name: String? = null
     var image: Int? = null
@@ -10,6 +12,6 @@ class Icon {
     }
 
     fun announce() {
-        println(name)
+        DeveloperPrinter().print("$name")
     }
 }

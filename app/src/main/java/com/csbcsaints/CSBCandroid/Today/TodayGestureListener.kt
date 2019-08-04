@@ -2,6 +2,7 @@ package com.csbcsaints.CSBCandroid
 
 import android.view.MotionEvent
 import android.view.GestureDetector
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 
 class TodayGestureListener(val parent : TodayActivity) : GestureDetector.SimpleOnGestureListener() {
@@ -10,13 +11,13 @@ class TodayGestureListener(val parent : TodayActivity) : GestureDetector.SimpleO
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        println("singleTap")
+        DeveloperPrinter().print("singleTap")
         parent.dateButtonTapped()
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        println("doubleTap")
+        DeveloperPrinter().print("doubleTap")
         parent.dateButtonDoubleTapped()
         return true
     }

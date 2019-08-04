@@ -3,6 +3,7 @@ package com.csbcsaints.CSBCandroid
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
@@ -10,9 +11,9 @@ import androidx.core.app.NotificationCompat
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context:Context, intent:Intent) {
-        println(" ")
-        println("--------LOCAL NOTIFICATION RECEIVED--------")
-        println(" ")
+        DeveloperPrinter().print(" ")
+        DeveloperPrinter().print("--------LOCAL NOTIFICATION RECEIVED--------")
+        DeveloperPrinter().print(" ")
         //val notificationIntent = Intent(context, MainActivity::class.java)
         val body = intent.getStringExtra("body")
         val requestCode = intent.getIntExtra("requestCode", 0)

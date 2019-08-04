@@ -6,59 +6,58 @@ import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import java.util.*
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 class EventsDataParser {
-    val titleList : MutableList<String> = arrayListOf()
-    val timeList : MutableList<String> = arrayListOf()
-    val dayList : MutableList<String> = arrayListOf()
-    val monthList : MutableList<String> = arrayListOf()
-    val schoolsList : MutableList<String> = arrayListOf()
-
     private var eventsModelArray : Array<EventsModel?> = arrayOf() //ONLY ACCESS FROM SHAREDPREFERENCES
 
     fun parseEventsData(html: String, preferences : SharedPreferences) {
-        println("Events data is being parsed")
+        DeveloperPrinter().print("Events data is being parsed")
         if (html.contains("evcal_event_title")) {
-            val doc = Jsoup.parse(html)
-            doc.select(".evcal_event_title")
+//            val doc = Jsoup.parse(html)
+            val modelListToReturn : MutableList<EventsModel> = arrayListOf()
+            Jsoup.parse(html).select(".desc_trig_outter")
                 .forEach {
-                    titleList.add(it.text())
-                }
-            doc.select(".evcal_time")
-                .forEach {
-                    if (it.text().contains("(All Day: ")) {
-                        timeList.add("All Day")
-                    } else {
-                        timeList.add(it.text())
+                    val dictToAppend = mutableMapOf<String, String>()
+                    it.select(".evcal_event_title")
+                        .forEach {
+                            dictToAppend["event"] = it.text()
+                        }
+                    it.select(".evcal_time")
+                        .forEach {
+                            if (it.text().toLowerCase().contains("all day")) {
+                                dictToAppend["time"] = "All Day"
+                            } else {
+                                dictToAppend["time"] = it.text()
+                            }
+                        }
+                    it.select(".evo_start")
+                        .forEach {
+                            it.select(".date")
+                                .forEach {
+                                    dictToAppend["day"] = it.text()
+                                }
+                            it.select(".month")
+                                .forEach {
+                                    dictToAppend["month"] = it.text().toUpperCase()
+                                }
+                        }
+                    it.select(".evcal_desc3 .ett1")
+                        .forEach {
+                            dictToAppend["schools"] = it.text().replace("Schools:","", true)
+                        }
+                    val modelToAppend = EventsModel(
+                        dictToAppend["event"] ?: "",
+                        "${dictToAppend["month"] ?: ""}${dictToAppend["day"] ?: ""}",
+                        dictToAppend["day"] ?: "",
+                        dictToAppend["month"] ?: "",
+                        dictToAppend["time"] ?: "",
+                        dictToAppend["schools"] ?: "")
+                    if (!modelListToReturn.contains(modelToAppend)) {
+                        modelListToReturn.add(modelToAppend)
                     }
                 }
-            doc.select(".date")
-                .forEach {
-                    dayList.add(it.text())
-                }
-            doc.select(".month")
-                .forEach {
-                    var dateString = it.text()
-                    monthList.add(Calendar.getInstance().time.abbrvMonthString())
-                }
-            doc.select(".ett1")
-                .forEach {
-                    val schools = it.text().replace("Schools:", "")
-                    schoolsList.add(schools)
-                }
-            val month = Calendar.getInstance().time.abbrvMonthString().toUpperCase()
-            val modelListToReturn : MutableList<EventsModel> = arrayListOf()
-            for (i in 0 until titleList.size) {
-                val modelToAppend = EventsModel(
-                    titleList.getOrNull(i) ?: "",
-                    month + dayList.getOrNull(i) ?: "",
-                    dayList.getOrNull(i) ?: "",
-                    month,
-                    timeList.getOrNull(i) ?: "",
-                    schoolsList.getOrNull(i) ?: "")
-                modelListToReturn.add(modelToAppend)
-            }
-            eventsModelArray = modelListToReturn.toTypedArray()
+            eventsModelArray = modelListToReturn.sortedWith(compareBy({ it.day })).toTypedArray()
         } else {
             eventsModelArray = arrayOf()
         }

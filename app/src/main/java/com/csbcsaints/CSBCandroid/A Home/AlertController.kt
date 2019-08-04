@@ -3,6 +3,7 @@ package com.csbcsaints.CSBCandroid
 import android.content.Context
 import com.csbcsaints.CSBCandroid.MainActivity
 import com.csbcsaints.CSBCandroid.ui.dateString
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -38,8 +39,8 @@ class AlertController(val parent : MainActivity) {
                     val myList: Collection<String>? = myMap?.values
                     val newSnowDays = myList?.toSet()
                     val ogSnowDays = preferences.getStringSet("snowDays", null)
-                    println("Existing Snow Days: $ogSnowDays")
-                    println("Firebase Snow Days: $newSnowDays")
+                    DeveloperPrinter().print("Existing Snow Days: $ogSnowDays")
+                    DeveloperPrinter().print("Firebase Snow Days: $newSnowDays")
                     if (newSnowDays != null) {
                         if (newSnowDays.contains(Calendar.getInstance().time.dateString())) {
                             parent.showBannerAlert("The Catholic Schools of Broome County are closed today")
@@ -48,15 +49,15 @@ class AlertController(val parent : MainActivity) {
                         }
                         if (ogSnowDays != null) {
                             if (newSnowDays != ogSnowDays) {
-                                println("Saving Firebase snow days and reinitializing")
+                                DeveloperPrinter().print("Saving Firebase snow days and reinitializing")
                                 preferences.edit().putStringSet("snowDays", newSnowDays).apply()
                                 shouldSnowDatesReinit = true
                                 tryToReinit()
                             } else {
-                                println("They are equal, no need to reinit")
+                                DeveloperPrinter().print("They are equal, no need to reinit")
                             }
                         } else {
-                            println("Saving Firebase snow days and reinitializing")
+                            DeveloperPrinter().print("Saving Firebase snow days and reinitializing")
                             preferences.edit().putStringSet("snowDays", newSnowDays).apply()
                             shouldSnowDatesReinit = true
                             tryToReinit()
@@ -66,7 +67,7 @@ class AlertController(val parent : MainActivity) {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    println(databaseError)
+                    DeveloperPrinter().print("$databaseError")
                 }
 
             })
@@ -83,7 +84,7 @@ class AlertController(val parent : MainActivity) {
                     )
                     if (!newOverrides.isNullOrEmpty() && !ogOverrides.isNullOrEmpty()) {
                         if (newOverrides != ogOverrides) {
-                            println("Saving Firebase overrides and reinitializing")
+                            DeveloperPrinter().print("Saving Firebase overrides and reinitializing")
                             preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
                             preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
                             preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
@@ -91,10 +92,10 @@ class AlertController(val parent : MainActivity) {
                             shouldOverridesReinit = true
                             tryToReinit()
                         } else {
-                            println("They are equal, no need to reinit")
+                            DeveloperPrinter().print("They are equal, no need to reinit")
                         }
                     } else if (newOverrides != null) {
-                        println("Saving Firebase overrides and reinitializing")
+                        DeveloperPrinter().print("Saving Firebase overrides and reinitializing")
                         preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
                         preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
                         preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
@@ -106,7 +107,7 @@ class AlertController(val parent : MainActivity) {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    println(databaseError)
+                    DeveloperPrinter().print("$databaseError")
                 }
 
             })
@@ -118,19 +119,18 @@ class AlertController(val parent : MainActivity) {
     }
 
     fun checkForAlert() {
-        println("Checking for alert from CSBC site")
+        DeveloperPrinter().print("Checking for alert from CSBC site")
         val request = Request.Builder()
             .url("https://csbcsaints.org/")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to CSBCSaints.org: ")
-                println(e)
+                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
                 checkForAlertFromWBNG()
             }
             override fun onResponse(call: Call, response: Response) {
-                println("Successfully received CSBC homepage")
+                DeveloperPrinter().print("Successfully received CSBC homepage")
                 val html = response.body?.string() ?: ""
                 if (html.contains("strong")) {
                     val closedData : MutableList<String> = arrayListOf()
@@ -156,19 +156,18 @@ class AlertController(val parent : MainActivity) {
         })
     }
     fun checkForAlertFromWBNG() {
-        println("Checking for alert from WBNG")
+        DeveloperPrinter().print("Checking for alert from WBNG")
         val request = Request.Builder()
             .url("http://ftpcontent6.worldnow.com/wbng/newsticker/closings.html")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to WBNG Closings: ")
-                println(e)
+                DeveloperPrinter().print("Error on request to WBNG Closings: $e")
             }
 
             override fun onResponse(call: Call, response: Response) {
-                println("Successfully received WBNG closing data")
+                DeveloperPrinter().print("Successfully received WBNG closing data")
                 val html = response.body?.string() ?: ""
                 if (html.toLowerCase().contains("catholic")) {
                     var indexToSelect : Int? = null
@@ -184,13 +183,13 @@ class AlertController(val parent : MainActivity) {
                                 indexToSelect = it.elementSiblingIndex() + 1
                             }
                         }
-                } else println("No messages found from WBNG")
+                } else DeveloperPrinter().print("No messages found from WBNG")
             }
         })
     }
     fun parseStatus(status : String) {
         if (status.toLowerCase().contains("closed")) {
-            println("Snow day today was found")
+            DeveloperPrinter().print("Snow day today was found")
             parent.showBannerAlert("The Catholic Schools of Broome County are closed today.")
             addSnowDateToDatabase(Calendar.getInstance().time)
         }
@@ -205,20 +204,20 @@ class AlertController(val parent : MainActivity) {
         val currentSnowDays = preferences.getStringSet("snowDays", null)
         if (currentSnowDays != null) {
             if (!currentSnowDays.contains(dateValueString)) {
-                println("Adding snow day on $dateValueString to database")
+                DeveloperPrinter().print("Adding snow day on $dateValueString to database")
                 FirebaseDatabase.getInstance().reference.child("SnowDays").updateChildren(dateToAddDict) {
                         databaseError, databaseReference ->
-                    println("Shit completed")
+                    DeveloperPrinter().print("Shit completed")
                     if (databaseError != null) {
-                        println("Error adding snow day to database: " + databaseError)
+                        DeveloperPrinter().print("Error adding snow day to database: " + databaseError)
 
                     } else {
-                        println("Snow day successfully added")
+                        DeveloperPrinter().print("Snow day successfully added")
                         getSnowDatesAndOverridesAndQueueNotifications()
                     }
                 }
             } else {
-                println("Snow day on $dateValueString already exists in database")
+                DeveloperPrinter().print("Snow day on $dateValueString already exists in database")
             }
         }
 

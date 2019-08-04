@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.csbcsaints.CSBCandroid.ui.printAll
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.google.gson.Gson
 import eu.amirs.JSON
 import java.text.SimpleDateFormat
@@ -79,7 +80,7 @@ class AthleticsDataParser {
                 } else {
                     print("Error in parsing '")
                     titleArray.printAll()
-                    println("'")
+                    DeveloperPrinter().print("'")
                 }
                 n++
 
@@ -89,15 +90,15 @@ class AthleticsDataParser {
             modelListToReturn.add(modelToAppend)
 
         }
-        println("athleticsModelArray created, adding to user defaults")
+        DeveloperPrinter().print("athleticsModelArray created, adding to user defaults")
         athleticsModelArray = modelListToReturn.toTypedArray()
         addObjectArrayToUserDefaults(athleticsModelArray, preferences)
     }
     private fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>, preferences : SharedPreferences) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(athleticsArray)
-        println("dateTimeToAdd: " + dateTimeToAdd)
-        println("json: " + json)
+        DeveloperPrinter().print("dateTimeToAdd: " + dateTimeToAdd)
+        DeveloperPrinter().print("json: " + json)
         preferences.edit()?.putString("athleticsArray", json)?.apply()
         preferences.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
     }

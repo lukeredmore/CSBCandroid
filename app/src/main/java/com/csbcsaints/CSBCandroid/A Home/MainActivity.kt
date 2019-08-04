@@ -75,14 +75,14 @@ class MainActivity: CSBCAppCompatActivity() {
         val window : Window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.csbcAlertRed))
+        window.statusBarColor = ContextCompat.getColor(this, R.color.csbcAlertRed)
 
         alertLabel.text = withMessage
         alertLabel.layoutParams = expandedParams
 
         val headerLayoutParams = header.getLayoutParams() as ConstraintLayout.LayoutParams
         headerLayoutParams.topMargin = 10.toPx()
-        header.setLayoutParams(headerLayoutParams)
+        header.layoutParams = headerLayoutParams
     }
     fun removeBannerAlert() {
 
@@ -95,12 +95,12 @@ class MainActivity: CSBCAppCompatActivity() {
 
         val headerLayoutParams = header.getLayoutParams() as ConstraintLayout.LayoutParams
         headerLayoutParams.topMargin = 0
-        header.setLayoutParams(headerLayoutParams)
+        header.layoutParams = headerLayoutParams
 
         val window : Window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
     }
     private fun setupGridView() {
         for (i in 0 until iconTitles.size) {

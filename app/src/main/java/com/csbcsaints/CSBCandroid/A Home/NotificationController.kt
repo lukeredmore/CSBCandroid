@@ -53,7 +53,7 @@ class NotificationController(val context: Context) {
 
                 // Get new Instance ID token
                 val token = task.result?.token!!
-                println("Device token: $token")
+                DeveloperPrinter().print("Device token: $token")
 
                 subscribeToTopics()
                 queueNotifications()
@@ -62,12 +62,12 @@ class NotificationController(val context: Context) {
     private fun defineNotificationSettings() : NotificationSettings {
         val json = sharedPreferences?.getString("Notifications", null)
         if (!json.isNullOrEmpty()) {
-            println("Notification settings exist")
+            DeveloperPrinter().print("Notification settings exist")
             val settingsToReturn = Gson().fromJson(json, NotificationSettings::class.java)
             settingsToReturn.printNotifData()
             return settingsToReturn
         } else {
-            println("No notification settings exist, returning default one")
+            DeveloperPrinter().print("No notification settings exist, returning default one")
             return NotificationSettings(true, "7:00 AM", arrayOf(true, true, true, true), false)
         }
 
@@ -90,13 +90,13 @@ class NotificationController(val context: Context) {
 
             val notifTimeAsDate = timeFormatter.parse(notificationSettings!!.deliveryTime) //Get time of notif deliver as date
             val notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate!!) //rewrite in 24h (16:23)
-            println(notif24HTimeString)
+            DeveloperPrinter().print(notif24HTimeString)
 
             val daySchedule = DaySchedule(context, notificationSettings!!.schools[0], notificationSettings!!.schools[1], notificationSettings!!.schools[2], notificationSettings!!.schools[3])
             val allSchoolDays : MutableList<String> = daySchedule.dateDayDictArray
             allSchoolDays.printAll()
             while (dateStringFormatter.parse(allSchoolDays.first())!! < todaysDate.addDays(-1)) { //Remove past dates
-                println(allSchoolDays[0])
+                DeveloperPrinter().print(allSchoolDays[0])
                 allSchoolDays.removeAt(0)
             }
             allSchoolDays.printAll()
@@ -145,9 +145,9 @@ class NotificationController(val context: Context) {
                 val dateWithTime = dateWithTimeFormatter.parse(dateWithTimeString)
                 val timeInMillisUntilNotifShouldDeliver = dateWithTime.time //- Calendar.getInstance().time.time
 
-                println("dateWithTimeString: $dateWithTimeString")
-                println("dateWithTime: $dateWithTime")
-                println("timeInMillisUntilNotifShouldDeliver: $timeInMillisUntilNotifShouldDeliver")
+                DeveloperPrinter().print("dateWithTimeString: $dateWithTimeString")
+                DeveloperPrinter().print("dateWithTime: $dateWithTime")
+                DeveloperPrinter().print("timeInMillisUntilNotifShouldDeliver: $timeInMillisUntilNotifShouldDeliver")
 
 //                //REQUEST
                 val requestCode = date.replace("/", "").toInt()
@@ -163,8 +163,8 @@ class NotificationController(val context: Context) {
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillisUntilNotifShouldDeliver, broadcast)
                 }
 
-                println("Today is $date. Today is $notificationContent.")
-                println(" ")
+                DeveloperPrinter().print("Today is $date. Today is $notificationContent.")
+                DeveloperPrinter().print(" ")
             }
 
         } else {
@@ -180,20 +180,18 @@ class NotificationController(val context: Context) {
                 FirebaseMessaging.getInstance().subscribeToTopic(topicArray[i])
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            println("Subscribed to ${topicArray[i]}")
+                            DeveloperPrinter().print("Subscribed to ${topicArray[i]}")
                         } else {
-                            print("Subscription to ${topicArray[i]} failed with exception: ")
-                            println(task.exception)
+                            println("Subscription to ${topicArray[i]} failed with exception: ${task.exception}")
                         }
                     }
             } else {
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(topicArray[i])
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            println("Unsubscribed from ${topicArray[i]}")
+                            DeveloperPrinter().print("Unsubscribed from ${topicArray[i]}")
                         } else {
-                            print("Unsubscription to ${topicArray[i]} failed with exception: ")
-                            println(task.exception)
+                            println("Unsubscription to ${topicArray[i]} failed with exception: ${task.exception}")
                         }
                     }
             }

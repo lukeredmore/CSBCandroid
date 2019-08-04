@@ -98,7 +98,7 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
             })
         }
 
-        if (rowData.count() > 0) {
+        if (rowData.count() > 0 && position < rowData.count()) {
             val model = rowData[position]
             holder.titleLabel?.text = model.event.toUpperCase()
             holder.titleLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)

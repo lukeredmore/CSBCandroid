@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import com.csbcsaints.CSBCandroid.R
 import java.text.SimpleDateFormat
+import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 //TODO - Support dark mode, support hiding schools, store school selected in an object
 
@@ -22,6 +23,7 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
+        DeveloperPrinter().print("hi")
     }
 
 
@@ -33,7 +35,7 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
 
         schoolSelected = sharedPreferences?.getString("schoolSelected", "Seton") ?: "Seton"
         schoolSelectedInt = schoolSelectedMap[schoolSelected]!!
-        println("schoolSelected was found to be $schoolSelected")
+        DeveloperPrinter().print("schoolSelected was found to be $schoolSelected")
         val tabLayout: TabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setScrollPosition(schoolSelectedInt, 0f, true)
         tabSelectedHandler()
@@ -42,7 +44,7 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
                 schoolSelected = tab.text.toString()
                 schoolSelectedInt = schoolSelectedMap[schoolSelected]!!
                 sharedPreferences?.edit()?.putString("schoolSelected", schoolSelected)?.apply()
-                println("schoolSelected was stored as $schoolSelected")
+                DeveloperPrinter().print("schoolSelected was stored as $schoolSelected")
                 tabSelectedHandler()
             }
             override fun onTabUnselected(p0: TabLayout.Tab?) { }
