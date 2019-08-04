@@ -10,6 +10,7 @@ import eu.amirs.JSON
 import java.text.SimpleDateFormat
 import java.util.*
 
+//Takes the JSON from schedule galaxy and returns a displayable model, plus adds it to user defaults
 class AthleticsDataParser {
     var athleticsModelArray : Array<AthleticsModel?> = arrayOf()
     private val teamAbbreviations = mapOf("V" to "Varsity","JV" to "JV","7/8TH" to "Modified")

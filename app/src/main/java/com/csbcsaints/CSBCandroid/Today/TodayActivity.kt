@@ -11,36 +11,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.ui.*
-import eu.amirs.JSON
-import okhttp3.*
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 //TODO: Swipe gesture, make sure correct events show up for date (events)!
 
-class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
-
-    var athleticsClient : OkHttpClient? = OkHttpClient()
-    var eventsClient : OkHttpClient? = OkHttpClient()
-    var eventsData : Array<EventsModel?>? = null
-    var athleticsReady = false
+class TodayActivity : CSBCAppCompatActivity() {
     var listView : ListView? = null
     var daySchedule: DaySchedule? = null
-    var eventsReady = false
-    var canCallAthletics = true
-    var canCallEvents = true
-    var eventsArray : Array<EventsModel?> = arrayOf()
-    var athleticsArray : Array<AthleticsModel?> = arrayOf()
-    val cellParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.MATCH_PARENT,
-        LinearLayout.LayoutParams.WRAP_CONTENT
-    )
-    var dateString = ""
-    val longDateFormat = SimpleDateFormat("EEEE, MMMM d")
-
     var dayIndicatorLabel : TextView? = null
     var eventsSeparator : TextView? = null
     var athleticsSeparator : TextView? = null
@@ -48,6 +27,18 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
     var dateChangerButton : TextView? = null
     var activityTitle : TextView? = null
     var loadingSymbol : ProgressBar? = null
+
+    var athleticsReady = false
+    var eventsReady = false
+    var eventsArray : Array<EventsModel?> = arrayOf()
+    var athleticsArray : Array<AthleticsModel?> = arrayOf()
+
+    val cellParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
+    )
+    var dateString = ""
+    val longDateFormat = SimpleDateFormat("EEEE, MMMM d")
 
     var sharedPreferences4 : SharedPreferences? = null
 
@@ -81,20 +72,15 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 
         sharedPreferences4 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         scrollLayout?.removeViews(1, 2)
-        eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!)
-        athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!)
-
-        if (athleticsArray.isNullOrEmpty()) {
-            if (canCallAthletics) { getAthleticsData() }
-        } else {
-            athleticsReady = true
-            tryToLoadTableView()
-        }
-        if (eventsArray.isNullOrEmpty()) {
-            if (canCallEvents) { getEventsData() }
-        } else {
+        EventsRetriever().retrieveEventsArray(sharedPreferences4!!, false, false) {
+            eventsArray = it
             eventsReady = true
-            tryToLoadTableView()
+            buildLinearLayoutAsTableView()
+        }
+        AthleticsRetriever().retrieveAthleticsArray(sharedPreferences4!!, false, false) {
+            athleticsArray = it
+            athleticsReady = true
+            buildLinearLayoutAsTableView()
         }
     }
     override fun tabSelectedHandler() {
@@ -132,7 +118,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
                         activityTitle?.text = "Today"
                     }
                     tabSelectedHandler()
-                    tryToLoadTableView()
+                    buildLinearLayoutAsTableView()
                 }
             }, mYear, mMonth - 1, mDay)
         datePickerDialog.show()
@@ -141,76 +127,7 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
         dateString = Calendar.getInstance().time.dateString()
         activityTitle?.text = "Today"
         tabSelectedHandler()
-        tryToLoadTableView()
-    }
-
-
-    //MARK - Data methods
-    fun getEventsData() {
-        println("We are asking for Events data")
-        val request = Request.Builder()
-            .url("https://csbcsaints.org/calendar/")
-            .build()
-
-        eventsClient?.newCall(request)?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to CSBCSaints.org: ")
-                println(e)
-                eventsData = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!,true)
-                eventsReady = true
-                tryToLoadTableView()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("Successfully received calendar data")
-                this@TodayActivity.runOnUiThread(object:Runnable {
-                    public override fun run() {
-                        val html = response.body?.string()
-                        println(html)
-                        val eventsDataParser = EventsDataParser()
-                        if (html != null) {
-                            eventsDataParser.parseEventsData(html, sharedPreferences4!!)
-                            eventsArray = eventsDataParser.eventsModelArray
-                        } else {
-                            eventsArray = retrieveEventsArrayFromUserDefaults(sharedPreferences4!!, true)
-                        }
-                        eventsReady = true
-                        tryToLoadTableView()
-                    }
-                })
-
-            }
-        })
-    }
-    fun getAthleticsData() {
-        canCallAthletics = false
-        println("we are asking for data")
-        val request = Request.Builder()
-            .url("https://www.schedulegalaxy.com/api/v1/schools/163/activities")
-            .build()
-
-        athleticsClient?.newCall(request)?.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to ScheduleGalaxy: ")
-                println(e)
-                athleticsArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences4!!, true)
-                athleticsReady = true
-                tryToLoadTableView()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("sucess")
-                this@TodayActivity.runOnUiThread(object:Runnable {
-                    public override fun run() {
-                        val athleticsDataParser = AthleticsDataParser()
-                        val json = JSON(response.body?.string())
-                        athleticsDataParser.parseAthleticsData(json, sharedPreferences4!!)
-                        athleticsArray = athleticsDataParser.athleticsModelArray
-                        athleticsReady = true
-                        tryToLoadTableView()
-                    }
-                })
-            }
-
-        })
+        buildLinearLayoutAsTableView()
     }
     fun getDayOfCycle(day : Int?) : String {
         if (day != null && day != 0) {
@@ -222,6 +139,33 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
 
 
     //MARK - Table methods
+    fun buildLinearLayoutAsTableView() {
+        println("runnign")
+        if (athleticsReady && eventsReady) {
+            scrollLayout?.removeAllViews()
+
+            val eventsArrayToDisplay : MutableList<EventsModel?> = arrayListOf()
+            var i = 0
+            while (eventsArray[i]?.date == dateString) {
+                eventsArrayToDisplay.add(eventsArray[i]!!)
+                i += 1
+            }
+            var athleticsArrayToDisplay : AthleticsModel? = null
+            for (date in athleticsArray) {
+                if (date?.date == longDateFormat.format(dateStringFormatter.parse(dateString))) {
+                    athleticsArrayToDisplay = date
+                    break
+                }
+            }
+
+            scrollLayout?.addView(dayIndicatorLabel)
+            scrollLayout?.addView(eventsSeparator)
+            createCellForEventsModelAndAddToEndOfScrollView(eventsArrayToDisplay.toTypedArray(), scrollLayout!!)
+            scrollLayout?.addView(athleticsSeparator)
+            createCellForAthleticsModelAndAddToEndOfScrollView(athleticsArrayToDisplay, scrollLayout!!)
+            loadingSymbol?.visibility = View.INVISIBLE
+        }
+    }
     fun createBasicTextView(color: Int, style: UserFontStyles) : TextView {
         val textView: TextView = TextView(this)
         textView.layoutParams = cellParams
@@ -305,33 +249,6 @@ class TodayActivity : CSBCAppCompatActivity() { //Fragment() {
         } else {
             val athleticsNoEvents = createNoEventsTextView()
             scrollLayout.addView(athleticsNoEvents)
-        }
-    }
-    fun tryToLoadTableView() {
-        println("runnign")
-        if (athleticsReady && eventsReady) {
-            scrollLayout?.removeAllViews()
-
-            val eventsArrayToDisplay : MutableList<EventsModel?> = arrayListOf()
-            var i = 0
-            while (eventsArray[i]?.date == dateString) {
-                eventsArrayToDisplay.add(eventsArray[i]!!)
-                i += 1
-            }
-            var athleticsArrayToDisplay : AthleticsModel? = null
-            for (date in athleticsArray) {
-                if (date?.date == longDateFormat.format(dateStringFormatter.parse(dateString))) {
-                    athleticsArrayToDisplay = date
-                    break
-                }
-            }
-
-            scrollLayout?.addView(dayIndicatorLabel)
-            scrollLayout?.addView(eventsSeparator)
-            createCellForEventsModelAndAddToEndOfScrollView(eventsArrayToDisplay.toTypedArray(), scrollLayout!!)
-            scrollLayout?.addView(athleticsSeparator)
-            createCellForAthleticsModelAndAddToEndOfScrollView(athleticsArrayToDisplay, scrollLayout!!)
-            loadingSymbol?.visibility = View.INVISIBLE
         }
     }
 }

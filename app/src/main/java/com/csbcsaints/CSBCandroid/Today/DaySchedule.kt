@@ -81,7 +81,6 @@ class DaySchedule(context : Context, forSeton : Boolean = false, forJohn : Boole
         if (forSeton) {
             //print("adding exam dates")
             for (dateString in noHighSchoolDateStrings) {
-                println("$dateString is being added to restrictedDatesForHS")
                 val restrictedDate = dateParser.parse(dateString)
                 restrictedDatesForHS.add(restrictedDate)
                 appendableRestrictedDatesForHSStrings.add(dateString)
@@ -91,7 +90,6 @@ class DaySchedule(context : Context, forSeton : Boolean = false, forJohn : Boole
         if (forJohn || forSaints || forJames) {
             //print("adding ptc dates")
             for (dateString in noElementarySchoolDateStrings) {
-                println("$dateString is being added to restrictedDatesForES")
                 val restrictedDate = dateParser.parse(dateString)
                 restrictedDatesForES.add(restrictedDate)
                 appendableRestrictedDatesForESStrings.add(dateString)

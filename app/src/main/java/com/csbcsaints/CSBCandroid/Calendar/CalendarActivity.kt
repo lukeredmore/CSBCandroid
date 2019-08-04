@@ -9,7 +9,6 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.Calendar.CalendarAdapter
-import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.ui.*
 import okhttp3.*
 import java.io.IOException
@@ -17,8 +16,6 @@ import java.io.IOException
 //TODO - Add search function, add school filter
 
 class CalendarActivity : CSBCAppCompatActivity() {
-    private val client = OkHttpClient()
-    var eventsData = EventsDataParser()
     var listView : ListView? = null
     var swipeRefreshLayout : SwipeRefreshLayout? = null
     var loadingSymbol : ProgressBar? = null
@@ -28,6 +25,7 @@ class CalendarActivity : CSBCAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+        supportActionBar?.title = "Calendar"
 
         loadingSymbol = findViewById(R.id.loadingSymbol)
         listView = findViewById(R.id.listView)
@@ -39,62 +37,24 @@ class CalendarActivity : CSBCAppCompatActivity() {
         swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
         swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
-                swipeRefreshLayout?.setRefreshing(true)
-                getEventsData()
-            }
-        })
-
-        supportActionBar?.title = "Calendar"
-        tryToBuildExistingData()
-    }
-
-
-    //MARK - Data methods
-    private fun tryToBuildExistingData() {
-        swipeRefreshLayout?.setEnabled(false)
-        val eventsArray: Array<EventsModel?> = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!)
-        if (eventsArray.size > 1) {
-            println("Events Data already exists and we can use it")
-            eventsData.eventsModelArray = eventsArray
-            setupTable()
-        } else {
-            println("Fetching new events data")
-            getEventsData()
-        }
-    }
-    fun getEventsData() {
-        println("We are asking for Events data")
-        val request = Request.Builder()
-            .url("https://csbcsaints.org/calendar/")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to CSBCSaints.org: ")
-                println(e)
-                eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!, true)
-                setupTable()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("Successfully received calendar data")
-                val html = response.body?.string()
-                if (html != null) {
-                    eventsData.parseEventsData(html, sharedPreferences3!!)
-                } else {
-                    eventsData.eventsModelArray = retrieveEventsArrayFromUserDefaults(sharedPreferences3!!, true)
+                swipeRefreshLayout?.isRefreshing = true
+                EventsRetriever().retrieveEventsArray(sharedPreferences3!!, false, true) {
+                    setupTable(it)
                 }
-                setupTable()
-
             }
         })
+
+        EventsRetriever().retrieveEventsArray(sharedPreferences3!!, false, false) {
+            setupTable(it)
+        }
     }
 
 
     //MARK - Table methods
-    fun setupTable() {
+    fun setupTable(eventsArray : Array<EventsModel?>) {
         val adapter = CalendarAdapter(this)
-        if (!eventsData.eventsModelArray.contains(EventsModel("", "", "", "", "", ""))) {
-            for (event in eventsData.eventsModelArray) {
+        if (!eventsArray.contains(EventsModel("", "", "", "", "", ""))) {
+            for (event in eventsArray) {
                 adapter.addItem(event!!)
             }
         } else {
@@ -111,7 +71,6 @@ class CalendarActivity : CSBCAppCompatActivity() {
             }
         })
     }
-
 }
 
 

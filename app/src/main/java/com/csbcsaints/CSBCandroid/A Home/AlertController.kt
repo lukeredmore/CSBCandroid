@@ -184,12 +184,13 @@ class AlertController(val parent : MainActivity) {
                                 indexToSelect = it.elementSiblingIndex() + 1
                             }
                         }
-                }
+                } else println("No messages found from WBNG")
             }
         })
     }
     fun parseStatus(status : String) {
         if (status.toLowerCase().contains("closed")) {
+            println("Snow day today was found")
             parent.showBannerAlert("The Catholic Schools of Broome County are closed today.")
             addSnowDateToDatabase(Calendar.getInstance().time)
         }

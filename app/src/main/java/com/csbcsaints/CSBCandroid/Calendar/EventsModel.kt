@@ -1,4 +1,4 @@
-package com.csbcsaints.CSBCandroid.Calendar
+package com.csbcsaints.CSBCandroid
 
 data class EventsModel(
     val event: String,

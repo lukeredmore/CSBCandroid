@@ -1,7 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.ui.abbrvMonthString
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.google.gson.Gson
@@ -15,7 +14,7 @@ class EventsDataParser {
     val monthList : MutableList<String> = arrayListOf()
     val schoolsList : MutableList<String> = arrayListOf()
 
-    var eventsModelArray : Array<EventsModel?> = arrayOf()
+    private var eventsModelArray : Array<EventsModel?> = arrayOf() //ONLY ACCESS FROM SHAREDPREFERENCES
 
     fun parseEventsData(html: String, preferences : SharedPreferences) {
         println("Events data is being parsed")
@@ -61,7 +60,7 @@ class EventsDataParser {
             }
             eventsModelArray = modelListToReturn.toTypedArray()
         } else {
-            eventsModelArray = arrayOf(EventsModel("", "", "", "", "", ""))
+            eventsModelArray = arrayOf()
         }
         addObjectArrayToUserDefaults(eventsModelArray, preferences)
     }

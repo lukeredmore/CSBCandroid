@@ -15,9 +15,8 @@ import java.io.IOException
 
 //TODO - Add search function
 
+///Initial asker for athletics data and sets up table once it gets it
 class AthleticsActivity : CSBCAppCompatActivity() {
-    private val client = OkHttpClient()
-    var athleticsData = AthleticsDataParser()
     var listView : ListView? = null
     private var athleticsAdapter : AthleticsAdapter? = null
     var swipeRefreshLayout : SwipeRefreshLayout? = null
@@ -28,69 +27,37 @@ class AthleticsActivity : CSBCAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_athletics)
+        supportActionBar?.title = "Athletics"
 
         loadingSymbol = findViewById(R.id.loadingSymbol)
         athleticsAdapter = AthleticsAdapter(this)
         listView = findViewById(R.id.listView)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
+        sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         loadingSymbol?.visibility = View.VISIBLE
         swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
         swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 swipeRefreshLayout?.setRefreshing(true)
-                getAthleticsData()
+                AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3!!, false, true) {
+                    setupTable(it)
+                }
             }
         })
-        sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-        getSupportActionBar()?.setTitle("Athletics")
-        tryToBuildExistingData()
-    }
-
-
-    //MARK - Data methods
-    private fun tryToBuildExistingData() {
-        swipeRefreshLayout?.setEnabled(false)
-        val athleticsArray : Array<AthleticsModel?> = retrieveAthleticsArrayFromUserDefaults(sharedPreferences3!!)
-        println(athleticsArray)
-        if (athleticsArray.size > 1) {
-            println("Athletics Data already exists and we can use it")
-            athleticsData.athleticsModelArray = athleticsArray
-            setupTable()
-        } else {
-            println("Fetching new athletics data")
-            getAthleticsData()
+        swipeRefreshLayout?.isEnabled = false
+        AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3!!, false, false) {
+            setupTable(it)
         }
-    }
-    fun getAthleticsData() {
-        println("We are asking for Athletics data")
-        val request = Request.Builder()
-            .url("https://www.schedulegalaxy.com/api/v1/schools/163/activities")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error on request to ScheduleGalaxy: ")
-                println(e)
-                athleticsData.athleticsModelArray = retrieveAthleticsArrayFromUserDefaults(sharedPreferences3!!, true)
-                setupTable()
-            }
-            override fun onResponse(call: Call, response: Response) {
-                println("success")
-                val json = JSON(response.body?.string())
-                athleticsData.parseAthleticsData(json, sharedPreferences3!!)
-                setupTable()
-            }
-        })
     }
 
 
     //MARK - Table methods
-    fun setupTable() {
+    private fun setupTable(athleticsModelArray: Array<AthleticsModel?>) {
         val adapter = AthleticsAdapter(this)
 
-        if (!athleticsData.athleticsModelArray.isNullOrEmpty()) {
-            for(dateWithEvents in athleticsData.athleticsModelArray) {
+        if (!athleticsModelArray.isNullOrEmpty()) {
+            for(dateWithEvents in athleticsModelArray) {
                 if (dateWithEvents != null) {
                     adapter.addSectionHeaderItem(dateWithEvents.date)
                     for (event in 0 until dateWithEvents.title.size) {

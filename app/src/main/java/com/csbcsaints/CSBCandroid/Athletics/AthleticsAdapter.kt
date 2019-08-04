@@ -11,6 +11,7 @@ import com.csbcsaints.CSBCandroid.ui.UserFontStyles
 import com.csbcsaints.CSBCandroid.ui.setCustomFont
 import java.util.*
 
+///Athletics data adapter
 class AthleticsAdapter(private val context: Context) : BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val TYPE_ITEM = 0

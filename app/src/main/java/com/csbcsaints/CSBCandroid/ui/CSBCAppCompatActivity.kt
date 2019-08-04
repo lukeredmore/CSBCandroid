@@ -1,17 +1,12 @@
 package com.csbcsaints.CSBCandroid.ui
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.AthleticsModel
-import com.csbcsaints.CSBCandroid.Calendar.EventsModel
 import com.csbcsaints.CSBCandroid.R
-import com.google.gson.Gson
 import java.text.SimpleDateFormat
-import java.util.*
 
 //TODO - Support dark mode, support hiding schools, store school selected in an object
 
@@ -55,46 +50,4 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
         })
     }
     open fun tabSelectedHandler() {}
-
-
-    //MARK - Athletics/Calendar methods
-    fun retrieveEventsArrayFromUserDefaults(preferences : SharedPreferences, forceReturn : Boolean = false) : Array<EventsModel?> {
-        println("Attempting to retrieve stored Events data.")
-        val currentTime = Calendar.getInstance().time
-        val eventsArrayTimeString : String? = preferences.getString("athleticsArrayTime", null)
-        val eventsArrayTime = eventsArrayTimeString?.toDateWithTime()?.addHours(1)
-        val json = preferences.getString("eventsArray", null)
-        if (eventsArrayTime != null && !json.isNullOrEmpty()) {
-            if ((eventsArrayTime > currentTime) || (forceReturn)) {
-                println("Up-to-date Events data found, no need to look online.")
-                return Gson().fromJson(json, Array<EventsModel?>::class.java)
-            } else {
-                println("Events data found, but is old. Will refresh online.")
-                return arrayOf(EventsModel("Could not connect.", "", "", "", "", ""))
-            }
-        } else {
-            println("No Events data found. Looking online.")
-            return arrayOf()
-        }
-    }
-    fun retrieveAthleticsArrayFromUserDefaults(preferences : SharedPreferences, forceReturn : Boolean = false) : Array<AthleticsModel?> {
-        println("Attempting to retrieve stored Athletics data.")
-        val currentTime = Calendar.getInstance().time
-        val athleticsArrayTimeString : String? = preferences.getString("athleticsArrayTime", null)
-        val athleticsArrayTime = athleticsArrayTimeString?.toDateWithTime()?.addHours(1)
-        val json = preferences.getString("athleticsArray", null)
-        if (athleticsArrayTime != null && !json.isNullOrEmpty()) {
-            if ((athleticsArrayTime > currentTime) || (forceReturn)) {
-                println("Up-to-date Athletics data found, no need to look online.")
-                return Gson().fromJson(json, Array<AthleticsModel?>::class.java)
-            } else {
-                println("Athletics data found, but is old. Will refresh online.")
-                return arrayOf()
-            }
-        } else {
-            println("No Athletics data found. Looking online.")
-            return arrayOf()
-        }
-    }
-
 }
