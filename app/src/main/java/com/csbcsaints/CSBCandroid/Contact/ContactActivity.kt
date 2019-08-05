@@ -1,5 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
+import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -10,6 +11,11 @@ import android.net.Uri
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.*
 import java.util.*
+import android.content.pm.PackageManager
+import android.Manifest.permission
+import android.Manifest.permission.CALL_PHONE
+import androidx.core.app.ActivityCompat
+
 
 //TODO - Add map link, add parallax effect
 
@@ -94,26 +100,27 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
         })
 
         mainPhoneLayout = findViewById(R.id.mainPhone)
-        mainPhoneLayout?.setOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + SCHOOL_PHONE[schoolSelectedInt].replace(".", "")))
+        mainPhoneLayout?.setOnClickListener {
+            println("attempting to call tel:" + SCHOOL_PHONE[schoolSelectedInt].replace(".", ""))
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + SCHOOL_PHONE[schoolSelectedInt].replace(".", "")))
             startActivity(intent)
-        })
+
+        }
         districtPhoneLayout = findViewById(R.id.districtPhone)
-        districtPhoneLayout?.setOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + DISTRICT_PHONE.replace(".", "")))
+        districtPhoneLayout?.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + DISTRICT_PHONE.replace(".", "")))
             startActivity(intent)
-        })
+        }
         schoolFaxLayout = findViewById(R.id.schoolFax)
         schoolFaxLayout?.setOnClickListener(View.OnClickListener {
             if (SCHOOL_FAX[schoolSelectedInt] != "N/A") {
-                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + SCHOOL_FAX[schoolSelectedInt].replace(".", "")))
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + SCHOOL_FAX[schoolSelectedInt].replace(".", "")))
                 startActivity(intent)
             }
         })
         schoolMailLayout = findViewById(R.id.schoolMail)
         schoolMailLayout?.setOnClickListener(View.OnClickListener {
             val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + PRINCIPAL_EMAILS[schoolSelectedInt]))
-            //email.putExtra(Intent.EXTRA_EMAIL, )
             startActivity(email)
         })
 
@@ -157,10 +164,10 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
         addressTextView?.text = SCHOOL_ADDRESSES[schoolSelectedInt]
         cityStateTextView?.text = SCHOOL_CITY_STATE[schoolSelectedInt]
 
-        mainPhoneTextView?.text = "Main: " + SCHOOL_PHONE[schoolSelectedInt]
-        districtPhoneTextView?.text = "District: " + DISTRICT_PHONE
-        faxTextView?.text = "Fax: " + SCHOOL_FAX[schoolSelectedInt]
-        mailTextView?.text = SCHOOL_PRINCIPALS[schoolSelectedInt] + ", Principal"
+        mainPhoneTextView?.text = "Main: ${SCHOOL_PHONE[schoolSelectedInt]}"
+        districtPhoneTextView?.text = "District: ${DISTRICT_PHONE}"
+        faxTextView?.text = "Fax: ${SCHOOL_FAX[schoolSelectedInt]}"
+        mailTextView?.text = "${SCHOOL_PRINCIPALS[schoolSelectedInt]}, Principal"
 
         normalParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         collapsedParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)

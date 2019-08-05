@@ -1,12 +1,11 @@
 package com.csbcsaints.CSBCandroid
 
-import android.view.View
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TodayDataParser(val parent : TodayActivity) {
     private var eventsArray : Array<EventsModel?> = arrayOf()
-    var athleticsArray : Array<AthleticsModel?> = arrayOf()
+    private var athleticsArray : Array<AthleticsModel?> = arrayOf()
 
     private var eventsReady = false
     private var athleticsReady = false
@@ -16,7 +15,7 @@ class TodayDataParser(val parent : TodayActivity) {
         getSchedulesToSendToToday()
     }
 
-    fun getSchedulesToSendToToday() {
+    private fun getSchedulesToSendToToday() {
         EventsRetriever().retrieveEventsArray(parent.sharedPreferences4!!, false, false) {
             eventsArray = it
             eventsReady = true
@@ -30,24 +29,22 @@ class TodayDataParser(val parent : TodayActivity) {
     }
     private fun tryToStartupPager() {
         if (eventsReady && athleticsReady) {
-            parent.runOnUiThread(object:Runnable {
-                override fun run() {
-                    parent.buildLinearLayoutAsTableView()
-                }
-            })
+            parent.runOnUiThread {
+                parent.buildLinearLayoutAsTableView()
+            }
         }
     }
 
     //MARK - Parse schedules for TodayVC
     fun events(date : Date) : Array<EventsModel> {
         val allEventsToday : MutableList<EventsModel> = arrayListOf()
-        val fmt = SimpleDateFormat("MMMdd")
-        val dateShownForCalendar = fmt.format(date).toUpperCase()
+        val eventsDateFormatter = SimpleDateFormat("MMMdd")
+        val dateShownForCalendar = eventsDateFormatter.format(date).toUpperCase()
         for (eventsModel in eventsArray) {
             if (eventsModel != null) {
                 if (eventsModel.date == dateShownForCalendar) {
                     allEventsToday.add(eventsModel)
-                    println("At leaset one event is today")
+                    println("At least one event is today")
                 }
             }
         }

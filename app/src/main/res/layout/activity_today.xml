@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content" android:id="@+id/dayIndicatorLabel"
                     android:textSize="34sp" android:textStyle="bold" android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:lineSpacingExtra="0sp" android:lines="1"
+                    android:lineSpacingExtra="0sp"
                     android:textColor="@android:color/black" android:padding="16dp"/>
             <TextView
                     android:id="@+id/eventsSeparator"
