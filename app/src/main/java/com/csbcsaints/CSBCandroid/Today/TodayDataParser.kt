@@ -1,5 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,12 +17,12 @@ class TodayDataParser(val parent : TodayActivity) {
     }
 
     private fun getSchedulesToSendToToday() {
-        EventsRetriever().retrieveEventsArray(parent.sharedPreferences4!!, false, false) {
+        EventsRetriever().retrieveEventsArray(parent.sharedPreferences4, false, false) {
             eventsArray = it
             eventsReady = true
             tryToStartupPager()
         }
-        AthleticsRetriever().retrieveAthleticsArray(parent.sharedPreferences4!!, false, false) {
+        AthleticsRetriever().retrieveAthleticsArray(parent.sharedPreferences4, false, false) {
             athleticsArray = it
             athleticsReady = true
             tryToStartupPager()

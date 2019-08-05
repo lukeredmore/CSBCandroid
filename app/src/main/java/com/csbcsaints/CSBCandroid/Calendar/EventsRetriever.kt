@@ -10,12 +10,12 @@ import java.util.*
 import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 class EventsRetriever {
-    fun retrieveEventsArray(preferences : SharedPreferences, forceReturn : Boolean = false, forceRefresh: Boolean = false, completion : (Array<EventsModel?>) -> Unit) {
+    fun retrieveEventsArray(preferences : SharedPreferences?, forceReturn : Boolean = false, forceRefresh: Boolean = false, completion : (Array<EventsModel?>) -> Unit) {
         if (forceRefresh) {
             DeveloperPrinter().print("Events Data is being refreshed")
             getEventsDataFromOnline(preferences, completion)
         } else if (forceReturn) {
-            val json = preferences.getString("eventsArray", null)
+            val json = preferences?.getString("eventsArray", null)
             return if (json != null) {
                 DeveloperPrinter().print("Force return found an old JSON value")
                 completion(Gson().fromJson(json, Array<EventsModel?>::class.java))
@@ -26,9 +26,9 @@ class EventsRetriever {
         } else {
             DeveloperPrinter().print("Attempting to retrieve stored Events data.")
             val currentTime = Calendar.getInstance().time
-            val eventsArrayTimeString : String? = preferences.getString("eventsArrayTime", null)
+            val eventsArrayTimeString : String? = preferences?.getString("eventsArrayTime", null)
             val eventsArrayTime = eventsArrayTimeString?.toDateWithTime()?.addHours(1)
-            val json = preferences.getString("eventsArray", null)
+            val json = preferences?.getString("eventsArray", null)
 
             if (eventsArrayTime != null && !json.isNullOrEmpty()) {
                 if (eventsArrayTime > currentTime) {
@@ -44,7 +44,7 @@ class EventsRetriever {
             }
         }
     }
-    private fun getEventsDataFromOnline(preferences: SharedPreferences, completion : (Array<EventsModel?>) -> Unit) {
+    private fun getEventsDataFromOnline(preferences: SharedPreferences?, completion : (Array<EventsModel?>) -> Unit) {
         DeveloperPrinter().print("We are asking for Events data")
         val client = OkHttpClient()
         val request = Request.Builder()

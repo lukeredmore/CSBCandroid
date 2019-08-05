@@ -37,16 +37,14 @@ class AthleticsActivity : CSBCAppCompatActivity() {
         sharedPreferences3 = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         loadingSymbol?.visibility = View.VISIBLE
         swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
-        swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                swipeRefreshLayout?.setRefreshing(true)
-                AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3!!, false, true) {
-                    setupTable(it)
-                }
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = true
+            AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3, false, true) {
+                setupTable(it)
             }
-        })
+        }
         swipeRefreshLayout?.isEnabled = false
-        AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3!!, false, false) {
+        AthleticsRetriever().retrieveAthleticsArray(sharedPreferences3, false, false) {
             setupTable(it)
         }
     }
@@ -65,14 +63,12 @@ class AthleticsActivity : CSBCAppCompatActivity() {
                     }
                 }
             }
-            runOnUiThread(object:Runnable {
-                override fun run() {
-                    listView?.adapter = adapter
-                    loadingSymbol?.visibility = View.INVISIBLE
-                    swipeRefreshLayout?.setRefreshing(false)
-                    swipeRefreshLayout?.setEnabled(true)
-                }
-            })
+            runOnUiThread {
+                listView?.adapter = adapter
+                loadingSymbol?.visibility = View.INVISIBLE
+                swipeRefreshLayout?.isRefreshing = false
+                swipeRefreshLayout?.isEnabled = true
+            }
         }
     }
 

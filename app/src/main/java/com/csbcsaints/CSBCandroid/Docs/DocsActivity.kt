@@ -10,14 +10,14 @@ import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
 //TODO - Pass document itself or local link to viewer
 
-class DocsActivity : CSBCAppCompatActivity() { //Fragment() {
+class DocsActivity : CSBCAppCompatActivity() {
     val documentTitles = arrayOf(
         arrayOf("SCC Parent - Student Handbook", "SCC Bell Schedule", "SCC Course Description and Information Guide", "SCC Monthly Calendar", "CSBC Calendar"),
         arrayOf(""),
         arrayOf("All Saints Cafeteria Info","All Saints Illness Policy"),
         arrayOf("St. James Parent - Student Handbook","St. James Code of Conduct"))
     val pdfTitleStrings = arrayOf(
-        arrayOf("https://csbcsaints.org/wp-content/uploads/SCC-Parent-Student-Handbook-2018-2019.pdf","https://csbcsaints.org/wp-content/uploads/Bell-Schedules-1.pdf","https://csbcsaints.org/wp-content/uploads/Course-Description-Guide-2019-20.pdf","https://csbcsaints.org/wp-content/uploads/2019-20-SCC-Monthly-Calendar.pdf","https://csbcsaints.org/wp-content/uploads/2019-2020-CSBC-School-Calendar.pdf"),
+        arrayOf("https://csbcsaints.org/wp-content/uploads/SCC-Parent-Student-Handbook-2019-2020.pdf","https://csbcsaints.org/wp-content/uploads/Bell-Schedules-1.pdf","https://csbcsaints.org/wp-content/uploads/Course-Description-Guide-2019-20.pdf","https://csbcsaints.org/wp-content/uploads/2019-20-SCC-Monthly-Calendar.pdf","https://csbcsaints.org/wp-content/uploads/2019-2020-CSBC-School-Calendar.pdf"),
         arrayOf(),
         arrayOf("https://csbcsaints.org/wp-content/uploads/cafeteria-info.pdf","https://csbcsaints.org/wp-content/uploads/sick-policy.pdf"),
         arrayOf("https://csbcsaints.org/wp-content/uploads/rev9_18-Student-Parent-POLICIES-Handbook-12.pdf","https://csbcsaints.org/wp-content/uploads/Official-Code-of-Conduct.doc-2.pdf"))

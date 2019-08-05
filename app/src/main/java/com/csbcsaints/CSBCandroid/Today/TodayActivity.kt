@@ -15,7 +15,7 @@ import com.csbcsaints.CSBCandroid.ui.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TODO: Swipe gesture, make sure correct events show up for date (events)!
+//TODO: Swipe gesture
 
 class TodayActivity : CSBCAppCompatActivity() {
     var listView : ListView? = null
@@ -77,7 +77,7 @@ class TodayActivity : CSBCAppCompatActivity() {
         todayParser = TodayDataParser(this)
     }
     override fun tabSelectedHandler() {
-        DeveloperPrinter().print("The dateString is: " + dateString)
+        DeveloperPrinter().print("The dateString is: $dateString")
         val day : Int? = daySchedule?.dateDayDict!![schoolSelected]!![dateString]
         dayIndicatorLabel?.text = getDayOfCycle(day)
     }
@@ -128,10 +128,10 @@ class TodayActivity : CSBCAppCompatActivity() {
 
     }
     fun getDayOfCycle(day : Int?) : String {
-        if (day != null && day != 0) {
-            return "Today is Day $day"
+        return if (day != null && day != 0) {
+            "Today is Day $day"
         } else {
-            return "There is no school today"
+            "There is no school today"
         }
     }
 
@@ -166,12 +166,12 @@ class TodayActivity : CSBCAppCompatActivity() {
 
 
                 val levelLabel = createBasicTextView(R.color.csbcGray, UserFontStyles.REGULAR)
-                levelLabel.text = model[event]!!.schools
+                levelLabel.text = model[event].schools
                 levelLabel.setPadding(24.toPx(), 10.toPx(), 24.toPx(), 0.toPx())
 
 
                 val timeLabel = createBasicTextView(R.color.csbcGray, UserFontStyles.ITALIC)
-                timeLabel.text = model[event]!!.time
+                timeLabel.text = model[event].time
                 timeLabel.setPadding(24.toPx(), 8.toPx(), 24.toPx(), 14.toPx())
 
                 scrollLayout.addView(separatorLine)

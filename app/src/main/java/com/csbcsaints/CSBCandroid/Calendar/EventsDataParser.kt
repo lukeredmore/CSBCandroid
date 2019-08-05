@@ -1,7 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.ui.abbrvMonthString
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.google.gson.Gson
 import org.jsoup.Jsoup
@@ -11,10 +10,9 @@ import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 class EventsDataParser {
     private var eventsModelArray : Array<EventsModel?> = arrayOf() //ONLY ACCESS FROM SHAREDPREFERENCES
 
-    fun parseEventsData(html: String, preferences : SharedPreferences) {
+    fun parseEventsData(html: String, preferences : SharedPreferences?) {
         DeveloperPrinter().print("Events data is being parsed")
         if (html.contains("evcal_event_title")) {
-//            val doc = Jsoup.parse(html)
             val modelListToReturn : MutableList<EventsModel> = arrayListOf()
             Jsoup.parse(html).select(".desc_trig_outter")
                 .forEach {
@@ -57,17 +55,20 @@ class EventsDataParser {
                         modelListToReturn.add(modelToAppend)
                     }
                 }
-            eventsModelArray = modelListToReturn.sortedWith(compareBy({ it.day })).toTypedArray()
+            eventsModelArray = modelListToReturn.sortedWith(compareBy { it.day }).toTypedArray()
         } else {
             eventsModelArray = arrayOf()
         }
         addObjectArrayToUserDefaults(eventsModelArray, preferences)
     }
-    private fun addObjectArrayToUserDefaults(eventsArray: Array<EventsModel?>, preferences : SharedPreferences) {
+    private fun addObjectArrayToUserDefaults(eventsArray: Array<EventsModel?>, preferences : SharedPreferences?) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(eventsArray)
-        preferences.edit()?.putString("eventsArray", json)?.apply()
-        preferences.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
+        if (preferences != null) {
+            preferences.edit()?.putString("eventsArray", json)?.apply()
+            preferences.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
+            DeveloperPrinter().print("Events data successfully added to user defaults")
+        } else DeveloperPrinter().print("Preferences are null, so events data that was parsed wasn't saved")
     }
 
 }

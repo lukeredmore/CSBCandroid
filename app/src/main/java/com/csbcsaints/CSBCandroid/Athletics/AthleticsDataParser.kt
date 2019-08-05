@@ -16,8 +16,8 @@ class AthleticsDataParser {
     var athleticsModelArray : Array<AthleticsModel?> = arrayOf()
     private val teamAbbreviations = mapOf("V" to "Varsity","JV" to "JV","7/8TH" to "Modified")
 
-    fun parseAthleticsData(json : JSON, preferences : SharedPreferences) {
-        var modelListToReturn : MutableList<AthleticsModel> = arrayListOf()
+    fun parseAthleticsData(json : JSON, preferences : SharedPreferences?) {
+        val modelListToReturn : MutableList<AthleticsModel> = arrayListOf()
         var dateToBeat = json.key("data").index(0).key("date").stringValue()
         var currentDate = dateToBeat
         var dateString : String = ""
@@ -94,12 +94,16 @@ class AthleticsDataParser {
         athleticsModelArray = modelListToReturn.toTypedArray()
         addObjectArrayToUserDefaults(athleticsModelArray, preferences)
     }
-    private fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>, preferences : SharedPreferences) {
+    private fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>, preferences : SharedPreferences?) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(athleticsArray)
-        DeveloperPrinter().print("dateTimeToAdd: " + dateTimeToAdd)
-        DeveloperPrinter().print("json: " + json)
-        preferences.edit()?.putString("athleticsArray", json)?.apply()
-        preferences.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
+        DeveloperPrinter().print("dateTimeToAdd: $dateTimeToAdd")
+        DeveloperPrinter().print("json: $json")
+        if (preferences != null) {
+            preferences.edit()?.putString("athleticsArray", json)?.apply()
+            preferences.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
+            DeveloperPrinter().print("Athletics data successfully added to user defaults")
+        } else DeveloperPrinter().print("Preferences are null, so athletics data that was parsed wasn't saved")
+
     }
 }

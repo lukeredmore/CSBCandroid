@@ -35,16 +35,14 @@ class CalendarActivity : CSBCAppCompatActivity() {
 
         loadingSymbol?.visibility = View.VISIBLE
         swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
-        swipeRefreshLayout?.setOnRefreshListener(object:SwipeRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                swipeRefreshLayout?.isRefreshing = true
-                EventsRetriever().retrieveEventsArray(sharedPreferences3!!, false, true) {
-                    setupTable(it)
-                }
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = true
+            EventsRetriever().retrieveEventsArray(sharedPreferences3, false, true) {
+                setupTable(it)
             }
-        })
+        }
 
-        EventsRetriever().retrieveEventsArray(sharedPreferences3!!, false, false) {
+        EventsRetriever().retrieveEventsArray(sharedPreferences3, false, false) {
             setupTable(it)
         }
     }

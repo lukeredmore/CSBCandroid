@@ -11,15 +11,11 @@ import android.net.Uri
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.ui.*
 import java.util.*
-import android.content.pm.PackageManager
-import android.Manifest.permission
-import android.Manifest.permission.CALL_PHONE
-import androidx.core.app.ActivityCompat
 
 
-//TODO - Add map link, add parallax effect
+//TODO - add parallax effect
 
-class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
+class ContactActivity : CSBCAppCompatActivity() {
 
     val MAP_IMAGE_ARRAY = arrayOf(R.drawable.setonmap, R.drawable.saintsmap, R.drawable.saintsmap, R.drawable.jamesmap)
     val BUILDING_IMAGE_ARRAY = arrayOf(R.drawable.setonbuilding, R.drawable.johnbuilding, R.drawable.saintsbuilding, R.drawable.jamesbuilding)
@@ -90,14 +86,14 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
         copyrightLabel = findViewById(R.id.copyrightLabel)
         copyrightLabel?.text = "© ${Calendar.getInstance().time.yearString()} Catholic Schools of Broome County"
 
-        mapCell?.setOnClickListener(View.OnClickListener {
+        mapCell?.setOnClickListener {
             val gmmIntentUri = Uri.parse("geo:${SCHOOL_COORDINATES[schoolSelectedInt]}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             if (mapIntent.resolveActivity(packageManager) != null) {
                 startActivity(mapIntent)
             }
-        })
+        }
 
         mainPhoneLayout = findViewById(R.id.mainPhone)
         mainPhoneLayout?.setOnClickListener {
@@ -112,17 +108,17 @@ class ContactActivity : CSBCAppCompatActivity() { //Fragment() {
             startActivity(intent)
         }
         schoolFaxLayout = findViewById(R.id.schoolFax)
-        schoolFaxLayout?.setOnClickListener(View.OnClickListener {
+        schoolFaxLayout?.setOnClickListener{
             if (SCHOOL_FAX[schoolSelectedInt] != "N/A") {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + SCHOOL_FAX[schoolSelectedInt].replace(".", "")))
                 startActivity(intent)
             }
-        })
+        }
         schoolMailLayout = findViewById(R.id.schoolMail)
-        schoolMailLayout?.setOnClickListener(View.OnClickListener {
+        schoolMailLayout?.setOnClickListener{
             val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + PRINCIPAL_EMAILS[schoolSelectedInt]))
             startActivity(email)
-        })
+        }
 
         mainPhoneIcon = findViewById(R.id.mainPhoneIcon)
         mainPhoneIcon?.setImageResource(R.drawable.phoneicon)

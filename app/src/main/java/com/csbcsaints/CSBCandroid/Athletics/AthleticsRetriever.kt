@@ -11,12 +11,12 @@ import java.util.*
 
 //Asks for athletics data, first from user defaults. If it's old/nonexistent, it will get it from online, wait for it to parse, then return it to Athletics Activity
 class AthleticsRetriever {
-    fun retrieveAthleticsArray(preferences : SharedPreferences, forceReturn : Boolean = false, forceRefresh : Boolean = false, completion : (Array<AthleticsModel?>) -> Unit) {
+    fun retrieveAthleticsArray(preferences : SharedPreferences?, forceReturn : Boolean = false, forceRefresh : Boolean = false, completion : (Array<AthleticsModel?>) -> Unit) {
         if (forceRefresh) {
             println("Athletics Data is being refreshed")
             getAthleticsDataFromOnline(preferences, completion)
         } else if (forceReturn) {
-            val json = preferences.getString("athleticsArray", null)
+            val json = preferences?.getString("athleticsArray", null)
             return if (json != null) {
                 println("Force return found an old JSON value")
                 completion(Gson().fromJson(json, Array<AthleticsModel?>::class.java))
@@ -27,9 +27,9 @@ class AthleticsRetriever {
         } else {
             println("Attempting to retrieve stored Athletics data.")
             val currentTime = Calendar.getInstance().time
-            val athleticsArrayTimeString : String? = preferences.getString("athleticsArrayTime", null)
+            val athleticsArrayTimeString : String? = preferences?.getString("athleticsArrayTime", null)
             val athleticsArrayTime = athleticsArrayTimeString?.toDateWithTime()?.addHours(1)
-            val json = preferences.getString("athleticsArray", null)
+            val json = preferences?.getString("athleticsArray", null)
 
             if ((athleticsArrayTime != null && !json.isNullOrEmpty())) {
                 if (athleticsArrayTime > currentTime) {
@@ -45,7 +45,7 @@ class AthleticsRetriever {
             }
         }
     }
-    private fun getAthleticsDataFromOnline(preferences: SharedPreferences, completion : (Array<AthleticsModel?>) -> Unit) {
+    private fun getAthleticsDataFromOnline(preferences: SharedPreferences?, completion : (Array<AthleticsModel?>) -> Unit) {
         println("We are asking for Athletics data")
         val client = OkHttpClient()
         val request = Request.Builder()
