@@ -21,18 +21,23 @@ class ActualDocActivity : CSBCAppCompatActivity() {
         DeveloperPrinter().print("WE HAVE ACHIEVED ENLIGHTENMENT")
         this.title = intent.getStringExtra("selectedTitle")
 
-        webView = findViewById(R.id.webViewDocs)
         loadingSymbol = findViewById(R.id.loadingSymbolDocs)
-        webView?.setWebViewClient(object: WebViewClient() {
+
+        webView = findViewById(R.id.webViewDocs)
+        webView?.settings?.javaScriptEnabled = true
+        webView?.webViewClient = object: WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+                webView?.visibility = View.INVISIBLE
                 loadingSymbol?.visibility = View.VISIBLE
             }
+
             override fun onPageFinished(view:WebView, url:String) {
                 super.onPageFinished(view, url)
+                webView?.visibility = View.VISIBLE
                 loadingSymbol?.visibility = View.INVISIBLE
             }
-        })
+        }
 
 
     }
