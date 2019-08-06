@@ -88,8 +88,8 @@ class NotificationController(val context: Context) {
         if (notificationSettings?.shouldDeliver ?: false && todaysDate < dateStringFormatter.parse(dayScheduleLite.endDateString)!!) { //If date is during school year
             print("Notifications queuing")
 
-            val notifTimeAsDate = timeFormatter.parse(notificationSettings!!.deliveryTime) //Get time of notif deliver as date
-            val notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate!!) //rewrite in 24h (16:23)
+            val notifTimeAsDate = timeFormatter.parse(notificationSettings?.deliveryTime) //Get time of notif deliver as date
+            val notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate) //rewrite in 24h (16:23)
             DeveloperPrinter().print(notif24HTimeString)
 
             val daySchedule = DaySchedule(context, notificationSettings!!.schools[0], notificationSettings!!.schools[1], notificationSettings!!.schools[2], notificationSettings!!.schools[3])
@@ -145,9 +145,9 @@ class NotificationController(val context: Context) {
                 val dateWithTime = dateWithTimeFormatter.parse(dateWithTimeString)
                 val timeInMillisUntilNotifShouldDeliver = dateWithTime.time //- Calendar.getInstance().time.time
 
-                DeveloperPrinter().print("dateWithTimeString: $dateWithTimeString")
-                DeveloperPrinter().print("dateWithTime: $dateWithTime")
-                DeveloperPrinter().print("timeInMillisUntilNotifShouldDeliver: $timeInMillisUntilNotifShouldDeliver")
+//                DeveloperPrinter().print("dateWithTimeString: $dateWithTimeString")
+//                DeveloperPrinter().print("dateWithTime: $dateWithTime")
+//                DeveloperPrinter().print("timeInMillisUntilNotifShouldDeliver: $timeInMillisUntilNotifShouldDeliver")
 
 //                //REQUEST
                 val requestCode = date.replace("/", "").toInt()
@@ -163,8 +163,8 @@ class NotificationController(val context: Context) {
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillisUntilNotifShouldDeliver, broadcast)
                 }
 
-                DeveloperPrinter().print("Today is $date. Today is $notificationContent.")
-                DeveloperPrinter().print(" ")
+//                DeveloperPrinter().print("Today is $date. Today is $notificationContent.")
+//                DeveloperPrinter().print(" ")
             }
 
         } else {

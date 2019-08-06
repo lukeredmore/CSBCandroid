@@ -13,7 +13,7 @@ import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 class DocsActivity : CSBCAppCompatActivity() {
     val documentTitles = arrayOf(
         arrayOf("SCC Parent - Student Handbook", "SCC Bell Schedule", "SCC Course Description and Information Guide", "SCC Monthly Calendar", "CSBC Calendar"),
-        arrayOf(""),
+        arrayOf(),
         arrayOf("All Saints Cafeteria Info","All Saints Illness Policy"),
         arrayOf("St. James Parent - Student Handbook","St. James Code of Conduct"))
     val pdfTitleStrings = arrayOf(

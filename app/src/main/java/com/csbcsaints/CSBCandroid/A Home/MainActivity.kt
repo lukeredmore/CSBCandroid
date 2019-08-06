@@ -6,7 +6,6 @@ import android.widget.AdapterView.OnItemClickListener
 import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.res.ResourcesCompat
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -14,13 +13,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.ui.toPx
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
-import com.google.firebase.iid.FirebaseInstanceId
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import java.text.SimpleDateFormat
 
-//TODO - add launch screen works, start downloading lunch menus
+//TODO - add launch screen works, start downloading lunch menus, fix spacing of icons
 
 class MainActivity: CSBCAppCompatActivity() {
     var myAdapter: MainIconGridAdapter? = null
@@ -48,6 +46,7 @@ class MainActivity: CSBCAppCompatActivity() {
         notificationController?.setupNotifications()
         htmlController = HTMLController(this)
         alertController = AlertController(this)
+
     }
     override fun onStart() {
         super.onStart()
@@ -80,7 +79,7 @@ class MainActivity: CSBCAppCompatActivity() {
         alertLabel.text = withMessage
         alertLabel.layoutParams = expandedParams
 
-        val headerLayoutParams = header.getLayoutParams() as ConstraintLayout.LayoutParams
+        val headerLayoutParams = header.layoutParams as ConstraintLayout.LayoutParams
         headerLayoutParams.topMargin = 10.toPx()
         header.layoutParams = headerLayoutParams
     }
@@ -93,11 +92,10 @@ class MainActivity: CSBCAppCompatActivity() {
         alertLabel.text = ""
         alertLabel.layoutParams = collapsedParams
 
-        val headerLayoutParams = header.getLayoutParams() as ConstraintLayout.LayoutParams
+        val headerLayoutParams = header.layoutParams as ConstraintLayout.LayoutParams
         headerLayoutParams.topMargin = 0
         header.layoutParams = headerLayoutParams
 
-        val window : Window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
@@ -108,7 +106,7 @@ class MainActivity: CSBCAppCompatActivity() {
         }
         myAdapter = MainIconGridAdapter(this, iconsList)
         iconGridView.adapter = myAdapter
-        iconGridView.setOnItemClickListener(OnItemClickListener { parent, v, position, id ->
+        iconGridView.onItemClickListener = OnItemClickListener { parent, v, position, id ->
             println(position)
             val iconSelected = iconsList[position]
             iconSelected.announce()
@@ -118,7 +116,7 @@ class MainActivity: CSBCAppCompatActivity() {
                 showWebPage(urlMap[position])
             }
 
-        })
+        }
     }
 
 
@@ -140,7 +138,7 @@ class MainActivity: CSBCAppCompatActivity() {
     }
     private fun showWebPage(withURL : String?) {
         val builder : CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-        builder.setToolbarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
         val customTabsIntent : CustomTabsIntent = builder.build()
         customTabsIntent.launchUrl(this, Uri.parse(withURL!!))
     }

@@ -10,14 +10,7 @@ import com.csbcsaints.CSBCandroid.ui.UserFontStyles
 import com.csbcsaints.CSBCandroid.ui.setCustomFont
 import kotlinx.android.synthetic.main.home_grid_layout.view.*
 
-class MainIconGridAdapter : BaseAdapter {
-    var iconsList = ArrayList<Icon>()
-    var context: Context? = null
-
-    constructor(context: Context, iconsList: ArrayList<Icon>) : super() {
-        this.context = context
-        this.iconsList = iconsList
-    }
+class MainIconGridAdapter(val context : Context, val iconsList : ArrayList<Icon>) : BaseAdapter() {
 
     override fun getCount(): Int {
         return iconsList.size
@@ -35,7 +28,7 @@ class MainIconGridAdapter : BaseAdapter {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val food = this.iconsList[position]
 
-        var inflator = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        var inflator = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var iconView = inflator.inflate(R.layout.home_grid_layout, null)
         iconView.iconImage.setImageResource(food.image!!)
         iconView.iconLabel.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)

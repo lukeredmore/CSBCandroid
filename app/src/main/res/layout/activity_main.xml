@@ -54,11 +54,10 @@
                 android:id="@+id/iconGridView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:columnWidth="120dp"
                 android:horizontalSpacing="0dp"
                 android:numColumns="3"
                 android:verticalSpacing="0dp" android:paddingTop="0dp" android:fastScrollEnabled="false"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white" android:columnWidth="120dp"/>
 
     </LinearLayout>
 
