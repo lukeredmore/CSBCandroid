@@ -33,16 +33,21 @@ class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 
         dateLabel?.text = dateLabelFormatter.format(Calendar.getInstance().time)
         dateLabel?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
-        webView?.setWebViewClient(object: WebViewClient() {
+
+        webView?.settings?.javaScriptEnabled = true
+        webView?.settings?.builtInZoomControls = true
+        webView?.settings?.displayZoomControls = false
+        webView?.webViewClient = object: WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 loadingSymbol?.visibility = View.VISIBLE
             }
+
             override fun onPageFinished(view:WebView, url:String) {
                 super.onPageFinished(view, url)
                 loadingSymbol?.visibility = View.INVISIBLE
             }
-        })
+        }
 
         val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         lunchURLs = Gson().fromJson(sharedPreferences.getString("lunchURLs", Gson().toJson(lunchURLs)), Array<String>::class.java)
