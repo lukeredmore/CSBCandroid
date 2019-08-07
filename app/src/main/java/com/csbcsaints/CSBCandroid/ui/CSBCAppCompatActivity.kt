@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import com.csbcsaints.CSBCandroid.R
 import java.text.SimpleDateFormat
 import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
@@ -22,8 +23,8 @@ abstract class CSBCAppCompatActivity : AppCompatActivity() {
     //MARK - Activity control
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         setTheme(R.style.AppTheme)
-        DeveloperPrinter().print("hi")
     }
 
 

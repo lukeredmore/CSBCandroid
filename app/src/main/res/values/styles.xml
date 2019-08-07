@@ -18,10 +18,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
-    <style name="AppTheme_launcher">
-        <item name="android:windowBackground">@drawable/launch_screen</item>
-    </style>
+    <!--&lt;!&ndash; The launcher theme. It sets the main window background to the launch_screen drawable &ndash;&gt;-->
+    <!--<style name="AppTheme_launcher">-->
+        <!--<item name="android:windowBackground">@drawable/launch_screen</item>-->
+    <!--</style>-->
 
 
 </resources>
