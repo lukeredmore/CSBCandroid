@@ -85,11 +85,17 @@ class NotificationController(val context: Context) {
         val center = NotificationManagerCompat.from(context)
         center.cancelAll()
 
-        if (notificationSettings?.shouldDeliver ?: false && todaysDate < dateStringFormatter.parse(dayScheduleLite.endDateString)!!) { //If date is during school year
+        if (notificationSettings?.shouldDeliver == true && todaysDate < dateStringFormatter.parse(dayScheduleLite.endDateString)!!) { //If date is during school year
             print("Notifications queuing")
 
-            val notifTimeAsDate = timeFormatter.parse(notificationSettings?.deliveryTime) //Get time of notif deliver as date
-            val notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate) //rewrite in 24h (16:23)
+            val notif24HTimeString : String
+
+            if ((notificationSettings?.deliveryTime ?: "7:00 AM") == "7:00 AM") {
+                notif24HTimeString = "07:00"
+            } else {
+                val notifTimeAsDate = timeFormatter.parse(notificationSettings?.deliveryTime) //Get time of notif deliver as date
+                notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate) //rewrite in 24h (16:23)
+            }
             DeveloperPrinter().print(notif24HTimeString)
 
             val daySchedule = DaySchedule(context, notificationSettings!!.schools[0], notificationSettings!!.schools[1], notificationSettings!!.schools[2], notificationSettings!!.schools[3])
