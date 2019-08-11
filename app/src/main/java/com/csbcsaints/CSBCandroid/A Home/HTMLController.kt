@@ -1,15 +1,12 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.Context
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
-import com.csbcsaints.CSBCandroid.ui.abbrvMonthString
 import com.csbcsaints.CSBCandroid.ui.printAll
 import com.google.gson.Gson
 import okhttp3.*
 import org.jsoup.Jsoup
 import java.io.IOException
-import java.util.*
 
 /// Finds URLs of, download, and store all the lunch menus
 class HTMLController(val parent : MainActivity) {
@@ -22,7 +19,7 @@ class HTMLController(val parent : MainActivity) {
         downloadAndStoreLunchMenus()
     }
 
-    fun downloadAndStoreLunchMenus() {
+    private fun downloadAndStoreLunchMenus() {
         lunchesReady = arrayOf(false, false, false, false)
 
         val setonRequest = Request.Builder()

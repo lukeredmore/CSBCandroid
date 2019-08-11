@@ -14,12 +14,11 @@ class AlarmReceiver : BroadcastReceiver() {
         DeveloperPrinter().print(" ")
         DeveloperPrinter().print("--------LOCAL NOTIFICATION RECEIVED--------")
         DeveloperPrinter().print(" ")
-        //val notificationIntent = Intent(context, MainActivity::class.java)
         val body = intent.getStringExtra("body")
         val requestCode = intent.getIntExtra("requestCode", 0)
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(MainActivity::class.java)
-        stackBuilder.addNextIntent(intent)//notificationIntent)
+        stackBuilder.addNextIntent(intent)
         val pendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT)
         val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

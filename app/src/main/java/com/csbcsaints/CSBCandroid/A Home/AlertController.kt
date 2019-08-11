@@ -29,7 +29,6 @@ class AlertController(val parent : MainActivity) {
     }
 
     fun getSnowDatesAndOverridesAndQueueNotifications() {
-        //var snowDays : Set<String> = setOf()
         FirebaseDatabase.getInstance().reference.child("SnowDays")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
