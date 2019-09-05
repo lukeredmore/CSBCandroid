@@ -15,6 +15,7 @@ import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
 import com.csbcsaints.CSBCandroid.ui.UserFontStyles
 import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarAdapter(private val context: Context) : BaseAdapter() {
@@ -102,9 +103,9 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
             val model = rowData[position]
             holder.titleLabel?.text = model.event.toUpperCase()
             holder.titleLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
-            holder.monthLabel?.text = model.month
+            holder.monthLabel?.text = SimpleDateFormat("MMM").format(model.date)
             holder.monthLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
-            holder.dayLabel?.text = model.day
+            holder.dayLabel?.text = SimpleDateFormat("dd").format(model.date)
             holder.dayLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
             holder.timeLabel?.text = model.time
             holder.timeLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.ITALIC)

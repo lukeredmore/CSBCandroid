@@ -46,6 +46,7 @@ class MainActivity: CSBCAppCompatActivity() {
         notificationController?.setupNotifications()
         htmlController = HTMLController(this)
         alertController = AlertController(this)
+        EventsRetriever.tryToRequestEventsFromGCF()
 
     }
     override fun onStart() {

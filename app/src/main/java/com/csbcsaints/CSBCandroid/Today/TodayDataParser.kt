@@ -5,11 +5,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TodayDataParser(val parent : TodayActivity) {
-    private var eventsArray : Array<EventsModel?> = arrayOf()
+    private var eventsArray : Set<EventsModel> = setOf()
     private var athleticsArray : Array<AthleticsModel?> = arrayOf()
 
     private var eventsReady = false
     private var athleticsReady = false
+
+    private val eventsRetriever : EventsRetriever by lazy {
+        EventsRetriever(parent.sharedPreferences4) { eventsSet, _ ->
+            eventsArray = eventsSet
+            eventsReady = true
+            tryToStartupPager()
+        }
+    }
 
 
     init {
@@ -17,11 +25,7 @@ class TodayDataParser(val parent : TodayActivity) {
     }
 
     private fun getSchedulesToSendToToday() {
-        EventsRetriever().retrieveEventsArray(parent.sharedPreferences4, false, false) {
-            eventsArray = it
-            eventsReady = true
-            tryToStartupPager()
-        }
+        eventsRetriever.retrieveEventsArray()
         AthleticsRetriever().retrieveAthleticsArray(parent.sharedPreferences4, false, false) {
             athleticsArray = it
             athleticsReady = true
@@ -39,14 +43,12 @@ class TodayDataParser(val parent : TodayActivity) {
     //MARK - Parse schedules for TodayVC
     fun events(date : Date) : Array<EventsModel> {
         val allEventsToday : MutableList<EventsModel> = arrayListOf()
-        val eventsDateFormatter = SimpleDateFormat("MMMdd")
-        val dateShownForCalendar = eventsDateFormatter.format(date).toUpperCase()
+        val eventsDateFormatter = SimpleDateFormat("yyyy-MM-dd")
+        val givenDate = eventsDateFormatter.format(date)
         for (eventsModel in eventsArray) {
-            if (eventsModel != null) {
-                if (eventsModel.date == dateShownForCalendar) {
-                    allEventsToday.add(eventsModel)
-                    println("At least one event is today")
-                }
+            if (eventsDateFormatter.format(eventsModel.date) == givenDate) {
+                allEventsToday.add(eventsModel)
+                println("At least one event is today")
             }
         }
         if (allEventsToday.isNullOrEmpty()) {
@@ -57,7 +59,7 @@ class TodayDataParser(val parent : TodayActivity) {
         //Filter for schoolSelected
         val filteredEventsForSchoolsToday : MutableList<EventsModel> = arrayListOf()
         for (i in 0 until allEventsToday.count()) {
-            if (allEventsToday[i].schools.contains(parent.schoolSelected) || allEventsToday[i].schools == "") {
+            if (allEventsToday[i].schools?.contains(parent.schoolSelected) ?: true || allEventsToday[i].schools == "") {
                 filteredEventsForSchoolsToday.add(allEventsToday[i])
             }
         }

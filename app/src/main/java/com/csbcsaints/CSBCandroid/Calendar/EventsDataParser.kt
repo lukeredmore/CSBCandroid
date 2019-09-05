@@ -8,64 +8,30 @@ import java.util.*
 import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 class EventsDataParser {
-    private var eventsModelArray : Array<EventsModel?> = arrayOf() //ONLY ACCESS FROM SHAREDPREFERENCES
-
-    fun parseEventsData(html: String, preferences : SharedPreferences?) {
-        DeveloperPrinter().print("Events data is being parsed")
-        if (html.contains("evcal_event_title")) {
-            val modelListToReturn : MutableList<EventsModel> = arrayListOf()
-            Jsoup.parse(html).select(".desc_trig_outter")
-                .forEach {
-                    val dictToAppend = mutableMapOf<String, String>()
-                    it.select(".evcal_event_title")
-                        .forEach {
-                            dictToAppend["event"] = it.text()
-                        }
-                    it.select(".evcal_time")
-                        .forEach {
-                            if (it.text().toLowerCase().contains("all day")) {
-                                dictToAppend["time"] = "All Day"
-                            } else {
-                                dictToAppend["time"] = it.text()
-                            }
-                        }
-                    it.select(".evo_start")
-                        .forEach {
-                            it.select(".date")
-                                .forEach {
-                                    dictToAppend["day"] = it.text()
-                                }
-                            it.select(".month")
-                                .forEach {
-                                    dictToAppend["month"] = it.text().toUpperCase()
-                                }
-                        }
-                    it.select(".evcal_desc3 .ett1")
-                        .forEach {
-                            dictToAppend["schools"] = it.text().replace("Schools:","", true)
-                        }
-                    val modelToAppend = EventsModel(
-                        dictToAppend["event"] ?: "",
-                        "${dictToAppend["month"] ?: ""}${dictToAppend["day"] ?: ""}",
-                        dictToAppend["day"] ?: "",
-                        dictToAppend["month"] ?: "",
-                        dictToAppend["time"] ?: "",
-                        dictToAppend["schools"] ?: "")
-                    if (!modelListToReturn.contains(modelToAppend)) {
-                        modelListToReturn.add(modelToAppend)
-                    }
-                }
-            eventsModelArray = modelListToReturn.sortedWith(compareBy { it.day }).toTypedArray()
-        } else {
-            eventsModelArray = arrayOf()
+    fun parseJSON(json : Array<Map<String,String>>, preferences : SharedPreferences?) : Set<EventsModel> {
+        var eventsModelSet : Set<EventsModel> = mutableSetOf()
+        for (event in json) {
+            val title = event["title"] ?: continue
+            val date = event["date"] ?: continue
+            val dateInts = date.split("-").map { it.toInt() }.toTypedArray()
+            val cal = Calendar.getInstance()
+            cal.set(dateInts[0], dateInts[1], dateInts[2])
+            val eventToInsert = EventsModel(
+                title,
+                cal,
+                if (event["time"] == "" || event["time"] == null) null else event["time"],
+                if (event["schools"] == "" || event["schools"] == null) null else event["schools"]
+            )
+            eventsModelSet = eventsModelSet.plus(eventToInsert)
         }
-        addObjectArrayToUserDefaults(eventsModelArray, preferences)
+        addObjectArrayToUserDefaults(eventsModelSet, preferences)
+        return eventsModelSet
     }
-    private fun addObjectArrayToUserDefaults(eventsArray: Array<EventsModel?>, preferences : SharedPreferences?) {
+    private fun addObjectArrayToUserDefaults(eventsSet: Set<EventsModel>, preferences : SharedPreferences?) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
-        val json : String = Gson().toJson(eventsArray)
+        val json : String = Gson().toJson(eventsSet)
         if (preferences != null) {
-            preferences.edit()?.putString("eventsArray", json)?.apply()
+            preferences.edit()?.putString("eventsSet", json)?.apply()
             preferences.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
             DeveloperPrinter().print("Events data successfully added to user defaults")
         } else DeveloperPrinter().print("Preferences are null, so events data that was parsed wasn't saved")
