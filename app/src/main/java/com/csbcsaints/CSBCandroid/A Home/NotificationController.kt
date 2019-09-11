@@ -56,7 +56,6 @@ class NotificationController(val context: Context) {
                 DeveloperPrinter().print("Device token: $token")
 
                 subscribeToTopics()
-                queueNotifications()
             })
     }
     private fun defineNotificationSettings() : NotificationSettings {
@@ -81,103 +80,6 @@ class NotificationController(val context: Context) {
 
 
     //MARK - Show notifications
-    fun queueNotifications() {
-        val center = NotificationManagerCompat.from(context)
-        center.cancelAll()
-
-        if (notificationSettings?.shouldDeliver == true && todaysDate < dateStringFormatter.parse(dayScheduleLite.endDateString)!!) { //If date is during school year
-            print("Notifications queuing")
-
-            val notif24HTimeString : String
-
-            if ((notificationSettings?.deliveryTime ?: "7:00 AM") == "7:00 AM") {
-                notif24HTimeString = "07:00"
-            } else {
-                val notifTimeAsDate = timeFormatter.parse(notificationSettings?.deliveryTime) //Get time of notif deliver as date
-                notif24HTimeString = timeFormatterIn24H.format(notifTimeAsDate) //rewrite in 24h (16:23)
-            }
-            DeveloperPrinter().print(notif24HTimeString)
-
-            val daySchedule = DaySchedule(context, notificationSettings!!.schools[0], notificationSettings!!.schools[1], notificationSettings!!.schools[2], notificationSettings!!.schools[3])
-            val allSchoolDays : MutableList<String> = daySchedule.dateDayDictArray
-            allSchoolDays.printAll()
-            while (dateStringFormatter.parse(allSchoolDays.first())!! < todaysDate.addDays(-1)) { //Remove past dates
-                DeveloperPrinter().print(allSchoolDays[0])
-                allSchoolDays.removeAt(0)
-            }
-            allSchoolDays.printAll()
-
-
-            //Mark: Setup notification
-            for (date in allSchoolDays) {
-                //print(date)
-
-                //WHAT
-                var notificationContent1 = ""
-                var notificationContent2 = ""
-                var notificationContent3 = ""
-                var notificationContent4 = ""
-
-                if (notificationSettings!!.schools[0] && !daySchedule.restrictedDatesForHS.contains(dateStringFormatter.parse(date)!!)) {
-                    val dayOfCycle = daySchedule.dateDayDict["Seton"]!![date]
-                    if (dayOfCycle != null) {
-                        notificationContent1 = "Day $dayOfCycle at Seton, "
-                    }
-                }
-                if (notificationSettings!!.schools[1] && !daySchedule.restrictedDatesForES.contains(dateStringFormatter.parse(date)!!)) {
-                    val dayOfCycle = daySchedule.dateDayDict["St. John's"]!![date]
-                    if (dayOfCycle != null) {
-                        notificationContent2 = "Day $dayOfCycle at St. John's, "
-                    }
-                }
-                if (notificationSettings!!.schools[2] && !daySchedule.restrictedDatesForES.contains(dateStringFormatter.parse(date)!!)) {
-                    val dayOfCycle = daySchedule.dateDayDict["All Saints"]!![date]
-                    if (dayOfCycle != null) {
-                        notificationContent3 = "Day $dayOfCycle at All Saints, "
-                    }
-                }
-                if (notificationSettings!!.schools[3] && !daySchedule.restrictedDatesForES.contains(dateStringFormatter.parse(date)!!)) {
-                    val dayOfCycle = daySchedule.dateDayDict["St. James"]!![date]
-                    if (dayOfCycle != null) {
-                        notificationContent4 = "Day $dayOfCycle at St. James, "
-                    }
-                }
-                val notificationContent = "$notificationContent1$notificationContent2$notificationContent3$notificationContent4"
-                notificationContent.dropLast(2)
-
-                //WHEN
-                val dateWithTimeString = "$date $notif24HTimeString"
-                val dateWithTimeFormatter = SimpleDateFormat("MM/dd/yyyy HH:mm")
-                val dateWithTime = dateWithTimeFormatter.parse(dateWithTimeString)
-                val timeInMillisUntilNotifShouldDeliver = dateWithTime.time //- Calendar.getInstance().time.time
-
-//                DeveloperPrinter().print("dateWithTimeString: $dateWithTimeString")
-//                DeveloperPrinter().print("dateWithTime: $dateWithTime")
-//                DeveloperPrinter().print("timeInMillisUntilNotifShouldDeliver: $timeInMillisUntilNotifShouldDeliver")
-
-//                //REQUEST
-                val requestCode = date.replace("/", "").toInt()
-                val notificationIntent = Intent("android.media.action.DISPLAY_NOTIFICATION")
-                notificationIntent.addCategory("android.intent.category.DEFAULT")
-                notificationIntent.putExtra("body", "Today is $date. Today is $notificationContent.")
-                //notificationIntent.putExtra("body", "Today is Day $dayOfCycle. $gymDayString")
-                notificationIntent.putExtra("requestCode", requestCode)
-
-                val broadcast = PendingIntent.getBroadcast(context, requestCode, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                if (timeInMillisUntilNotifShouldDeliver > Calendar.getInstance().time.time) {
-                    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillisUntilNotifShouldDeliver, broadcast)
-                }
-
-//                DeveloperPrinter().print("Today is $date. Today is $notificationContent.")
-//                DeveloperPrinter().print(" ")
-            }
-
-        } else {
-            print("User has declined to receive notifications")
-        }
-
-    }
     fun subscribeToTopics() {
         val topicArray = arrayOf("setonNotifications","johnNotifications","saintsNotifications","jamesNotifications")
         val schoolBools = notificationSettings?.schools ?: arrayOf(false, false, false, false)

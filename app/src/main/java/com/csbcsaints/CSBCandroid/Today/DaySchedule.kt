@@ -16,7 +16,7 @@ class DaySchedule(context : Context, forSeton : Boolean = false, forJohn : Boole
 
     val noSchoolDateStrings : Array<String> = arrayOf("10/05/2019", "10/08/2019", "11/12/2019", "11/21/2019", "11/22/2019", "11/23/2019", "12/24/2019", "12/25/2019", "12/26/2019", "12/27/2019", "12/28/2019", "12/31/2019", "01/01/2020", "02/15/2020", "02/18/2020", "03/14/2020", "03/15/2020", "03/18/2020", "04/15/2020", "04/16/2020", "04/17/2020", "04/18/2020", "04/19/2020", "04/22/2020", "05/23/2020", "05/24/2020", "05/27/2020")
     val noElementarySchoolDateStrings : Array<String> = arrayOf("11/15/2019")
-    val noHighSchoolDateStrings : Array<String> = arrayOf("01/21/2020", "01/22/2020", "01/23/2020", "01/24/2020", "01/25/2020", "06/18/2020", "06/19/2020")
+    val noHighSchoolDateStrings : Array<String> = arrayOf("09/13/2019","01/21/2020", "01/22/2020", "01/23/2020", "01/24/2020", "01/25/2020", "06/18/2020", "06/19/2020")
 
     var snowDateStrings : Array<String> = arrayOf()
     var dayScheduleOverides : MutableMap<String, Int> = mutableMapOf()
