@@ -5,7 +5,7 @@ import com.crashlytics.android.Crashlytics
 
 class DeveloperPrinter {
     fun print(text : String) {
-        Log.i("DeveloperMessage", text)
+//        Log.i("DeveloperMessage", text)
         Crashlytics.log(Log.DEBUG, "DeveloperMessage", text)
     }
 }

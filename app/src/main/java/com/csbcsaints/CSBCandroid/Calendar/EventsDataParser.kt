@@ -15,14 +15,16 @@ class EventsDataParser {
             val date = event["date"] ?: continue
             val dateInts = date.split("-").map { it.toInt() }.toTypedArray()
             val cal = Calendar.getInstance()
-            cal.set(dateInts[0], dateInts[1], dateInts[2])
+            cal.set(dateInts[0], dateInts[1] - 1, dateInts[2])
             val eventToInsert = EventsModel(
                 title,
                 cal,
                 if (event["time"] == "" || event["time"] == null) null else event["time"],
                 if (event["schools"] == "" || event["schools"] == null) null else event["schools"]
             )
-            eventsModelSet = eventsModelSet.plus(eventToInsert)
+            println(eventToInsert)
+            if (!eventsModelSet.contains(eventToInsert)) { eventsModelSet = eventsModelSet.plus(eventToInsert) }
+
         }
         addObjectArrayToUserDefaults(eventsModelSet, preferences)
         return eventsModelSet

@@ -64,10 +64,10 @@ class CalendarActivity : CSBCAppCompatActivity() {
             loadingSymbol?.visibility = View.VISIBLE
             swipeRefreshLayout?.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
             swipeRefreshLayout?.setOnRefreshListener {
-                swipeRefreshLayout?.isRefreshing = true
-                eventsRetriever.retrieveEventsArray(false, true)
+                swipeRefreshLayout?.isRefreshing = false
+//                eventsRetriever.retrieveEventsArray(false, true)
             }
-            eventsRetriever.retrieveEventsArray()
+            eventsRetriever.retrieveEventsArray(false, true)
         }
 
 

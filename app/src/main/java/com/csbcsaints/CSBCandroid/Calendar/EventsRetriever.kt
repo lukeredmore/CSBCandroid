@@ -74,11 +74,24 @@ class EventsRetriever(val preferences: SharedPreferences?, val completion: (Set<
     private fun requestEventsDataFromFirebase() {
         FirebaseDatabase.getInstance().reference.child("Calendars").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                val eventsArrayDict = p0.child("eventsSet").value as? Array<Map<String,String>> ?: return
-                print("Events array updated, new data returned")
-                completion(dataParser.parseJSON(eventsArrayDict, preferences), CSBCListDataType.COMPLETE)
+                println("received data")
+                val eventsArray : MutableList<Map<String,String>> = mutableListOf()
+                p0.child("eventsArray").children.forEach {
+                    val mapToAppend : MutableMap<String,String> = mutableMapOf()
+                    it.children.forEach {
+                        mapToAppend[it.key!!] = it.value as String
+                    }
+                    eventsArray.add(mapToAppend)
+                }
+                if (eventsArray.isNotEmpty()) {
+                    println("Events array updated, new data returned")
+                    completion(dataParser.parseJSON(eventsArray.toTypedArray(), preferences), CSBCListDataType.COMPLETE)
+                } else {
+                    println("unparseable data from firebase")
+                    completion(setOf(), CSBCListDataType.COMPLETE)
+                }
             }
-            override fun onCancelled(databaseError: DatabaseError) { }
+            override fun onCancelled(databaseError: DatabaseError) { println("Cancelled") }
         })
     }
 }

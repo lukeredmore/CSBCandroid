@@ -54,16 +54,6 @@ class MainActivity: CSBCAppCompatActivity() {
     }
 
 
-    //MARK - Notifications
-    fun reinitNotifications() {
-        print("reinitializing Notifications")
-        notificationController = null
-        notificationController = NotificationController(this)
-        notificationController?.subscribeToTopics()
-//        notificationController?.queueNotifications()
-    }
-
-
     //MARK - UI methods
     fun showBannerAlert(withMessage : String) {
         val expandedParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)

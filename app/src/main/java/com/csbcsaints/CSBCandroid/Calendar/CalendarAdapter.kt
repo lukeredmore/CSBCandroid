@@ -103,9 +103,9 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
             val model = rowData[position]
             holder.titleLabel?.text = model.event.toUpperCase()
             holder.titleLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
-            holder.monthLabel?.text = SimpleDateFormat("MMM").format(model.date)
+            holder.monthLabel?.text = SimpleDateFormat("MMM").format(model.date.time)
             holder.monthLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.REGULAR)
-            holder.dayLabel?.text = SimpleDateFormat("dd").format(model.date)
+            holder.dayLabel?.text = SimpleDateFormat("dd").format(model.date.time)
             holder.dayLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.SEMIBOLD)
             holder.timeLabel?.text = model.time
             holder.timeLabel?.setCustomFont(UserFontFamilies.MONTSERRAT, UserFontStyles.ITALIC)
