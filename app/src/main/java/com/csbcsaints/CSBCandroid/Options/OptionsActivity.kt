@@ -1,5 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
+import android.app.Notification
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -27,9 +28,6 @@ class OptionsActivity : AppCompatActivity() {
     var deliveryTimeCell : LinearLayout? = null
     var reportIssue : ConstraintLayout? = null
     var settingsSwitch : Array<Switch?> = arrayOf()
-
-    var notificationController : NotificationController? = null
-    var notificationSettings : NotificationSettings? = null
 
     val normalParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     val collapsedParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
@@ -69,7 +67,7 @@ class OptionsActivity : AppCompatActivity() {
         deliveryTimeLabel?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(v:View) {
                 val fullTimeFormatter = SimpleDateFormat("h:mm a")
-                val deliveryTime = fullTimeFormatter.parse(notificationSettings?.deliveryTime)
+                val deliveryTime = fullTimeFormatter.parse(NotificationController(this@OptionsActivity).notificationSettings.deliveryTime)
                 val hourFormatter = SimpleDateFormat("HH")
                 val hour = hourFormatter.format(deliveryTime).toInt()
                 val minuteFormatter = SimpleDateFormat("mm")
@@ -82,8 +80,7 @@ class OptionsActivity : AppCompatActivity() {
                             val timeFormatter = SimpleDateFormat("HH:mm")
                             val timeAsDate = timeFormatter.parse("$hourOfDay:$minute")
                             deliveryTimeLabel?.setText(fullTimeFormatter.format(timeAsDate))
-                            notificationSettings?.deliveryTime = deliveryTimeLabel?.text.toString()
-                            notificationController?.storeNotificationSettings(notificationSettings!!)
+                            NotificationController(this@OptionsActivity).notificationSettings.deliveryTime = deliveryTimeLabel?.text.toString()
                         }
 
                     }, hour, minute, is24HourView)
@@ -95,34 +92,34 @@ class OptionsActivity : AppCompatActivity() {
         setonSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
                 DeveloperPrinter().print("Seton Switch checked: ${setonSwitch?.isChecked}")
-                notificationSettings!!.schools[0] = setonSwitch!!.isChecked
+                NotificationController(this@OptionsActivity).notificationSettings.schools[0] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         johnSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
                 DeveloperPrinter().print("John Switch checked: ${johnSwitch?.isChecked}")
-                notificationSettings!!.schools[1] = setonSwitch!!.isChecked
+                NotificationController(this@OptionsActivity).notificationSettings.schools[1] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         saintsSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
                 DeveloperPrinter().print("Saints Switch checked: ${saintsSwitch?.isChecked}")
-                notificationSettings!!.schools[2] = setonSwitch!!.isChecked
+                NotificationController(this@OptionsActivity).notificationSettings.schools[2] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         jamesSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view:View) {
                 DeveloperPrinter().print("James Switch checked: ${jamesSwitch?.isChecked}")
-                notificationSettings!!.schools[3] = setonSwitch!!.isChecked
+                NotificationController(this@OptionsActivity).notificationSettings.schools[3] = setonSwitch!!.isChecked
                 settingsSwitchToggled()
             }
         })
         showAllSchoolsSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view: View?) {
-                notificationSettings!!.valuesChangedByUser = true
+                NotificationController(this@OptionsActivity).notificationSettings.valuesChangedByUser = true
                 if ((!settingsSwitch[0]!!.isChecked && !settingsSwitch[1]!!.isChecked && !settingsSwitch[2]!!.isChecked && !settingsSwitch[3]!!.isChecked && !settingsSwitch[4]!!.isChecked) || (settingsSwitch[0]!!.isChecked && settingsSwitch[1]!!.isChecked && settingsSwitch[2]!!.isChecked && settingsSwitch[3]!!.isChecked)) {
                     val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
                     settingsSwitch[4]?.isChecked = true
@@ -132,20 +129,16 @@ class OptionsActivity : AppCompatActivity() {
         })
         deliverNotificationsSwitch?.setOnClickListener(object:View.OnClickListener {
             override fun onClick(view: View?) {
-                notificationSettings!!.valuesChangedByUser = true
+                NotificationController(this@OptionsActivity).notificationSettings.valuesChangedByUser = true
                 if (deliverNotificationsSwitch!!.isChecked) { //should get notifs
                     deliveryTimeCell?.setLayoutParams(normalParams)
                 } else {
                     deliveryTimeCell?.setLayoutParams(collapsedParams)
                 }
-                notificationSettings!!.shouldDeliver = deliverNotificationsSwitch!!.isChecked
-                notificationController?.storeNotificationSettings(notificationSettings!!)
+                NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver = deliverNotificationsSwitch!!.isChecked
             }
 
         })
-
-        notificationController = NotificationController(this)
-        notificationSettings = notificationController?.notificationSettings
 
         settingsSwitch = arrayOf(setonSwitch, johnSwitch, saintsSwitch, jamesSwitch, showAllSchoolsSwitch)
 
@@ -156,27 +149,25 @@ class OptionsActivity : AppCompatActivity() {
 
         val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
-        notificationSettings?.schools = arrayOf(settingsSwitch[0]!!.isChecked, settingsSwitch[1]!!.isChecked, settingsSwitch[2]!!.isChecked, settingsSwitch[3]!!.isChecked)
+        NotificationController(this@OptionsActivity).notificationSettings.schools = arrayOf(settingsSwitch[0]!!.isChecked, settingsSwitch[1]!!.isChecked, settingsSwitch[2]!!.isChecked, settingsSwitch[3]!!.isChecked)
         val userEntered = deliveryTimeLabel?.text.toString()
         if ((userEntered.count() == 4 || userEntered.count() == 5) && (userEntered.toCharArray()[1] == ':' || userEntered.toCharArray()[2] == ':')) {
-            notificationSettings?.deliveryTime = userEntered
+            NotificationController(this@OptionsActivity).notificationSettings.deliveryTime = userEntered
         } else {
-            notificationSettings?.deliveryTime = "7:00 AM"
+            NotificationController(this@OptionsActivity).notificationSettings.deliveryTime = "7:00 AM"
         }
 
         if (!settingsSwitch[0]!!.isChecked && !settingsSwitch[1]!!.isChecked && !settingsSwitch[2]!!.isChecked && !settingsSwitch[3]!!.isChecked) {
             preferences.edit().putBoolean("showAllSchools", true).apply()
-            notificationSettings?.shouldDeliver = false
+            NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver = false
         } else {
             preferences.edit().putBoolean("showAllSchools", settingsSwitch[4]!!.isChecked).apply()
-            notificationSettings!!.shouldDeliver = deliverNotificationsSwitch!!.isChecked
+            NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver = deliverNotificationsSwitch!!.isChecked
         }
 
-        if (!notificationSettings!!.shouldDeliver || notificationSettings!!.deliveryTime != "7:00 AM" || !notificationSettings!!.schools.contentEquals(arrayOf(true, true, true, true)) || notificationSettings!!.valuesChangedByUser) {
-            notificationSettings!!.valuesChangedByUser = true
+        if (!NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver || NotificationController(this@OptionsActivity).notificationSettings.deliveryTime != "7:00 AM" || !NotificationController(this@OptionsActivity).notificationSettings.schools.contentEquals(arrayOf(true, true, true, true)) || NotificationController(this@OptionsActivity).notificationSettings.valuesChangedByUser) {
+            NotificationController(this@OptionsActivity).notificationSettings.valuesChangedByUser = true
         }
-        notificationController?.storeNotificationSettings(notificationSettings!!)
-        notificationController?.subscribeToTopics()
     }
 
 
@@ -185,13 +176,13 @@ class OptionsActivity : AppCompatActivity() {
         val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
         for (i in 0 until 4) { //Schools switches
-            settingsSwitch[i]?.isChecked = notificationSettings!!.schools[i]
+            settingsSwitch[i]?.isChecked = NotificationController(this@OptionsActivity).notificationSettings.schools[i]
         }
         settingsSwitch[4]?.isChecked = preferences.getBoolean("showAllSchools", true)
 
 
 
-        if (notificationSettings!!.shouldDeliver) { //should get notifs
+        if (NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver) { //should get notifs
             deliverNotificationsSwitch?.isChecked = true
             deliveryTimeCell?.setLayoutParams(normalParams)
         } else {
@@ -199,20 +190,17 @@ class OptionsActivity : AppCompatActivity() {
             deliveryTimeCell?.setLayoutParams(collapsedParams)
         }
 
-        deliveryTimeLabel?.setText(notificationSettings?.deliveryTime)//what time should they be
+        deliveryTimeLabel?.setText(NotificationController(this@OptionsActivity).notificationSettings.deliveryTime)//what time should they be
     }
     fun settingsSwitchToggled() {
 
-        notificationSettings?.valuesChangedByUser = true
-        notificationController?.storeNotificationSettings(notificationSettings!!)
+        NotificationController(this@OptionsActivity).notificationSettings.valuesChangedByUser = true
         if (settingsSwitch[0] != null && settingsSwitch[1] != null && settingsSwitch[2] != null && settingsSwitch[3] != null && settingsSwitch[4] != null) {
             val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
             if ((!settingsSwitch[0]!!.isChecked && !settingsSwitch[1]!!.isChecked && !settingsSwitch[2]!!.isChecked && !settingsSwitch[3]!!.isChecked) || (settingsSwitch[0]!!.isChecked && settingsSwitch[1]!!.isChecked && settingsSwitch[2]!!.isChecked && settingsSwitch[3]!!.isChecked)) {
                 settingsSwitch[4]!!.isChecked = true
                 preferences.edit().putBoolean("showAllSchools", true).apply()
             }
-
-            notificationController?.notificationSettings = notificationSettings
         }
     }
 }

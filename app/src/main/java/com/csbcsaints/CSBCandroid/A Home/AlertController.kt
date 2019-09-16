@@ -25,96 +25,49 @@ class AlertController(val parent : MainActivity) {
 
     init {
         parent.removeBannerAlert()
-        getSnowDatesAndOverridesAndQueueNotifications()
+        getSnowDatesAndOverrides()
     }
 
-    fun getSnowDatesAndOverridesAndQueueNotifications() {
-        FirebaseDatabase.getInstance().reference.child("SnowDays")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(p0: DataSnapshot) {
-                    val preferences = parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
+    private fun getSnowDatesAndOverrides() {
+        FirebaseDatabase.getInstance().reference.child("SnowDays").addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val preferences = parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
 
-                    val myMap: Map<String, String>? = p0.value as? Map<String, String>
-                    val myList: Collection<String>? = myMap?.values
-                    val newSnowDays = myList?.toSet()
-                    val ogSnowDays = preferences.getStringSet("snowDays", null)
-                    DeveloperPrinter().print("Existing Snow Days: $ogSnowDays")
-                    DeveloperPrinter().print("Firebase Snow Days: $newSnowDays")
-                    if (newSnowDays != null) {
-                        if (newSnowDays.contains(Calendar.getInstance().time.dateString())) {
-                            parent.showBannerAlert("The Catholic Schools of Broome County are closed today")
-                        } else {
-                            parent.removeBannerAlert()
-                        }
-                        if (ogSnowDays != null) {
-                            if (newSnowDays != ogSnowDays) {
-                                DeveloperPrinter().print("Saving Firebase snow days and reinitializing")
-                                preferences.edit().putStringSet("snowDays", newSnowDays).apply()
-                                shouldSnowDatesReinit = true
-                                tryToReinit()
-                            } else {
-                                DeveloperPrinter().print("They are equal, no need to reinit")
-                            }
-                        } else {
-                            DeveloperPrinter().print("Saving Firebase snow days and reinitializing")
-                            preferences.edit().putStringSet("snowDays", newSnowDays).apply()
-                            shouldSnowDatesReinit = true
-                            tryToReinit()
-                        }
-                        snowDatesChecked = true
+                val myMap: Map<String, String>? = p0.value as? Map<String, String>
+                val myList: Collection<String>? = myMap?.values
+                val newSnowDays = myList?.toSet()
+                if (newSnowDays != null) {
+                    if (newSnowDays.contains(Calendar.getInstance().time.dateString())) {
+                        parent.showBannerAlert("The Catholic Schools of Broome County are closed today")
+                    } else {
+                        parent.removeBannerAlert()
                     }
+                    preferences.edit().putStringSet("snowDays", newSnowDays).apply()
                 }
+            }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    DeveloperPrinter().print("$databaseError")
+            override fun onCancelled(databaseError: DatabaseError) {
+                DeveloperPrinter().print("$databaseError")
+            }
+
+        })
+        FirebaseDatabase.getInstance().reference.child("DayScheduleOverrides").addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val preferences = parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
+                val newOverrides: Map<String, Int>? = p0.value as? Map<String, Int>
+
+                if (!newOverrides.isNullOrEmpty()) {
+                    preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
+                    preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
+                    preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
+                    preferences.edit().putInt("JamesOverrides", newOverrides["James"]!!).apply()
                 }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                DeveloperPrinter().print("$databaseError")
+            }
 
-            })
-        FirebaseDatabase.getInstance().reference.child("DayScheduleOverrides")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(p0: DataSnapshot) {
-                    val preferences = parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
-                    val newOverrides: Map<String, Int>? = p0.value as? Map<String, Int>
-                    val ogOverrides = mapOf(
-                        "Seton" to preferences.getInt("SetonOverrides", 0),
-                        "John" to preferences.getInt("JohnOverrides", 0),
-                        "Saints" to preferences.getInt("SaintsOverrides", 0),
-                        "James" to preferences.getInt("JamesOverrides", 0)
-                    )
-                    if (!newOverrides.isNullOrEmpty() && !ogOverrides.isNullOrEmpty()) {
-                        if (newOverrides != ogOverrides) {
-                            DeveloperPrinter().print("Saving Firebase overrides and reinitializing")
-                            preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
-                            preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
-                            preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
-                            preferences.edit().putInt("JamesOverrides", newOverrides["James"]!!).apply()
-                            shouldOverridesReinit = true
-                            tryToReinit()
-                        } else {
-                            DeveloperPrinter().print("They are equal, no need to reinit")
-                        }
-                    } else if (newOverrides != null) {
-                        DeveloperPrinter().print("Saving Firebase overrides and reinitializing")
-                        preferences.edit().putInt("SetonOverrides", newOverrides["Seton"]!!).apply()
-                        preferences.edit().putInt("JohnOverrides", newOverrides["John"]!!).apply()
-                        preferences.edit().putInt("SaintsOverrides", newOverrides["Saints"]!!).apply()
-                        preferences.edit().putInt("JamesOverrides", newOverrides["James"]!!).apply()
-                        shouldOverridesReinit = true
-                        tryToReinit()
-                    }
-                    dayOverridesChecked = true
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    DeveloperPrinter().print("$databaseError")
-                }
-
-            })
-    }
-    fun tryToReinit() {
-        if (snowDatesChecked && dayOverridesChecked && (shouldSnowDatesReinit || shouldOverridesReinit)) {
-            parent.reinitNotifications()
-        }
+        })
     }
 
     fun checkForAlert() {
@@ -171,17 +124,16 @@ class AlertController(val parent : MainActivity) {
                 if (html.toLowerCase().contains("catholic")) {
                     var indexToSelect : Int? = null
                     val doc = Jsoup.parse(html)
-                    doc.select("font")
-                        .forEach {
-                            if (indexToSelect == it.elementSiblingIndex()) {
-                                parseStatus(it.text())
-                                return
-                            }
-                            val value = it.text()
-                            if (value.toLowerCase().contains("Catholic") && value.toLowerCase().contains("Broome")) {
-                                indexToSelect = it.elementSiblingIndex() + 1
-                            }
+                    doc.select("font").forEach {
+                        if (indexToSelect == it.elementSiblingIndex()) {
+                            parseStatus(it.text())
+                            return
                         }
+                        val value = it.text()
+                        if (value.toLowerCase().contains("Catholic") && value.toLowerCase().contains("Broome")) {
+                            indexToSelect = it.elementSiblingIndex() + 1
+                        }
+                    }
                 } else DeveloperPrinter().print("No messages found from WBNG")
             }
         })
@@ -212,7 +164,7 @@ class AlertController(val parent : MainActivity) {
 
                     } else {
                         DeveloperPrinter().print("Snow day successfully added")
-                        getSnowDatesAndOverridesAndQueueNotifications()
+                        getSnowDatesAndOverrides()
                     }
                 }
             } else {

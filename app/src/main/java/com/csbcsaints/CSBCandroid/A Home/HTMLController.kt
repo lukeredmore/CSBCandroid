@@ -39,7 +39,7 @@ class HTMLController(val parent : MainActivity) {
         })
 
         val johnRequest = Request.Builder()
-            .url("http://www.bcsdfs.org/menu.cfm?mid=1372")
+            .url("http://www.rockoncafe.org/Menus_B.aspx")
             .build()
         client.newCall(johnRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -106,19 +106,19 @@ class HTMLController(val parent : MainActivity) {
     fun parseJohnLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
-            doc.select("a[href]")
-                .forEach {
-                    if (it.text().contains("Elementary") && it.text().contains("Lunch")) {
-                        var urlWithJS = it.attr("href")
-                        urlWithJS = urlWithJS.replace("javascript:popupGetMenu('", "")
-                        urlWithJS = urlWithJS.replace("')", "")
-                        DeveloperPrinter().print("Johns Lunch Menu Link: " + urlWithJS)
-                        lunchURLs[1] = urlWithJS
+            val linkList = doc.select(".linksList").toList()
+            for (link in linkList) {
+                link.select("li a").forEach {
+                    if (it.text().toLowerCase().contains("john")) {
+                        val link = it.attr("href")
+                        DeveloperPrinter().print("Johns Lunch Menu Link: " + link)
+                        lunchURLs[1] = link
                         lunchesReady[1] = true
                         tryToLoadPDFs(parent)
                         return
                     }
                 }
+            }
         }
     }
     fun parseSaintsLunchHTML(html: String?, parent: MainActivity) {
