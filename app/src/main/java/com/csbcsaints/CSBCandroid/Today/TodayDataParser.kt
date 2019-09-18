@@ -46,7 +46,7 @@ class TodayDataParser(val parent : TodayActivity) {
         val eventsDateFormatter = SimpleDateFormat("yyyy-MM-dd")
         val givenDate = eventsDateFormatter.format(date)
         for (eventsModel in eventsArray) {
-            if (eventsDateFormatter.format(eventsModel.date) == givenDate) {
+            if (eventsDateFormatter.format(eventsModel.date.time) == givenDate) {
                 allEventsToday.add(eventsModel)
                 println("At least one event is today")
             }
