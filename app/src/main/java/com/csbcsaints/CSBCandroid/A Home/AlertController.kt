@@ -26,6 +26,7 @@ class AlertController(val parent : MainActivity) {
     init {
         parent.removeBannerAlert()
         getSnowDatesAndOverrides()
+        checkForAlert()
     }
 
     private fun getSnowDatesAndOverrides() {
@@ -72,40 +73,52 @@ class AlertController(val parent : MainActivity) {
 
     fun checkForAlert() {
         DeveloperPrinter().print("Checking for alert from CSBC site")
-        val request = Request.Builder()
-            .url("https://csbcsaints.org/")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
-                checkForAlertFromWBNG()
+        FirebaseDatabase.getInstance().reference.child("BannerAlertMessage").addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val alertMessage = p0.value as? String
+                println(alertMessage)
+                if (alertMessage != null && alertMessage != "null" && alertMessage != "nil") {
+                    parent.showBannerAlert(alertMessage)
+                } else parent.removeBannerAlert()
             }
-            override fun onResponse(call: Call, response: Response) {
-                DeveloperPrinter().print("Successfully received CSBC homepage")
-                val html = response.body?.string() ?: ""
-                if (html.contains("strong")) {
-                    val closedData : MutableList<String> = arrayListOf()
-                    val doc = Jsoup.parse(html)
-                    doc.select("strong")
-                        .forEach {
-                            closedData.add(it.text())
-                        }
-                    if (closedData[0] != "") {
-                        print("An alert was found")
-                        parent.showBannerAlert(closedData[0])
-                        if (closedData[0].toLowerCase().contains("closed")) {
-                            print("Today is a snow day")
-                            addSnowDateToDatabase(Calendar.getInstance().time)
-                        }
-                    } else {
-                        checkForAlertFromWBNG()
-                    }
-                } else {
-                    checkForAlertFromWBNG()
-                }
+            override fun onCancelled(databaseError: DatabaseError) {
+                DeveloperPrinter().print("$databaseError")
             }
         })
+//        val request = Request.Builder()
+//            .url("https://csbcsaints.org/")
+//            .build()
+//
+//        client.newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
+//                checkForAlertFromWBNG()
+//            }
+//            override fun onResponse(call: Call, response: Response) {
+//                DeveloperPrinter().print("Successfully received CSBC homepage")
+//                val html = response.body?.string() ?: ""
+//                if (html.contains("strong")) {
+//                    val closedData : MutableList<String> = arrayListOf()
+//                    val doc = Jsoup.parse(html)
+//                    doc.select("strong")
+//                        .forEach {
+//                            closedData.add(it.text())
+//                        }
+//                    if (closedData[0] != "") {
+//                        print("An alert was found")
+//                        parent.showBannerAlert(closedData[0])
+//                        if (closedData[0].toLowerCase().contains("closed")) {
+//                            print("Today is a snow day")
+//                            addSnowDateToDatabase(Calendar.getInstance().time)
+//                        }
+//                    } else {
+//                        checkForAlertFromWBNG()
+//                    }
+//                } else {
+//                    checkForAlertFromWBNG()
+//                }
+//            }
+//        })
     }
     fun checkForAlertFromWBNG() {
         DeveloperPrinter().print("Checking for alert from WBNG")
