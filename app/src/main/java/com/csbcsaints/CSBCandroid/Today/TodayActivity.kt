@@ -27,6 +27,7 @@ class TodayActivity : CSBCAppCompatActivity() {
     var dateChangerButton : TextView? = null
     var activityTitle : TextView? = null
     var loadingSymbol : ProgressBar? = null
+    var currentDate = Calendar.getInstance().time
 
     var todayParser : TodayDataParser? = null
 
@@ -34,7 +35,6 @@ class TodayActivity : CSBCAppCompatActivity() {
         LinearLayout.LayoutParams.MATCH_PARENT,
         LinearLayout.LayoutParams.WRAP_CONTENT
     )
-    var dateString = ""
 
     var sharedPreferences4 : SharedPreferences? = null
 
@@ -52,9 +52,9 @@ class TodayActivity : CSBCAppCompatActivity() {
         dateChangerButton = findViewById(R.id.dateChangerButton)
         loadingSymbol = findViewById(R.id.loadingSymbol)
 
-        dateString = Calendar.getInstance().time.dateString() //Should be current date string, but can change to test
+        currentDate = Calendar.getInstance().time //Should be current date, but can change to test
         activityTitle?.text = "Today"
-        daySchedule = DaySchedule(this, true, true, true, true)
+        daySchedule = DaySchedule(this)
 
 
         val gestureDetector = GestureDetector(this, TodayGestureListener(this))
@@ -77,8 +77,8 @@ class TodayActivity : CSBCAppCompatActivity() {
         todayParser = TodayDataParser(this)
     }
     override fun tabSelectedHandler() {
-        DeveloperPrinter().print("The dateString is: $dateString")
-        val day : Int? = daySchedule?.dateDayDict!![schoolSelected]!![dateString]
+        DeveloperPrinter().print("The date is: $currentDate")
+        val day = daySchedule?.day(currentDate, schoolSelected)
         dayIndicatorLabel?.text = getDayOfCycle(day)
     }
 
@@ -89,10 +89,9 @@ class TodayActivity : CSBCAppCompatActivity() {
             val yearFormatter = SimpleDateFormat("yyyy")
             val monthFormatter = SimpleDateFormat("MM")
             val dayFormatter = SimpleDateFormat("dd")
-            val date = dateStringFormatter.parse(dateString)
-            val mYear = yearFormatter.format(date).toInt()
-            val mMonth = monthFormatter.format(date).toInt()
-            val mDay = dayFormatter.format(date).toInt()
+            val mYear = yearFormatter.format(currentDate).toInt()
+            val mMonth = monthFormatter.format(currentDate).toInt()
+            val mDay = dayFormatter.format(currentDate).toInt()
             val datePickerDialog = DatePickerDialog(this@TodayActivity,
                 object:DatePickerDialog.OnDateSetListener {
                     override fun onDateSet(view:DatePicker, year:Int, monthOfYear:Int, dayOfMonth:Int) {
@@ -104,10 +103,12 @@ class TodayActivity : CSBCAppCompatActivity() {
                         if (dayOfMonth < 10) {
                             day = "0$day"
                         }
-                        dateString = "$month/$day/$year"
-                        if (dateString != Calendar.getInstance().time.dateString()) {
+                        val tempDateString = "${year}-${month}-${day}"
+                        val tempFormatter = SimpleDateFormat("yyyy-MM-dd")
+                        currentDate = tempFormatter.parse(tempDateString)
+                        if (currentDate.dateString() != Calendar.getInstance().time.dateString()) {
                             val titleFormatter = SimpleDateFormat("MMM d")
-                            activityTitle?.text = titleFormatter.format(dateStringFormatter.parse(dateString))
+                            activityTitle?.text = titleFormatter.format(currentDate)
                         } else {
                             activityTitle?.text = "Today"
                         }
@@ -120,14 +121,14 @@ class TodayActivity : CSBCAppCompatActivity() {
     }
     fun dateButtonDoubleTapped() {
         if (loadingSymbol?.visibility == View.INVISIBLE) {
-            dateString = Calendar.getInstance().time.dateString()
+            currentDate = Calendar.getInstance().time
             activityTitle?.text = "Today"
             tabSelectedHandler()
             buildLinearLayoutAsTableView()
         }
 
     }
-    fun getDayOfCycle(day : Int?) : String {
+    private fun getDayOfCycle(day : Int?) : String {
         return if (day != null && day != 0) {
             "Today is Day $day"
         } else {
@@ -143,9 +144,9 @@ class TodayActivity : CSBCAppCompatActivity() {
 
         scrollLayout?.addView(dayIndicatorLabel)
         scrollLayout?.addView(eventsSeparator)
-        createCellForEventsModelAndAddToEndOfScrollView(todayParser?.events(dateStringFormatter.parse(dateString)), scrollLayout!!)
+        createCellForEventsModelAndAddToEndOfScrollView(todayParser?.events(currentDate), scrollLayout!!)
         scrollLayout?.addView(athleticsSeparator)
-        createCellForAthleticsModelAndAddToEndOfScrollView(todayParser?.athletics(dateStringFormatter.parse(dateString)), scrollLayout!!)
+        createCellForAthleticsModelAndAddToEndOfScrollView(todayParser?.athletics(currentDate), scrollLayout!!)
 
         loadingSymbol?.visibility = View.INVISIBLE
     }
