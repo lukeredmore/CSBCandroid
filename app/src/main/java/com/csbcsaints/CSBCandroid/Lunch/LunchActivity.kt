@@ -17,11 +17,11 @@ import java.util.*
 
 class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 
-    var webView : WebView? = null
+    private var webView : WebView? = null
     var loadingSymbol : ProgressBar? = null
-    var lunchURLs : Array<String> = arrayOf("https://csbcsaints.org/wp-content/uploads/SETON-MENU-June-2019.pdf", "http://doclibrary.com/MSC20/DOC/Elem_LunchJune4354.pdf", "https://csbcsaints.org/wp-content/uploads/JUNE-LunchMenu6-2019-1.doc", "https://csbcsaints.org/wp-content/uploads/June-Lunch-2019.docx")
-    var dateLabel : TextView? = null
-    val dateLabelFormatter = SimpleDateFormat("EEEE, MMMM d")
+    private var lunchURLs : Array<String> = arrayOf("https://csbcsaints.org/wp-content/uploads/SETON-MENU-June-2019.pdf", "http://doclibrary.com/MSC20/DOC/Elem_LunchJune4354.pdf", "https://csbcsaints.org/wp-content/uploads/JUNE-LunchMenu6-2019-1.doc", "https://csbcsaints.org/wp-content/uploads/June-Lunch-2019.docx")
+    private var dateLabel : TextView? = null
+    private val dateLabelFormatter = SimpleDateFormat("EEEE, MMMM d")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,6 @@ class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 
         val sharedPreferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
         lunchURLs = Gson().fromJson(sharedPreferences.getString("lunchURLs", Gson().toJson(lunchURLs)), Array<String>::class.java)
-
         setupViewForTabbedActivity(R.layout.activity_lunch)
     }
     override fun tabSelectedHandler() {

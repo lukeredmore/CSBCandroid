@@ -21,15 +21,15 @@ import java.text.SimpleDateFormat
 //TODO - add launch screen works, start downloading lunch menus, fix spacing of icons
 
 class MainActivity: CSBCAppCompatActivity() {
-    var myAdapter: MainIconGridAdapter? = null
-    var iconsList = ArrayList<Icon>()
-    val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
-    val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
-    val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/N-9Y0w?vid=1hepr")
+    private var myAdapter: MainIconGridAdapter? = null
+    private var iconsList = ArrayList<Icon>()
+    private val iconTitles = arrayOf("Today", "Portal","Contact","Calendar","News","Lunch","Athletics","Give","Connect","Dress Code","Docs","Options")
+    private val iconImages = arrayOf(R.drawable.today,R.drawable.portal,R.drawable.contact,R.drawable.calendar,R.drawable.news,R.drawable.lunch,R.drawable.athletics,R.drawable.give,R.drawable.connect,R.drawable.dresscode,R.drawable.docs,R.drawable.options)
+    private val urlMap = mapOf(1 to "https://www.plusportals.com/setoncchs", 4 to "https://csbcsaints.org/news", 7 to "https://app.mobilecause.com/form/N-9Y0w?vid=1hepr")
 
-    var notificationController : NotificationController? = null
-    var alertController : AlertController? = null
-    var htmlController : HTMLController? = null
+    private var notificationController : NotificationController? = null
+    private var alertController : AlertController? = null
+    private var htmlController : HTMLController? = null
 
 
     //MARK - Activity Control

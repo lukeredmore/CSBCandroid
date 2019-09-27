@@ -87,33 +87,6 @@
                     android:textIsSelectable="false" android:textSize="20sp"
                     android:textStyle="bold" android:background="@android:color/white"
                     android:padding="10dp" android:paddingStart="18dp"/>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:background="@android:color/white"
-                    android:id="@+id/deliveryTimeCell"
-                    android:focusable="true" android:focusableInTouchMode="true">
-                <TextView
-                        android:text="Delivery Time"
-                        android:layout_width="187dp"
-                        android:layout_height="wrap_content" android:layout_weight="1"
-                        android:textColor="@color/csbcGray" android:textStyle="bold" android:textSize="20sp"
-                        android:textIsSelectable="false" android:padding="10dp" android:paddingStart="18dp"/>
-                <View
-                        android:layout_width="156dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"/>
-                <EditText
-                        android:text="12:00 AM"
-                        android:layout_width="115dp"
-                        android:layout_height="wrap_content" android:layout_weight="1"
-                        android:inputType="none"
-                        android:textSize="20sp"
-                        android:id="@+id/deliveryTimeLabel"
-                        android:focusable="false"
-                        android:textStyle="italic" android:layout_marginEnd="10dp" android:textAlignment="center"
-                        android:textIsSelectable="false"/>
-            </LinearLayout>
             <View
                     android:layout_width="match_parent"
                     android:layout_height="40dp"

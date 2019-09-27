@@ -152,7 +152,7 @@ class HTMLController(val parent : MainActivity) {
         }
     }
 
-    fun tryToLoadPDFs(parent: MainActivity) {
+    private fun tryToLoadPDFs(parent: MainActivity) {
         if (lunchesReady.contentEquals(arrayOf(true, true, true, true))) {
             DeveloperPrinter().print("Starting document downloads for these lunchURLs:")
             lunchURLs.printAll()
