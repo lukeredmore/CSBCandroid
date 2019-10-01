@@ -1,7 +1,6 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.Context
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.csbcsaints.CSBCandroid.ui.printAll
 import com.google.gson.Gson
 import okhttp3.*
@@ -27,10 +26,10 @@ class HTMLController(val parent : MainActivity) {
             .build()
         client.newCall(setonRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
+                println("Error on request to CSBCSaints.org: $e")
             }
             override fun onResponse(call: Call, response: Response) {
-                DeveloperPrinter().print("Successfully received lunch data")
+                println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
                     parseSetonLunchHTML(html, parent)
@@ -43,10 +42,10 @@ class HTMLController(val parent : MainActivity) {
             .build()
         client.newCall(johnRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
+                println("Error on request to CSBCSaints.org: $e")
             }
             override fun onResponse(call: Call, response: Response) {
-                DeveloperPrinter().print("Successfully received lunch data")
+                println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
                     parseJohnLunchHTML(html, parent)
@@ -59,10 +58,10 @@ class HTMLController(val parent : MainActivity) {
             .build()
         client.newCall(saintsRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
+                println("Error on request to CSBCSaints.org: $e")
             }
             override fun onResponse(call: Call, response: Response) {
-                DeveloperPrinter().print("Successfully received lunch data")
+                println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
                     parseSaintsLunchHTML(html, parent)
@@ -75,10 +74,10 @@ class HTMLController(val parent : MainActivity) {
             .build()
         client.newCall(jamesRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                DeveloperPrinter().print("Error on request to CSBCSaints.org: $e")
+                println("Error on request to CSBCSaints.org: $e")
             }
             override fun onResponse(call: Call, response: Response) {
-                DeveloperPrinter().print("Successfully received lunch data")
+                println("Successfully received lunch data")
                 val html = response.body?.string()
                 if (html != null) {
                     parseJamesLunchHTML(html, parent)
@@ -91,10 +90,10 @@ class HTMLController(val parent : MainActivity) {
     fun parseSetonLunchHTML(html: String?, parent: MainActivity) {
         if (html != null) {
             val doc = Jsoup.parse(html)
-            doc.select(".mega-menu-link")
+            doc.select(".mega-menu-link").toTypedArray()
                 .forEach {
                     if (it.text() == "Cafeteria Menu") {
-                        DeveloperPrinter().print("Seton Lunch Menu Link: ${it.attr("href")}")
+                        println("Seton Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[0] = it.attr("href")
                         lunchesReady[0] = true
                         tryToLoadPDFs(parent)
@@ -111,7 +110,7 @@ class HTMLController(val parent : MainActivity) {
                 link.select("li a").forEach {
                     if (it.text().toLowerCase().contains("john")) {
                         val link = it.attr("href")
-                        DeveloperPrinter().print("Johns Lunch Menu Link: " + link)
+                        println("Johns Lunch Menu Link: " + link)
                         lunchURLs[1] = link
                         lunchesReady[1] = true
                         tryToLoadPDFs(parent)
@@ -127,7 +126,7 @@ class HTMLController(val parent : MainActivity) {
             doc.select(".et_pb_blurb_description").select("p").select("a")
                 .forEach {
                     if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
-                        DeveloperPrinter().print("Saints Lunch Menu Link: ${it.attr("href")}")
+                        println("Saints Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[2] = it.attr("href")
                         lunchesReady[2] = true
                         tryToLoadPDFs(parent)
@@ -142,7 +141,7 @@ class HTMLController(val parent : MainActivity) {
             doc.select(".et_pb_blurb_description").select("p").select("a")
                 .forEach {
                     if (it.text().toLowerCase().contains("lunch") || it.text().toLowerCase().contains("menu")) {
-                        DeveloperPrinter().print("James Lunch Menu Link: ${it.attr("href")}")
+                        println("James Lunch Menu Link: ${it.attr("href")}")
                         lunchURLs[3] = it.attr("href")
                         lunchesReady[3] = true
                         tryToLoadPDFs(parent)
@@ -154,7 +153,7 @@ class HTMLController(val parent : MainActivity) {
 
     private fun tryToLoadPDFs(parent: MainActivity) {
         if (lunchesReady.contentEquals(arrayOf(true, true, true, true))) {
-            DeveloperPrinter().print("Starting document downloads for these lunchURLs:")
+            println("Starting document downloads for these lunchURLs:")
             lunchURLs.printAll()
             parent.getSharedPreferences("UserDefaults", Context.MODE_PRIVATE).edit().putString("lunchURLs", Gson().toJson(lunchURLs)).apply()
         }

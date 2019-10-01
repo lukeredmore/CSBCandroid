@@ -1,12 +1,9 @@
 package com.csbcsaints.CSBCandroid
 
-import com.csbcsaints.CSBCandroid.ui.addDays
 import java.text.SimpleDateFormat
 import java.util.*
 import android.content.Context
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
-import com.csbcsaints.CSBCandroid.ui.printAll
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

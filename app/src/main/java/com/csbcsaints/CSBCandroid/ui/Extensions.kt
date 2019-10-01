@@ -122,14 +122,14 @@ fun Array<String>.printAll() {
     for (each in 0 until size - 1) {
         print(this[each] + ", ")
     }
-    DeveloperPrinter().print(this.last() + "]")
+    println(this.last() + "]")
 }
 fun MutableList<String>.printAll() {
     print("[")
     for (each in 0 until size - 1) {
         print(this[each] + ", ")
     }
-    DeveloperPrinter().print(this.last() + "]")
+    println(this.last() + "]")
 }
 
 

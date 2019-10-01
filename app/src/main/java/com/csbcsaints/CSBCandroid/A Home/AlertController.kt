@@ -1,23 +1,11 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.Context
-import android.renderscript.Sampler
-import android.renderscript.Type
-import com.csbcsaints.CSBCandroid.MainActivity
-import com.csbcsaints.CSBCandroid.ui.dateString
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
-import okhttp3.*
-import org.jsoup.Jsoup
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
-import com.google.gson.reflect.TypeToken
-
 
 
 /// Checks for snow days and other critical alerts, tells the main screen and updates Firebase
@@ -39,12 +27,12 @@ class AlertController(val parent : MainActivity) {
                     preferences.edit().putString("daySchedule", dayScheduleJSONString).apply()
                 }
             }
-            override fun onCancelled(p0: DatabaseError) { DeveloperPrinter().print("$p0") }
+            override fun onCancelled(p0: DatabaseError) { println("$p0") }
         })
     }
 
     fun checkForAlert() {
-        DeveloperPrinter().print("Checking for alert from Firebase")
+        println("Checking for alert from Firebase")
         FirebaseDatabase.getInstance().reference.child("BannerAlertMessage")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
@@ -56,7 +44,7 @@ class AlertController(val parent : MainActivity) {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    DeveloperPrinter().print("$databaseError")
+                    println("$databaseError")
                 }
             })
     }

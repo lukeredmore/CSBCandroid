@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.*
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -35,15 +34,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // hTODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        DeveloperPrinter().print("From: ${remoteMessage?.from}")
+        println("From: ${remoteMessage?.from}")
 
         // Check if message contains a data payload.
         remoteMessage?.data?.isNotEmpty()?.let {
-            DeveloperPrinter().print( "Message data payload: " + remoteMessage.data)
+            println( "Message data payload: " + remoteMessage.data)
 
             if (remoteMessage.notification != null) {
-                DeveloperPrinter().print("Message Notification Title: ${remoteMessage.notification?.title}")
-                DeveloperPrinter().print("Message Notification Body: ${remoteMessage.notification?.body}")
+                println("Message Notification Title: ${remoteMessage.notification?.title}")
+                println("Message Notification Body: ${remoteMessage.notification?.body}")
                 sendNotification(remoteMessage.notification?.title!!, remoteMessage.notification?.body!!)
             }
         }
@@ -59,7 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String?) {
-        DeveloperPrinter().print("Refreshed token: $token")
+        println("Refreshed token: $token")
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -88,9 +87,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageTitle: String, messageBody:
     String) {
 
-        DeveloperPrinter().print(" ")
-        DeveloperPrinter().print("--------PUSH NOTIFICATION RECEIVED--------")
-        DeveloperPrinter().print(" ")
+        println(" ")
+        println("--------PUSH NOTIFICATION RECEIVED--------")
+        println(" ")
 
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

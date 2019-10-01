@@ -1,11 +1,8 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.csbcsaints.CSBCandroid.ui.printAll
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.google.gson.Gson
 import eu.amirs.JSON
 import java.text.SimpleDateFormat
@@ -80,7 +77,7 @@ class AthleticsDataParser {
                 } else {
                     print("Error in parsing '")
                     titleArray.printAll()
-                    DeveloperPrinter().print("'")
+                    println("'")
                 }
                 n++
 
@@ -90,20 +87,20 @@ class AthleticsDataParser {
             modelListToReturn.add(modelToAppend)
 
         }
-        DeveloperPrinter().print("athleticsModelArray created, adding to user defaults")
+        println("athleticsModelArray created, adding to user defaults")
         athleticsModelArray = modelListToReturn.toTypedArray()
         addObjectArrayToUserDefaults(athleticsModelArray, preferences)
     }
     private fun addObjectArrayToUserDefaults(athleticsArray: Array<AthleticsModel?>, preferences : SharedPreferences?) {
         val dateTimeToAdd = Calendar.getInstance().time.dateStringWithTime()
         val json : String = Gson().toJson(athleticsArray)
-        DeveloperPrinter().print("dateTimeToAdd: $dateTimeToAdd")
-        DeveloperPrinter().print("json: $json")
+        println("dateTimeToAdd: $dateTimeToAdd")
+        println("json: $json")
         if (preferences != null) {
             preferences.edit()?.putString("athleticsArray", json)?.apply()
             preferences.edit()?.putString("athleticsArrayTime", dateTimeToAdd)?.apply()
-            DeveloperPrinter().print("Athletics data successfully added to user defaults")
-        } else DeveloperPrinter().print("Preferences are null, so athletics data that was parsed wasn't saved")
+            println("Athletics data successfully added to user defaults")
+        } else println("Preferences are null, so athletics data that was parsed wasn't saved")
 
     }
 }

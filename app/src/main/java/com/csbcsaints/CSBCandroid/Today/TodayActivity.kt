@@ -77,7 +77,7 @@ class TodayActivity : CSBCAppCompatActivity() {
         todayParser = TodayDataParser(this)
     }
     override fun tabSelectedHandler() {
-        DeveloperPrinter().print("The date is: $currentDate")
+        println("The date is: $currentDate")
         val day = daySchedule?.day(currentDate, schoolSelected)
         dayIndicatorLabel?.text = getDayOfCycle(day)
     }
@@ -139,7 +139,7 @@ class TodayActivity : CSBCAppCompatActivity() {
 
     //MARK - Table methods
     fun buildLinearLayoutAsTableView() {
-        DeveloperPrinter().print("Building Today View as a LinearLayout impersonating a ListView")
+        println("Building Today View as a LinearLayout impersonating a ListView")
         scrollLayout?.removeAllViews()
 
         scrollLayout?.addView(dayIndicatorLabel)

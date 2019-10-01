@@ -3,9 +3,7 @@ package com.csbcsaints.CSBCandroid
 import android.content.SharedPreferences
 import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
 import com.google.gson.Gson
-import org.jsoup.Jsoup
 import java.util.*
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 
 class EventsDataParser {
     fun parseJSON(json : Array<Map<String,String>>, preferences : SharedPreferences?) : Set<EventsModel> {
@@ -35,8 +33,8 @@ class EventsDataParser {
         if (preferences != null) {
             preferences.edit()?.putString("eventsSet", json)?.apply()
             preferences.edit()?.putString("eventsArrayTime", dateTimeToAdd)?.apply()
-            DeveloperPrinter().print("Events data successfully added to user defaults")
-        } else DeveloperPrinter().print("Preferences are null, so events data that was parsed wasn't saved")
+            println("Events data successfully added to user defaults")
+        } else println("Preferences are null, so events data that was parsed wasn't saved")
     }
 
 }

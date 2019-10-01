@@ -36,20 +36,20 @@ class EventsRetriever(val preferences: SharedPreferences?, val completion: (Set<
 
     fun retrieveEventsArray(forceReturn : Boolean = false, forceRefresh: Boolean = false) {
         if (forceRefresh) {
-            DeveloperPrinter().print("Events Data is being refreshed")
+            println("Events Data is being refreshed")
             completion(localEventsSet, CSBCListDataType.DUMMY)
             requestEventsDataFromFirebase()
         } else if (forceReturn) {
             val json = preferences?.getString("eventsSet", null)
             return if (json != null) {
-                DeveloperPrinter().print("Force return found an old JSON value")
+                println("Force return found an old JSON value")
                 completion(Gson().fromJson(json, object : TypeToken<Set<EventsModel>>() {}.type ), CSBCListDataType.COMPLETE)
             } else {
-                DeveloperPrinter().print("Force return returned an empty array")
+                println("Force return returned an empty array")
                 completion(setOf(), CSBCListDataType.COMPLETE)
             }
         } else {
-            DeveloperPrinter().print("Attempting to retrieve stored Events data.")
+            println("Attempting to retrieve stored Events data.")
             val currentTime = Calendar.getInstance().time
             val eventsArrayTimeString : String? = preferences?.getString("eventsArrayTime", null)
             val eventsArrayTime = eventsArrayTimeString?.toDateWithTime()?.addHours(1)
@@ -57,15 +57,15 @@ class EventsRetriever(val preferences: SharedPreferences?, val completion: (Set<
 
             if (eventsArrayTime != null && !json.isNullOrEmpty()) {
                 if (eventsArrayTime < currentTime) {
-                    DeveloperPrinter().print("Events data found, but is old. Will refresh online.")
+                    println("Events data found, but is old. Will refresh online.")
                     completion(localEventsSet, CSBCListDataType.DUMMY)
                     requestEventsDataFromFirebase()
                 } else {
-                    DeveloperPrinter().print("Up-to-date Events data found, no need to look online.")
+                    println("Up-to-date Events data found, no need to look online.")
                     return completion(localEventsSet, CSBCListDataType.COMPLETE)
                 }
             } else {
-                DeveloperPrinter().print("No Events data found. Looking online.")
+                println("No Events data found. Looking online.")
                 completion(setOf(), CSBCListDataType.DUMMY)
                 requestEventsDataFromFirebase()
             }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.webkit.WebView
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.ui.DeveloperPrinter
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
 import com.csbcsaints.CSBCandroid.ui.UserFontStyles
@@ -25,7 +24,7 @@ class DressCodeActivity : CSBCAppCompatActivity() {
         setupDressCodeView()
     }
     override fun tabSelectedHandler() {
-        DeveloperPrinter().print(dressCodeTitles[dressCodeSelectedInt])
+        println(dressCodeTitles[dressCodeSelectedInt])
         val webView : WebView? = findViewById(R.id.webView)
         webView?.settings?.loadWithOverviewMode = true
         webView?.settings?.useWideViewPort = true
@@ -40,7 +39,7 @@ class DressCodeActivity : CSBCAppCompatActivity() {
 
         dressCodeSelected = sharedPreferences?.getString("dressCodeSelected", "Elementary") ?: "Elementary"
         dressCodeSelectedInt = dressCodeMap[dressCodeSelected]!!
-        DeveloperPrinter().print("schoolSelected was found to be $dressCodeSelected")
+        println("schoolSelected was found to be $dressCodeSelected")
         val tabLayout: TabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setScrollPosition(dressCodeSelectedInt, 0f, true)
         tabSelectedHandler()
@@ -49,7 +48,7 @@ class DressCodeActivity : CSBCAppCompatActivity() {
                 dressCodeSelected = tab.text.toString()
                 dressCodeSelectedInt = dressCodeMap[dressCodeSelected]!!
                 sharedPreferences?.edit()?.putString("dressCodeSelected", dressCodeSelected)?.apply()
-                DeveloperPrinter().print("dressCodeSelected was stored as $dressCodeSelected")
+                println("dressCodeSelected was stored as $dressCodeSelected")
                 tabSelectedHandler()
             }
             override fun onTabUnselected(p0: TabLayout.Tab?) { }
