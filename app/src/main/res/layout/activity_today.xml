@@ -18,7 +18,7 @@
                 android:layout_height="match_parent">
             <TextView
                     android:text="@string/Today"
-                    android:layout_width="350dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/activityTitle" android:textSize="24sp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@android:color/white"
@@ -26,7 +26,7 @@
                     android:layout_marginStart="16dp" android:layout_marginBottom="8dp" android:layout_marginTop="8dp"/>
             <TextView
                     android:text="•••"
-                    android:layout_width="20dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="28dp" android:id="@+id/dateChangerButton" android:layout_weight="1"
                     android:textColor="@android:color/white" android:typeface="normal" android:textSize="20sp"
                     android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:textAlignment="textEnd"
