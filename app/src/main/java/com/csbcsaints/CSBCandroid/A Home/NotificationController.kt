@@ -79,9 +79,9 @@ class NotificationController(val context: Context) {
             if (schoolBools[i]) {
                 FirebaseMessaging.getInstance().subscribeToTopic(topicArray[i]).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        println("Subscribed to ${topicArray[i]}")
+                        println("Subscribed to '${topicArray[i]}'")
                     } else {
-                        println("Subscription to ${topicArray[i]} failed with exception: ${task.exception}")
+                        println("Subscription to '${topicArray[i]}' failed with exception: ${task.exception}")
                     }
                 }
             } else {
