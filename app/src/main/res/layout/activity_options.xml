@@ -90,7 +90,66 @@
             <View
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@color/csbcSuperLightGray" android:id="@+id/view2"
+                    android:background="@color/csbcSuperLightGray" android:id="@+id/adminSettingsHeader"
+                    android:layout_weight="1"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:background="@android:color/white"
+                    android:layout_height="match_parent" android:id="@+id/viewActivePasses">
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="10dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/csbcGray"
+                        android:text="View Active Passes"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/viewActivePassesArrow"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent" android:paddingStart="18dp"
+                        android:textStyle="bold" android:id="@+id/viewActivePassesText" android:gravity="clip_vertical"/>
+                <ImageView
+                        app:srcCompat="@drawable/indicator_arrow"
+                        android:id="@+id/viewActivePassesArrow"
+                        android:scaleType="centerInside" android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:background="@android:color/white"
+                    android:layout_height="match_parent" android:id="@+id/sendNotification">
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="10dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/csbcGray"
+                        android:text="Send A Notification"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/sendNotificationArrow"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent" android:paddingStart="18dp"
+                        android:textStyle="bold" android:id="@+id/sendNotificationText" android:gravity="clip_vertical"/>
+                <ImageView
+                        app:srcCompat="@drawable/indicator_arrow"
+                        android:id="@+id/sendNotificationArrow"
+                        android:scaleType="centerInside" android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/csbcSuperLightGray" android:id="@+id/view3"
                     android:layout_weight="1"/>
             <LinearLayout
                     android:orientation="horizontal"

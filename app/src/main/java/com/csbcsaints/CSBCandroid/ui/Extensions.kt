@@ -10,6 +10,8 @@ import android.widget.Toast
 import java.text.ParseException
 
 
+
+
 //MARK - Dates
 fun Date.yearString() : String {
     val dateFormatter = SimpleDateFormat("yyyy")
@@ -146,6 +148,20 @@ fun Int.toDp() : Int {
  */
 fun Int.toPx() : Int {
     return this * Resources.getSystem().getDisplayMetrics().density.toInt()
+}
+
+fun Long.stringFromTimeInterval() : String {
+    var seconds = this/1000
+    val hours = seconds/3600
+    seconds -= hours * 3600
+    val minutes = seconds/60
+    seconds -= minutes * 60
+
+    return if (hours > 0) {
+        "$hours:" + "%02d".format(minutes) + ":" + "%02d".format(seconds)
+    } else {
+        "$minutes:" + "%02d".format(seconds)
+    }
 }
 
 

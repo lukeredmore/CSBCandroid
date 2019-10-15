@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.csbcsaints.CSBCandroid.Options.ActivePassesActivity
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.yearString
 import java.util.*
@@ -21,6 +22,8 @@ class OptionsActivity : CSBCAppCompatActivity() {
     private var deliverNotificationsSwitch : Switch? = null
     private var schoolSwitches : Array<Switch?> = arrayOf()
     private var reportIssue : ConstraintLayout? = null
+
+    private var viewActivePassesCell : ConstraintLayout? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +45,11 @@ class OptionsActivity : CSBCAppCompatActivity() {
         }
         reportIssue = findViewById(R.id.reportIssue)
 
+        viewActivePassesCell = findViewById(R.id.viewActivePasses)
+        viewActivePassesCell?.setOnClickListener {
+            startActivity(Intent(baseContext, ActivePassesActivity::class.java))
+            println("Showing active passes")
+        }
 
         reportIssue?.setOnClickListener {
             val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:lredmore@syrdio.org"))
