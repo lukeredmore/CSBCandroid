@@ -19,8 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
-
-
+//Handles all of a user's preferences and their adminstrative status
 class OptionsActivity : CSBCAppCompatActivity() {
     private var setonSwitch : Switch? = null
     private var johnSwitch : Switch? = null

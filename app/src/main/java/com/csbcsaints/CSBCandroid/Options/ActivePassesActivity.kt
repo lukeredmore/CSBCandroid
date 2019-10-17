@@ -22,6 +22,7 @@ data class StudentPassInfo(
     val previousStatuses: Array<Pair<String, Date>>
 )
 
+///Pulls all pass data from Firebase, formats and displays students who are out
 class ActivePassesActivity : AppCompatActivity() {
     private var listView : ListView? = null
 
