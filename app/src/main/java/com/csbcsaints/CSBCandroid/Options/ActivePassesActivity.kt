@@ -93,30 +93,31 @@ class ActivePassesActivity : AppCompatActivity() {
 
     fun setupTable(data: ArrayList<StudentPassInfo> = signedOutStudentInfoArray) {
         this.signedOutStudentInfoArray = data
-        if (data.isNotEmpty()) {
-            val adapter = ActivePassesAdapter(this)
-            for (student in data) {
-                val month = Calendar.getInstance().get(Calendar.MONTH)
-                val year = Calendar.getInstance().get(Calendar.YEAR)
-                val seniorsGradYear = if (month >= 6) year + 1 else year
-                val gradeLevelMap = mutableMapOf(seniorsGradYear to 12)
-                for (i in seniorsGradYear + 1 downTo seniorsGradYear + 6)
-                    gradeLevelMap[i] = gradeLevelMap[i - 1]!! - 1
-                val gradeLevelString = if (gradeLevelMap[student.graduationYear] != null) {
-                    " (" + gradeLevelMap[student.graduationYear]!! + ")"
-                } else ""
-                val interval = Calendar.getInstance().time.time - student.currentStatus.second.time
-                val timeString = interval.stringFromTimeInterval()
-
-
-                adapter.addItem(Pair(student.name + gradeLevelString, timeString))
-            }
-            runOnUiThread {
-                listView?.adapter = adapter
-                listView?.visibility = View.VISIBLE
-            }
-        } else {
+        if (data.isEmpty()) {
             listView?.visibility = View.INVISIBLE
+            return
+        }
+        val adapter = ActivePassesAdapter(this)
+        for (student in data) {
+            val month = Calendar.getInstance().get(Calendar.MONTH)
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            val seniorsGradYear = if (month >= 6) year + 1 else year
+            val gradeLevelMap = mutableMapOf(seniorsGradYear to 12)
+            for (i in seniorsGradYear + 1 downTo seniorsGradYear + 6)
+                gradeLevelMap[i] = gradeLevelMap[i - 1]!! - 1
+            val gradeLevelString = if (gradeLevelMap[student.graduationYear] != null) {
+                " (" + gradeLevelMap[student.graduationYear]!! + ")"
+            } else ""
+            val interval = Calendar.getInstance().time.time - student.currentStatus.second.time
+            val timeString = interval.stringFromTimeInterval()
+
+            val statusArray = student.currentStatus.first.split(" - ")
+            val location = if (statusArray.size > 1) statusArray[1] else ""
+            adapter.addItem(Triple(student.name + gradeLevelString, timeString, location))
+        }
+        runOnUiThread {
+            listView?.adapter = adapter
+            listView?.visibility = View.VISIBLE
         }
     }
 }

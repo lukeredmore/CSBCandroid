@@ -116,7 +116,7 @@ fun TextView.setCustomFont(fontFamily: UserFontFamilies, fontStyle: UserFontStyl
 
 
 //MARK - Debugging
-fun AppCompatActivity.write(text: Any) {
+fun AppCompatActivity.writeToScreen(text: Any) {
     Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show()
 }
 fun Array<String>.printAll() {

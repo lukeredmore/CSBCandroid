@@ -76,7 +76,7 @@ class CalendarAdapter(private val context: Context) : BaseAdapter() {
                 }
                 TYPE_SEPARATOR -> {
                     convertView = inflater.inflate(R.layout.calendar_supplemental_list_layout, null)
-                    holder.textView = convertView!!.findViewById(R.id.text)
+                    holder.textView = convertView!!.findViewById(R.id.nameTextField)
                     holder.container = convertView!!.findViewById(R.id.container)
                 }
             }

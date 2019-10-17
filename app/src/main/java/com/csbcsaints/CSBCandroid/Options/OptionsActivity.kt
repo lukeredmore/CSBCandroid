@@ -11,7 +11,7 @@ import com.csbcsaints.CSBCandroid.NotificationController
 import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 import com.csbcsaints.CSBCandroid.ui.toPx
-import com.csbcsaints.CSBCandroid.ui.write
+import com.csbcsaints.CSBCandroid.ui.writeToScreen
 import com.csbcsaints.CSBCandroid.ui.yearString
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import java.util.*
@@ -122,15 +122,15 @@ class OptionsActivity : CSBCAppCompatActivity() {
                 if (allowedUserEmails.keys.contains(userEmailComponents?.get(0)) && userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
                     preferences.edit().putBoolean("userIsAnAdmin", true).apply()
                     preferences.edit().putString("adminSchool", allowedUserEmails[userEmailComponents[0]]).apply()
-                    write("Successfully signed in")
+                    writeToScreen("Successfully signed in")
                 } else if (userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
                     preferences.edit().putBoolean("userIsATeacher", true).apply()
-                    write("Successfully signed in")
+                    writeToScreen("Successfully signed in")
                 } else {
                     print("${userEmailComponents?.get(0)} is unauthorized")
                     preferences.edit().putBoolean("userIsATeacher", false).apply()
                     preferences.edit().putBoolean("userIsAnAdmin", false).apply()
-                    write("You must be a teacher or administrator to access these settings.")
+                    writeToScreen("You must be a teacher or administrator to access these settings.")
                 }
                 updateUIForAuthentication()
                 mGoogleSignInClient.signOut()
@@ -177,7 +177,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
                     preferences.edit().putBoolean("userIsATeacher", false).apply()
                     preferences.edit().putBoolean("userIsAnAdmin", false).apply()
                     updateUIForAuthentication()
-                    write("Successfully signed out")
+                    writeToScreen("Successfully signed out")
                 }
                 adminSettingsHeader?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60.toPx())
                 viewActivePassesCell?.layoutParams = expandedParams
@@ -186,7 +186,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
                 }
                 sendNotificationCell?.layoutParams = if (userIsAnAdmin) expandedParams else collapsedParams
                 if (userIsAnAdmin) sendNotificationCell?.setOnClickListener {
-                    write("This feature is not currently supported")
+                    writeToScreen("This feature is not currently supported")
                 } else sendNotificationCell?.setOnClickListener(null)
             } else {
                 signInButton?.text = "Sign In"

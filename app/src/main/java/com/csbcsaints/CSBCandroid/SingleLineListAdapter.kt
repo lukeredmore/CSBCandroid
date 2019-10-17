@@ -60,7 +60,7 @@ class SingleLineListAdapter(private val context: Context) : BaseAdapter() {
             when (rowType) {
                 TYPE_ITEM -> {
                     convertView = inflater.inflate(R.layout.single_line_list_layout, null)
-                    holder.textView = convertView!!.findViewById<View>(R.id.text) as TextView
+                    holder.textView = convertView!!.findViewById<View>(R.id.nameTextField) as TextView
                     holder.textView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
                 }
                 TYPE_SEPARATOR -> {

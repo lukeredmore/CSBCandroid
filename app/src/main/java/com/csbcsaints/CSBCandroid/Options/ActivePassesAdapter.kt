@@ -6,18 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
-import com.csbcsaints.CSBCandroid.ui.UserFontStyles
-import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.csbcsaints.CSBCandroid.Options.ActivePassesActivity
+import com.csbcsaints.CSBCandroid.ui.writeToScreen
 import java.util.*
 
 ///Active Passes data adapter
-class ActivePassesAdapter(context: Context) : BaseAdapter() {
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class ActivePassesAdapter(private val activePassesActivity: ActivePassesActivity) : BaseAdapter() {
+    private val inflater: LayoutInflater = activePassesActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val TYPE_ITEM = 0
 
-    private val listData = ArrayList<Pair<String,String>>()
-    fun addItem(item: Pair<String, String>) {
+    private val listData = ArrayList<Triple<String,String,String>>()
+
+    fun addItem(item: Triple<String, String, String>) {
         listData.add(item)
     }
 
@@ -33,7 +34,7 @@ class ActivePassesAdapter(context: Context) : BaseAdapter() {
         return listData.size
     }
 
-    override fun getItem(position: Int): Pair<String,String> {
+    override fun getItem(position: Int): Triple<String,String,String> {
         return listData[position]
     }
 
@@ -50,9 +51,11 @@ class ActivePassesAdapter(context: Context) : BaseAdapter() {
             holder = PassesViewHolder()
             when (rowType) {
                 TYPE_ITEM -> {
-                    convertView = inflater.inflate(R.layout.single_line_list_with_detail_layout, null)
-                    holder.text = convertView!!.findViewById<View>(R.id.text) as TextView
-                    holder.detailText = convertView!!.findViewById<View>(R.id.detailText) as TextView
+                    convertView = inflater.inflate(R.layout.active_pass_cell_layout, null)
+                    holder.cell = convertView.findViewById(R.id.cell)
+                    holder.studentNameTextView = convertView.findViewById(R.id.nameTextField)
+                    holder.timeElapsedTextView = convertView.findViewById(R.id.timeElapsedTextField)
+                    holder.locationTextView = convertView.findViewById(R.id.locationTextField)
                 }
             }
             convertView!!.tag = holder
@@ -62,8 +65,12 @@ class ActivePassesAdapter(context: Context) : BaseAdapter() {
 
         val model = listData[position]
 
-        holder.text?.text = model.first
-        holder.detailText?.text = model.second
+        holder.studentNameTextView?.text = model.first
+        holder.timeElapsedTextView?.text = model.second
+        holder.locationTextView?.text = model.third
+        holder.cell?.setOnClickListener {
+            activePassesActivity.writeToScreen("This feature is not currently supported")
+        }
 
         return convertView
     }
@@ -72,6 +79,8 @@ class ActivePassesAdapter(context: Context) : BaseAdapter() {
 
 
 class PassesViewHolder {
-    var text: TextView? = null
-    var detailText: TextView? = null
+    var cell : ConstraintLayout? = null
+    var studentNameTextView: TextView? = null
+    var timeElapsedTextView: TextView? = null
+    var locationTextView: TextView? = null
 }
