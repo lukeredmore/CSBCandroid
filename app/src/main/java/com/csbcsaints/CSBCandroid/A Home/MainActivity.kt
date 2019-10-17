@@ -12,11 +12,11 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.csbcsaints.CSBCandroid.Options.OptionsActivity
 import com.csbcsaints.CSBCandroid.ui.toPx
 import com.google.firebase.FirebaseApp
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
-import java.text.SimpleDateFormat
 
 //TODO - add launch screen works, start downloading lunch menus, fix spacing of icons
 
