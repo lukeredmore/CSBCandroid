@@ -111,29 +111,30 @@ class OptionsActivity : CSBCAppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
-            if (requestCode == GID_REQUEST_CODE) {
+            if (requestCode == GID_REQUEST_CODE && data != null) {
                 val preferences = getSharedPreferences("UserDefaults", Context.MODE_PRIVATE)
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 val account = task.getResult(ApiException::class.java)
                 val userEmailComponents = account?.email?.split("@")
-                println(allowedUserEmails.keys.contains(userEmailComponents?.get(0)) && userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*")))
-                println(userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*")))
-                if (allowedUserEmails.keys.contains(userEmailComponents?.get(0)) && userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
+                if (preferences == null || task == null || account == null || userEmailComponents == null) {
+                    mGoogleSignInClient.signOut()
+                    return
+                } else if (allowedUserEmails.keys.contains(userEmailComponents[0]) && userEmailComponents[1].contains("syrdio") && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
                     preferences.edit().putBoolean("userIsAnAdmin", true).apply()
                     preferences.edit().putString("adminSchool", allowedUserEmails[userEmailComponents[0]]).apply()
                     writeToScreen("Successfully signed in")
-                } else if (userEmailComponents?.get(1)?.contains("syrdio") == true && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
+                } else if (userEmailComponents[1].contains("syrdio") && !userEmailComponents[0].contains(".") && !userEmailComponents[0].matches(Regex(".*\\d.*"))) {
                     preferences.edit().putBoolean("userIsATeacher", true).apply()
                     writeToScreen("Successfully signed in")
                 } else {
-                    print("${userEmailComponents?.get(0)} is unauthorized")
+                    print("${userEmailComponents[0]} is unauthorized")
                     preferences.edit().putBoolean("userIsATeacher", false).apply()
                     preferences.edit().putBoolean("userIsAnAdmin", false).apply()
                     writeToScreen("You must be a teacher or administrator to access these settings.")
                 }
                 updateUIForAuthentication()
                 mGoogleSignInClient.signOut()
-            }
+            } else if (requestCode == GID_REQUEST_CODE) mGoogleSignInClient.signOut()
         }
     override fun onStop() {
             super.onStop()

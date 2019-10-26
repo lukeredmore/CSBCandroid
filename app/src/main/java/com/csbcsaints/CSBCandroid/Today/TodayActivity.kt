@@ -110,8 +110,8 @@ class TodayActivity : CSBCAppCompatActivity() {
             val mMonth = monthFormatter.format(currentDate).toInt()
             val mDay = dayFormatter.format(currentDate).toInt()
             val datePickerDialog = DatePickerDialog(this@TodayActivity, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                val month = if (monthOfYear < 10) "b" else "" + "${monthOfYear + 1}"
-                val day = if (dayOfMonth < 10) "a" else "" + "$dayOfMonth"
+                val month = "${monthOfYear + 1}"
+                val day = "$dayOfMonth"
                 println("setting date to $year-$month-$day")
                 val formatter = SimpleDateFormat("yyyy-MM-dd")
                 currentDate = formatter.parse("$year-$month-$day")
