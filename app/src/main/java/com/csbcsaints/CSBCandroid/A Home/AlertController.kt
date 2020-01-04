@@ -38,7 +38,7 @@ class AlertController(val parent : MainActivity) {
                 override fun onDataChange(p0: DataSnapshot) {
                     val alertMessage = p0.value as? String
                     println(alertMessage)
-                    if (alertMessage != null && alertMessage != "null" && alertMessage != "nil") {
+                    if (alertMessage != null && alertMessage != "null" && alertMessage != "nil" && alertMessage != "") {
                         parent.showBannerAlert(alertMessage)
                     } else parent.removeBannerAlert()
                 }

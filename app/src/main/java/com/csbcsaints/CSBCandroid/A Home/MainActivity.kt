@@ -12,13 +12,14 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.csbcsaints.CSBCandroid.Lunch.LunchMenuRetriever
 import com.csbcsaints.CSBCandroid.Options.OptionsActivity
 import com.csbcsaints.CSBCandroid.ui.toPx
 import com.google.firebase.FirebaseApp
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
 
-//TODO - add launch screen works, start downloading lunch menus, fix spacing of icons
+//TODO - add launch screen works, fix spacing of icons
 
 class MainActivity: CSBCAppCompatActivity() {
     private var myAdapter: MainIconGridAdapter? = null
@@ -29,7 +30,6 @@ class MainActivity: CSBCAppCompatActivity() {
 
     private var notificationController : NotificationController? = null
     private var alertController : AlertController? = null
-    private var htmlController : HTMLController? = null
 
 
     //MARK - Activity Control
@@ -44,7 +44,7 @@ class MainActivity: CSBCAppCompatActivity() {
         FirebaseApp.initializeApp(this)
         notificationController = NotificationController(this)
         notificationController?.setupNotifications()
-        htmlController = HTMLController(this)
+        LunchMenuRetriever().downloadLunchMenus(this)
         alertController = AlertController(this)
 
     }

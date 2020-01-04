@@ -19,7 +19,7 @@ class LunchActivity : CSBCAppCompatActivity() { //Fragment() {
 
     private var webView : WebView? = null
     var loadingSymbol : ProgressBar? = null
-    private var lunchURLs : Array<String> = arrayOf("https://csbcsaints.org/wp-content/uploads/SETON-MENU-June-2019.pdf", "http://doclibrary.com/MSC20/DOC/Elem_LunchJune4354.pdf", "https://csbcsaints.org/wp-content/uploads/JUNE-LunchMenu6-2019-1.doc", "https://csbcsaints.org/wp-content/uploads/June-Lunch-2019.docx")
+    private var lunchURLs : Array<String> = arrayOf()
     private var dateLabel : TextView? = null
     private val dateLabelFormatter = SimpleDateFormat("EEEE, MMMM d")
 
