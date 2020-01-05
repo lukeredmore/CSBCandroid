@@ -7,4 +7,5 @@
     <color name="csbcSuperLightGray">#F0F0F0</color>
     <color name="csbcGray">#666666</color>
     <color name="csbcAlertRed">#dd3333</color>
+    <color name="csbcAlertTextColor">#000000</color>
 </resources>

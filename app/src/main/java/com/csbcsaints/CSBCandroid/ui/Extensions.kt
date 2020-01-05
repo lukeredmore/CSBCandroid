@@ -7,6 +7,9 @@ import java.util.*
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import okhttp3.Request
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.text.ParseException
 
 
@@ -162,6 +165,19 @@ fun Long.stringFromTimeInterval() : String {
     } else {
         "$minutes:" + "%02d".format(seconds)
     }
+}
+
+fun Request.Builder.createWithParameters(fromURLString: String, parameters: Map<String,String>) : Request? {
+    var urlToSend = "$fromURLString?"
+    for (param in parameters) {
+        urlToSend += "${param.key}=${URLEncoder.encode(param.value, StandardCharsets.UTF_8.toString())}&"
+    }
+    urlToSend = urlToSend.dropLast(1)
+    urlToSend = urlToSend.replace("\n", "<br>")
+
+    return Request.Builder()
+        .url(urlToSend)
+        .build()
 }
 
 

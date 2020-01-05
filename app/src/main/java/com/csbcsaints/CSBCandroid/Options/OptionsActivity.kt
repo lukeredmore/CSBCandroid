@@ -2,7 +2,6 @@ package com.csbcsaints.CSBCandroid.Options
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -65,10 +64,15 @@ class OptionsActivity : CSBCAppCompatActivity() {
             updateUIForAuthentication()
 
             reportIssue?.setOnClickListener {
-                val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:lredmore@syrdio.org"))
-                email.putExtra(Intent.EXTRA_SUBJECT, "CSBC Android App User Comment")
-                email.putExtra(Intent.EXTRA_TEXT, "Please ensure your app has been updated to the latest version. Then, give a short description of the issue you would like to report or the suggestion you would like to submit:")
-                startActivity(email)
+                val config = ComposerConfiguration("Submit", "Please give a detailed description of the issue you would like to report or the suggestion you would like to submit:", true)
+                ComposerActivity(this, config) {
+                    IssueReporter().report(it) { error ->
+                        runOnUiThread {
+                            if (error != null) { errorSending(error); return@runOnUiThread }
+                            writeToScreen("Report successfully submitted")
+                        }
+                    }
+                }.show()
             }
 
 
@@ -108,6 +112,11 @@ class OptionsActivity : CSBCAppCompatActivity() {
 
             getNotificationPreferences()
         }
+
+    private fun errorSending(error: String) {
+        println("Error sending composer result: $error")
+        writeToScreen("The message could not be sent. Please check your connection and try again.")
+    }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
@@ -186,7 +195,19 @@ class OptionsActivity : CSBCAppCompatActivity() {
                 }
                 sendNotificationCell?.layoutParams = if (userIsAnAdmin) expandedParams else collapsedParams
                 if (userIsAnAdmin) sendNotificationCell?.setOnClickListener {
-                    writeToScreen("This feature is not currently supported")
+                    val config = ComposerConfiguration("Send", "Enter a message", false)
+
+                    ComposerActivity(this, config) {
+                        val school = preferences.getString("adminSchool", null)
+                        val schoolInt = schoolSelectedMap[school]
+                        if (schoolInt == null) { errorSending("Invalid school"); return@ComposerActivity }
+                        PushNotificationSender().send(it, schoolInt!!) { error ->
+                            runOnUiThread {
+                                if (error != null) { errorSending(error); return@runOnUiThread }
+                                writeToScreen("Report successfully submitted")
+                            }
+                        }
+                    }.show()
                 } else sendNotificationCell?.setOnClickListener(null)
             } else {
                 signInButton?.text = "Sign In"
@@ -216,7 +237,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
             adminSettingsHeader = findViewById(R.id.adminSettingsHeader)
             viewActivePassesCell = findViewById(R.id.viewActivePasses)
             sendNotificationCell = findViewById(R.id.sendNotification)
-            signInButton = findViewById(R.id.signInButton)
+            signInButton = findViewById(R.id.submitButton)
         }
 
 }

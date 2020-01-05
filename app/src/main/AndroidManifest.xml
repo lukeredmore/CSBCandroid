@@ -14,6 +14,8 @@
             android:roundIcon="@drawable/appiconcircle"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".Options.ComposerActivity">
+        </activity>
         <activity android:name=".Options.ActivePassesActivity">
         </activity>
         <!--
