@@ -6,7 +6,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
 
 class ConnectActivity : CSBCAppCompatActivity() {
     val socialArray = arrayOf(

@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
-import com.csbcsaints.CSBCandroid.ui.UserFontStyles
-import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import com.csbcsaints.CSBCandroid.UserFontFamilies
+import com.csbcsaints.CSBCandroid.UserFontStyles
+import com.csbcsaints.CSBCandroid.setCustomFont
 import kotlinx.android.synthetic.main.home_grid_layout.view.*
 
 class MainIconGridAdapter(val context : Context, val iconsList : ArrayList<Icon>) : BaseAdapter() {

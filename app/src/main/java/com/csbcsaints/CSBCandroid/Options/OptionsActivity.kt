@@ -8,10 +8,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.BuildConfig
 import com.csbcsaints.CSBCandroid.NotificationController
 import com.csbcsaints.CSBCandroid.R
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
-import com.csbcsaints.CSBCandroid.ui.toPx
-import com.csbcsaints.CSBCandroid.ui.writeToScreen
-import com.csbcsaints.CSBCandroid.ui.yearString
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.toPx
+import com.csbcsaints.CSBCandroid.writeToScreen
+import com.csbcsaints.CSBCandroid.yearString
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import java.util.*
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

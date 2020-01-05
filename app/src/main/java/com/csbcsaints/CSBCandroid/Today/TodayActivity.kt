@@ -7,15 +7,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import com.csbcsaints.CSBCandroid.ui.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.csbcsaints.CSBCandroid.*
 import java.text.SimpleDateFormat
 import java.util.*
-import com.csbcsaints.CSBCandroid.ui.HorizontalSwipeListener
+import com.csbcsaints.CSBCandroid.HorizontalSwipeListener
 
 //TODO: Ensure calendar data is correct
 

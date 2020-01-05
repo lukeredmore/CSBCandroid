@@ -1,7 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.ui.dateStringWithTime
+import com.csbcsaints.CSBCandroid.dateStringWithTime
 import com.google.gson.Gson
 import java.util.*
 

@@ -7,7 +7,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.ListView
 import com.csbcsaints.CSBCandroid.*
-import com.csbcsaints.CSBCandroid.ui.stringFromTimeInterval
+import com.csbcsaints.CSBCandroid.stringFromTimeInterval
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

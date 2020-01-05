@@ -1,8 +1,8 @@
 package com.csbcsaints.CSBCandroid
 
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.ui.addHours
-import com.csbcsaints.CSBCandroid.ui.toDateWithTime
+import com.csbcsaints.CSBCandroid.addHours
+import com.csbcsaints.CSBCandroid.toDateWithTime
 import com.google.gson.Gson
 import eu.amirs.JSON
 import okhttp3.*

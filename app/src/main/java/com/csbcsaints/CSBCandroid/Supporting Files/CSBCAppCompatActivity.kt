@@ -1,4 +1,4 @@
-package com.csbcsaints.CSBCandroid.ui
+package com.csbcsaints.CSBCandroid
 
 import android.annotation.SuppressLint
 import android.content.Context

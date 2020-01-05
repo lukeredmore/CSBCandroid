@@ -8,10 +8,7 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
-import eu.amirs.JSON
-import okhttp3.*
-import java.io.IOException
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
 
 //TODO - Add search function
 

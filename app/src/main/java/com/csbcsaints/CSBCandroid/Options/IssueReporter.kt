@@ -1,8 +1,8 @@
 package com.csbcsaints.CSBCandroid.Options
 
 import com.csbcsaints.CSBCandroid.BuildConfig
-import com.csbcsaints.CSBCandroid.ui.createWithParameters
-import com.csbcsaints.CSBCandroid.ui.dateString
+import com.csbcsaints.CSBCandroid.createWithParameters
+import com.csbcsaints.CSBCandroid.dateString
 import okhttp3.*
 import java.io.IOException
 import java.util.*

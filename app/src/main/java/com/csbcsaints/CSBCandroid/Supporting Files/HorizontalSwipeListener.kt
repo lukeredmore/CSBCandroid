@@ -1,4 +1,4 @@
-package com.csbcsaints.CSBCandroid.ui
+package com.csbcsaints.CSBCandroid
 
 import android.view.MotionEvent
 import android.view.View

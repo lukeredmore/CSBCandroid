@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-import com.csbcsaints.CSBCandroid.ActualDocActivity
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
 
 //TODO - Pass document itself or local link to viewer
 

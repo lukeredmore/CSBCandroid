@@ -4,10 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.webkit.WebView
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
-import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
-import com.csbcsaints.CSBCandroid.ui.UserFontStyles
-import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.UserFontFamilies
+import com.csbcsaints.CSBCandroid.UserFontStyles
+import com.csbcsaints.CSBCandroid.setCustomFont
 import com.google.android.material.tabs.TabLayout
 import android.webkit.WebChromeClient
 

@@ -6,7 +6,7 @@ import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
 
 //TODO - Pull document from bundle instead of internet, add share button
 

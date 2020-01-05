@@ -14,10 +14,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.Lunch.LunchMenuRetriever
 import com.csbcsaints.CSBCandroid.Options.OptionsActivity
-import com.csbcsaints.CSBCandroid.ui.toPx
+import com.csbcsaints.CSBCandroid.toPx
 import com.google.firebase.FirebaseApp
 import kotlin.collections.ArrayList
-import com.csbcsaints.CSBCandroid.ui.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
 
 //TODO - add launch screen works, fix spacing of icons
 

@@ -1,15 +1,13 @@
 package com.csbcsaints.CSBCandroid
 
-import android.Manifest
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.content.Intent
 import android.net.Uri
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.csbcsaints.CSBCandroid.ui.*
+import com.csbcsaints.CSBCandroid.*
 import java.util.*
 
 

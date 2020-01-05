@@ -8,7 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.ui.*
+import com.csbcsaints.CSBCandroid.*
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*

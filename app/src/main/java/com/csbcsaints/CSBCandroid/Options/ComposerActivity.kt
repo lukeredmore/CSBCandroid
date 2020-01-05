@@ -15,9 +15,9 @@ import androidx.appcompat.app.AlertDialog
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
-import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
-import com.csbcsaints.CSBCandroid.ui.UserFontStyles
-import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import com.csbcsaints.CSBCandroid.UserFontFamilies
+import com.csbcsaints.CSBCandroid.UserFontStyles
+import com.csbcsaints.CSBCandroid.setCustomFont
 import java.io.Serializable
 
 data class ComposerConfiguration(val submitButtonTitle : String, val placeholderText : String, val allowParagraphBreaks : Boolean) : Serializable

@@ -2,7 +2,6 @@ package com.csbcsaints.CSBCandroid
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.csbcsaints.CSBCandroid.ui.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.iid.FirebaseInstanceId

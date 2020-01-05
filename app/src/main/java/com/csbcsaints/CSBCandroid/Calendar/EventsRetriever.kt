@@ -1,25 +1,14 @@
 package com.csbcsaints.CSBCandroid
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import okhttp3.*
-import java.io.IOException
 import java.util.*
-import com.csbcsaints.CSBCandroid.CSBCListDataType
-import com.csbcsaints.CSBCandroid.ui.*
+import com.csbcsaints.CSBCandroid.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.reflect.TypeToken
-import eu.amirs.JSON
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import kotlin.concurrent.schedule
-import kotlin.concurrent.timer
 
 class EventsRetriever(val preferences: SharedPreferences?, val completion: (Set<EventsModel>, CSBCListDataType) -> Unit) {
 

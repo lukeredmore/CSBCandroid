@@ -12,9 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.EventsModel
 import com.csbcsaints.CSBCandroid.R
-import com.csbcsaints.CSBCandroid.ui.UserFontFamilies
-import com.csbcsaints.CSBCandroid.ui.UserFontStyles
-import com.csbcsaints.CSBCandroid.ui.setCustomFont
+import com.csbcsaints.CSBCandroid.UserFontFamilies
+import com.csbcsaints.CSBCandroid.UserFontStyles
+import com.csbcsaints.CSBCandroid.setCustomFont
 import java.text.SimpleDateFormat
 import java.util.*
 

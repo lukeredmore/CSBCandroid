@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.Options.ActivePassesActivity
-import com.csbcsaints.CSBCandroid.ui.writeToScreen
+import com.csbcsaints.CSBCandroid.writeToScreen
 import java.util.*
 
 ///Active Passes data adapter

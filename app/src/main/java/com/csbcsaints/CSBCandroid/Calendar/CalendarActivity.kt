@@ -12,10 +12,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.csbcsaints.CSBCandroid.Calendar.CalendarAdapter
-import com.csbcsaints.CSBCandroid.ui.*
-import okhttp3.*
-import java.io.IOException
-import java.util.*
+import com.csbcsaints.CSBCandroid.*
 
 //TODO - Add search function, add school filter
 enum class CSBCListDataType {
