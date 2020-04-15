@@ -33,13 +33,13 @@ class AlertController(val parent : MainActivity) {
 
     fun checkForAlert() {
         println("Checking for alert from Firebase")
-        FirebaseDatabase.getInstance().reference.child("BannerAlertMessage")
+        FirebaseDatabase.getInstance().reference.child("BannerAlert/message")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     val alertMessage = p0.value as? String
                     println(alertMessage)
                     if (alertMessage != null && alertMessage != "null" && alertMessage != "nil" && alertMessage != "") {
-                        parent.showBannerAlert(alertMessage)
+                        parent.showBannerAlert(alertMessage.replace("--include-covid-modal--", ""))
                     } else parent.removeBannerAlert()
                 }
 
