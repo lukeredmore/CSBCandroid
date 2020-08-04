@@ -5,14 +5,14 @@ apply plugin: 'io.fabric'
 
 ext.versionMajor = 1
 ext.versionMinor = 4
-ext.versionPatch = 0 //1.4
+ext.versionPatch = 1 //1.4.1
 ext.versionClassifier = null
 ext.isSnapshot = false
 ext.minimumSdkVersion = 21
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "29.0.2"
 
     signingConfigs {
         release {
@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId "com.csbcsaints.CSBCandroid"
         minSdkVersion project.ext.minimumSdkVersion
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode generateVersionCode() // ex] 190010203
         versionName generateVersionName() // ex] 1.2.3
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

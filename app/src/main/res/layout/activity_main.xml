@@ -35,12 +35,15 @@
             android:contentDescription="@string/app_name"
             app:layout_constraintStart_toStartOf="@+id/header"
             app:layout_constraintHorizontal_bias="0.0"/>
+
     <View
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
             android:id="@+id/bar"
-            app:layout_constraintTop_toBottomOf="@+id/header" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:background="@color/colorAccent"/>
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
     <LinearLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -60,5 +63,18 @@
                 android:background="@android:color/white" android:columnWidth="120dp"/>
 
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/covidCheckInTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COVID-19 Check-In ►"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bar"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

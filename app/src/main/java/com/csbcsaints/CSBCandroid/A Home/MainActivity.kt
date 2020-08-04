@@ -18,6 +18,10 @@ import com.csbcsaints.CSBCandroid.toPx
 import com.google.firebase.FirebaseApp
 import kotlin.collections.ArrayList
 import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 //TODO - add launch screen works, fix spacing of icons
 
@@ -31,6 +35,7 @@ class MainActivity: CSBCAppCompatActivity() {
     private var notificationController : NotificationController? = null
     private var alertController : AlertController? = null
 
+    private var yellowBar : View? = null
 
     //MARK - Activity Control
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +51,27 @@ class MainActivity: CSBCAppCompatActivity() {
         notificationController?.setupNotifications()
         LunchMenuRetriever().downloadLunchMenus(this)
         alertController = AlertController(this)
+
+        yellowBar = findViewById(R.id.bar)
+        findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.INVISIBLE
+        yellowBar?.layoutParams?.height = 14.toPx()
+
+        FirebaseDatabase.getInstance().getReference("Schools/general/showCovidCheckIn").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val showCovidCheckIn = p0.value as? Boolean ?: false
+                if (showCovidCheckIn) {
+                    findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.VISIBLE
+                    yellowBar?.layoutParams?.height = 58.toPx()
+                    yellowBar?.setOnClickListener {
+                        performSegue(12)
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("$databaseError")
+            }
+        })
 
     }
     override fun onStart() {
@@ -122,6 +148,7 @@ class MainActivity: CSBCAppCompatActivity() {
             10 -> DressCodeActivity::class.java
             11 -> DocsActivity::class.java
             12 -> OptionsActivity::class.java
+            13 -> CovidCheckInActivity::class.java
             else -> return
         }
         startActivity(Intent(baseContext, destinationClass))

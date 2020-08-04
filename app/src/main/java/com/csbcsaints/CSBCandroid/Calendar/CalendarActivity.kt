@@ -42,10 +42,10 @@ class CalendarActivity : CSBCAppCompatActivity() {
             val inflator = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val customActionBar = inflator.inflate(R.layout.action_bar_with_loading_symbol, null)
             val titleTextView = customActionBar?.findViewById<TextView>(R.id.textView)
-            loadingSymbolActionItem = customActionBar?.findViewById(R.id.progressBar)
             titleTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
             titleTextView?.text = "Calendar"
 
+            loadingSymbolActionItem = customActionBar?.findViewById(R.id.progressBar)
             loadingSymbolActionItem?.visibility = View.INVISIBLE
 
 
