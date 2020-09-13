@@ -113,18 +113,16 @@
                             android:layout_height="wrap_content" android:id="@+id/mapTextView"
                             android:textColor="@android:color/black" android:textSize="20sp"
                             android:layout_marginEnd="40dp"/>
+
                     <TextView
-                            android:text="70 Seminary Avenue"
-                            android:layout_height="wrap_content" android:id="@+id/addressTextView"
-                            android:textSize="18sp"
-                            android:textColor="@android:color/black" android:layout_width="match_parent"
-                            android:layout_marginEnd="40dp" android:layout_marginTop="5dp"/>
-                    <TextView
-                            android:text="Binghamton, NY 13905"
-                            android:layout_height="wrap_content" android:id="@+id/cityStateTextView"
-                            android:textSize="18sp"
-                            android:textColor="@android:color/black" android:layout_width="match_parent"
-                            android:layout_marginEnd="40dp"/>
+                            android:id="@+id/addressTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="40dp"
+                            android:text="70 Seminary Avenue Binghamton, NY 13905"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

@@ -3,12 +3,16 @@ package com.csbcsaints.CSBCandroid.Options
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.csbcsaints.CSBCandroid.BuildConfig
 import com.csbcsaints.CSBCandroid.NotificationController
 import com.csbcsaints.CSBCandroid.R
 import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.Covid.CovidCheckInActivity
 import com.csbcsaints.CSBCandroid.toPx
 import com.csbcsaints.CSBCandroid.writeToScreen
 import com.csbcsaints.CSBCandroid.yearString
@@ -26,6 +30,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
     private var jamesSwitch : Switch? = null
     private var showAllSchoolsSwitch : Switch? = null
     private var deliverNotificationsSwitch : Switch? = null
+    private var familyQuestionnaireNotificationsSwitch: Switch?= null
     private var schoolSwitches : Array<Switch?> = arrayOf()
     private var reportIssue : ConstraintLayout? = null
     private var copyrightLabel : TextView? = null
@@ -41,7 +46,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
     "lredmore" to "Seton", "kehret" to "Seton", "ecarter" to "Seton", "mmartinkovic" to "Seton", "llevis" to "Seton",
     "jfountaine" to "St. John's", "krosen" to "St. John's",
     "wpipher" to "All Saints", "kpawlowski" to "All Saints",
-    "skitchen" to "St. James", "isanyshyn" to "St. James")
+    "pmonachino" to "St. James", "isanyshyn" to "St. James")
     private val gso : GoogleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -89,6 +94,19 @@ class OptionsActivity : CSBCAppCompatActivity() {
                 settingsToChange.shouldDeliver = deliverNotificationsSwitch!!.isChecked
                 NotificationController(this@OptionsActivity).notificationSettings = settingsToChange
             }
+
+
+        familyQuestionnaireNotificationsSwitch?.setOnClickListener {
+            val settingsToChange = NotificationController(this@OptionsActivity).notificationSettings
+            settingsToChange.notifyFamilyCheckIn = familyQuestionnaireNotificationsSwitch!!.isChecked
+            NotificationController(this@OptionsActivity).notificationSettings = settingsToChange
+        }
+
+        if (!CovidCheckInActivity.showCovidCheckIn) {
+           familyQuestionnaireNotificationsSwitch?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
+            familyQuestionnaireNotificationsSwitch?.visibility = View.INVISIBLE
+
+        }
 
             schoolSwitches = arrayOf(setonSwitch, johnSwitch, saintsSwitch, jamesSwitch)
             for (i in 0 until schoolSwitches.size) {
@@ -171,7 +189,8 @@ class OptionsActivity : CSBCAppCompatActivity() {
             }
             showAllSchoolsSwitch?.isChecked = preferences.getBoolean("showAllSchools", false)
             deliverNotificationsSwitch?.isChecked = NotificationController(this@OptionsActivity).notificationSettings.shouldDeliver
-        }
+            familyQuestionnaireNotificationsSwitch?.isChecked = NotificationController(this@OptionsActivity).notificationSettings.notifyFamilyCheckIn
+    }
 
     private fun updateUIForAuthentication() {
 
@@ -230,6 +249,7 @@ class OptionsActivity : CSBCAppCompatActivity() {
             jamesSwitch = findViewById(R.id.jamesSwitch)
             showAllSchoolsSwitch = findViewById(R.id.showAllSchoolsSwitch)
             deliverNotificationsSwitch = findViewById(R.id.deliverNotificationsSwitch)
+        familyQuestionnaireNotificationsSwitch = findViewById(R.id.familyQuestionnaireNotificationsSwitch)
             copyrightLabel = findViewById(R.id.copyrightLabel)
             versionLabel = findViewById(R.id.versionLabel)
             reportIssue = findViewById(R.id.reportIssue)

@@ -36,6 +36,10 @@ fun Date.dayString() : String {
     val dateFormatter = SimpleDateFormat("dd")
     return dateFormatter.format(this)
 }
+fun Date.weekdayShortString() : String {
+    val dateFormatter = SimpleDateFormat("E")
+    return dateFormatter.format(this)
+}
 fun Date.dateString() : String {
     val dateFormatter = SimpleDateFormat("MM/dd/yyyy")
     return dateFormatter.format(this)

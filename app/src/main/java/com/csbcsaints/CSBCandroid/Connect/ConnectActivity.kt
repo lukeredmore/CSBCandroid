@@ -37,11 +37,10 @@ class ConnectActivity : CSBCAppCompatActivity() {
             arrayOf(
                 "Catholic Schools of Broome County",
                 "Dr. Elizabeth Carter, President",
-                "St. James School",
-                "Suzy Kitchen, Principal"
+                "St. James School"
             ), //t
             arrayOf("Catholic Schools of Broome County", "St. James School"), //f
-            arrayOf("St. James School", "Suzy Kitchen") //i
+            arrayOf("St. James School") //i
         )
     )
     val socialURLArray = arrayOf(
@@ -67,7 +66,7 @@ class ConnectActivity : CSBCAppCompatActivity() {
         ), arrayOf( //St. James
             arrayOf("CatholicSchools", "CatholicSchPres", "StJamesSchoolJC", "StJamesJC"), //t
             arrayOf("103950839670987", "136066559773647"), //f
-            arrayOf("stjamesschooljc", "stjamesjcprincipal") //i
+            arrayOf("stjamesschooljc") //i
         )
     )
     val tableHeaders = arrayOf("Twitter", "Facebook", "Instagram")

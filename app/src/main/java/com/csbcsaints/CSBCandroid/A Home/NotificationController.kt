@@ -1,7 +1,11 @@
 package com.csbcsaints.CSBCandroid
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
+import com.csbcsaints.CSBCandroid.Covid.CovidNotificationController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.iid.FirebaseInstanceId
@@ -18,7 +22,7 @@ class NotificationController(val context: Context) {
                 Gson().fromJson(json, NotificationSettings::class.java)
             } else {
                 println("No notification settings exist, returning default one")
-                NotificationSettings(true, arrayOf(true, true, true, true))
+                NotificationSettings(true, arrayOf(true, true, true, true), true)
             }
         }
         set(newValue) {
@@ -95,6 +99,8 @@ class NotificationController(val context: Context) {
             FirebaseAnalytics.getInstance(context).setUserProperty(topicArray[i], "${notificationSettings.schools[i]}")
 
         }
+
+        CovidNotificationController.configure(context, notificationSettings.notifyFamilyCheckIn)
     }
 
 }

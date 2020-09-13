@@ -1,5 +1,7 @@
 package com.csbcsaints.CSBCandroid
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.AdapterView.OnItemClickListener
@@ -11,13 +13,14 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.csbcsaints.CSBCandroid.Lunch.LunchMenuRetriever
 import com.csbcsaints.CSBCandroid.Options.OptionsActivity
-import com.csbcsaints.CSBCandroid.toPx
 import com.google.firebase.FirebaseApp
 import kotlin.collections.ArrayList
-import com.csbcsaints.CSBCandroid.CSBCAppCompatActivity
+import com.csbcsaints.CSBCandroid.Covid.CovidCheckInActivity
+import com.csbcsaints.CSBCandroid.Covid.CovidNotificationController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -52,27 +55,10 @@ class MainActivity: CSBCAppCompatActivity() {
         LunchMenuRetriever().downloadLunchMenus(this)
         alertController = AlertController(this)
 
-        yellowBar = findViewById(R.id.bar)
-        findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.INVISIBLE
-        yellowBar?.layoutParams?.height = 14.toPx()
 
-        FirebaseDatabase.getInstance().getReference("Schools/general/showCovidCheckIn").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                val showCovidCheckIn = p0.value as? Boolean ?: false
-                if (showCovidCheckIn) {
-                    findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.VISIBLE
-                    yellowBar?.layoutParams?.height = 58.toPx()
-                    yellowBar?.setOnClickListener {
-                        performSegue(12)
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                println("$databaseError")
-            }
-        })
-
+        StaticData.getDataFromFirebase() {
+            setupGridView()
+        }
     }
     override fun onStart() {
         super.onStart()
@@ -117,12 +103,12 @@ class MainActivity: CSBCAppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
     }
     private fun setupGridView() {
-        for (i in 0 until iconTitles.size) {
+        for (i in iconTitles.indices) {
             iconsList.add(Icon(iconTitles[i], iconImages[i]))
         }
         myAdapter = MainIconGridAdapter(this, iconsList)
         iconGridView.adapter = myAdapter
-        iconGridView.onItemClickListener = OnItemClickListener { parent, v, position, id ->
+        iconGridView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
             println(position)
             val iconSelected = iconsList[position]
             iconSelected.announce()
@@ -132,6 +118,18 @@ class MainActivity: CSBCAppCompatActivity() {
                 showWebPage(urlMap[position])
             }
 
+        }
+
+        yellowBar = findViewById(R.id.bar)
+        findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.INVISIBLE
+        yellowBar?.layoutParams?.height = 14.toPx()
+
+        if (CovidCheckInActivity.showCovidCheckIn) {
+            findViewById<TextView>(R.id.covidCheckInTextView)?.visibility = View.VISIBLE
+            yellowBar?.layoutParams?.height = 58.toPx()
+            yellowBar?.setOnClickListener {
+                performSegue(12)
+            }
         }
     }
 

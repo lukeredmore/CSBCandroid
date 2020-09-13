@@ -18,13 +18,6 @@ class ContactActivity : CSBCAppCompatActivity() {
     val MAP_IMAGE_ARRAY = arrayOf(R.drawable.setonmap, R.drawable.saintsmap, R.drawable.saintsmap, R.drawable.jamesmap)
     val BUILDING_IMAGE_ARRAY = arrayOf(R.drawable.setonbuilding, R.drawable.johnbuilding, R.drawable.saintsbuilding, R.drawable.jamesbuilding)
     val SCHOOL_NAMES = arrayOf("Seton Catholic Central", "St. John the Evangelist", "All Saints School", "St. James School")
-    val SCHOOL_ADDRESSES = arrayOf("70 Seminary Avenue", "9 Livingston Street", "1112 Broad Street", "143 Main Street")
-    val SCHOOL_CITY_STATE = arrayOf("Binghamton, NY 13905", "Binghamton NY 13903", "Endicott NY 13760", "Johnson City NY 13790")
-    val SCHOOL_PHONE : Array<String> = arrayOf("607.723.5307", "607.723.0703", "607.748.7423", "607.797.5444")
-    val DISTRICT_PHONE = "607.723.1547"
-    val SCHOOL_FAX = arrayOf("607.723.4811", "607.772.6210", "N/A", "N/A")
-    val SCHOOL_PRINCIPALS = arrayOf("Matthew Martinkovic", "James Fountaine", "William Pipher", "Susan Kitchen")
-    val PRINCIPAL_EMAILS = arrayOf("mmartinkovic","jfountaine","wpipher","skitchen")
     val BEFORE_TIME = arrayOf(null, "Before School Care: From 7:00 AM", "Before School Care: From 7:00 AM", "Before School Care: From 7:00 AM")
     val START_TIME = arrayOf("Morning Bell: 8:13 AM", "Start: 8:30 AM", "Start: 8:20 AM", "Start 8:20 AM")
     val DISMISSAL_TIME = arrayOf("Dismissal: 3:00 PM", "Dismissal: 2:45 PM", "Dismissal: 2:45 PM", "Dismissal: 3:00 PM")
@@ -77,8 +70,6 @@ class ContactActivity : CSBCAppCompatActivity() {
         mapTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.SEMIBOLD)
         addressTextView = findViewById(R.id.addressTextView)
         addressTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
-        cityStateTextView = findViewById(R.id.cityStateTextView)
-        cityStateTextView?.setCustomFont(UserFontFamilies.GOTHAM, UserFontStyles.REGULAR)
 
 
         copyrightLabel = findViewById(R.id.copyrightLabel)
@@ -95,26 +86,26 @@ class ContactActivity : CSBCAppCompatActivity() {
 
         mainPhoneLayout = findViewById(R.id.mainPhone)
         mainPhoneLayout?.setOnClickListener {
-            println("attempting to call tel:" + SCHOOL_PHONE[schoolSelectedInt].replace(".", ""))
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + SCHOOL_PHONE[schoolSelectedInt].replace(".", "")))
+            println("attempting to call tel:" + StaticData.readData("$schoolSelected/info/phone")?.replace(" ", "")?.replace("(", "")?.replace(")", ""))
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + StaticData.readData("$schoolSelected/info/phone")?.replace(" ", "")?.replace("(", "")?.replace(")", "")))
             startActivity(intent)
 
         }
         districtPhoneLayout = findViewById(R.id.districtPhone)
         districtPhoneLayout?.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + DISTRICT_PHONE.replace(".", "")))
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + StaticData.readData("general/districtPhone")?.replace(" ", "")?.replace("(", "")?.replace(")", "")))
             startActivity(intent)
         }
         schoolFaxLayout = findViewById(R.id.schoolFax)
         schoolFaxLayout?.setOnClickListener{
-            if (SCHOOL_FAX[schoolSelectedInt] != "N/A") {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + SCHOOL_FAX[schoolSelectedInt].replace(".", "")))
+            if (StaticData.readData("$schoolSelected/info/fax") != null) {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1" + StaticData.readData("$schoolSelected/info/fax")?.replace(" ", "")?.replace("(", "")?.replace(")", "")))
                 startActivity(intent)
             }
         }
         schoolMailLayout = findViewById(R.id.schoolMail)
         schoolMailLayout?.setOnClickListener{
-            val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + PRINCIPAL_EMAILS[schoolSelectedInt]))
+            val email = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + StaticData.readData("$schoolSelected/info/email")))
             startActivity(email)
         }
 
@@ -153,15 +144,16 @@ class ContactActivity : CSBCAppCompatActivity() {
     override fun tabSelectedHandler() {
         imageView?.setImageResource(BUILDING_IMAGE_ARRAY[schoolSelectedInt])
 
+
         mapIcon?.setImageResource(MAP_IMAGE_ARRAY[schoolSelectedInt])
         mapTextView?.text = SCHOOL_NAMES[schoolSelectedInt]
-        addressTextView?.text = SCHOOL_ADDRESSES[schoolSelectedInt]
-        cityStateTextView?.text = SCHOOL_CITY_STATE[schoolSelectedInt]
+        addressTextView?.text = StaticData.readData("$schoolSelected/info/address")
+        cityStateTextView?.text = ""
 
-        mainPhoneTextView?.text = "Main: ${SCHOOL_PHONE[schoolSelectedInt]}"
-        districtPhoneTextView?.text = "District: ${DISTRICT_PHONE}"
-        faxTextView?.text = "Fax: ${SCHOOL_FAX[schoolSelectedInt]}"
-        mailTextView?.text = "${SCHOOL_PRINCIPALS[schoolSelectedInt]}, Principal"
+        mainPhoneTextView?.text = "Main: ${StaticData.readData("$schoolSelected/info/phone")}"
+        districtPhoneTextView?.text = "District: ${StaticData.readData("general/districtPhone")}"
+        faxTextView?.text = "Fax: ${StaticData.readData("$schoolSelected/info/fax") ?: "N/A"}"
+        mailTextView?.text = "${StaticData.readData("$schoolSelected/info/principal")}, Principal"
 
         normalParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         collapsedParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)

@@ -110,17 +110,56 @@
                     android:textIsSelectable="false" android:textSize="20sp"
                     android:textStyle="bold" android:background="@android:color/white"
                     android:padding="10dp" android:paddingStart="18dp"/>
-            <View
+
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@color/csbcSuperLightGray"/>
+                    android:layout_height="match_parent"
+                    android:background="@color/csbcSuperLightGray"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="3dp"
+                        android:text="Notifications"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#969696"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+            </LinearLayout>
+
             <Switch
+                    android:id="@+id/deliverNotificationsSwitch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/deliverNotificationsSwitch"
-                    android:text="Day Schedule Notifications" android:textColor="@color/csbcGray"
-                    android:textIsSelectable="false" android:textSize="20sp"
-                    android:textStyle="bold" android:background="@android:color/white"
-                    android:padding="10dp" android:paddingStart="18dp"/>
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:padding="10dp"
+                    android:paddingStart="18dp"
+                    android:text="Day Schedule"
+                    android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            <Switch
+                    android:id="@+id/familyQuestionnaireNotificationsSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:padding="10dp"
+                    android:paddingStart="18dp"
+                    android:text="COVID-19 Check-In Reminder"
+                    android:textColor="@color/csbcGray"
+                    android:textIsSelectable="false"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp" android:background="@color/csbcSuperLightGray"
